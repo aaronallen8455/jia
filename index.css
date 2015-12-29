@@ -1,0 +1,175 @@
+#outerBorder {
+    max-width: 900px;
+    position: relative;
+    display: block;
+    background-color: #a3a3a3;
+    margin-left: auto;
+    margin-right: auto;
+    border: 10px solid #a3a3a3;
+    border-radius: 17px;
+    margin-top: 40px;
+    box-shadow: 8px 8px 10px #C4C4C4;
+}
+#contentDiv {
+    position: relative;
+    background-color: #f6f6f6;
+    border-radius: 10px;
+    padding: 10px;
+    padding-top: 12px;
+}
+#titleDiv {
+    font-family: sans-serif;
+    float: left;
+    margin-left: 20px;
+    text-align: center;
+    margin-bottom: 14px;
+}
+#titleDiv > h1 {
+    font-family: impact;
+    font-size: 40pt;
+    line-height: 0;
+    color: #3b3b3b;
+    float: left;
+    margin-bottom: 25px;
+}
+#navbar-container {
+    clear: both;
+    background-color: #cc4545;
+    margin-left: 3px;
+    margin-right: 3px;
+    min-height: 30px;
+    border-radius: 5px;
+    margin-bottom: 20px;
+}
+#navbar-container > ul {
+    margin: 0;
+    padding: 0;
+}
+
+#nav > li {
+    list-style-type: none;
+    display: table-cell;
+    width: 20%;
+    -moz-box-shadow: inset 1px 1px 1px rgba(255, 255, 255, .4), inset -1px -1px 1px rgba(0, 0, 0, .4);
+    -webkit-box-shadow: inset 1px 1px 1px rgba(255, 255, 255, .4), inset -1px -1px 1px rgba(0, 0, 0, .4);
+    box-shadow: inset 1px 1px 1px rgba(255, 255, 255, .2), inset -1px -1px 1px rgba(0, 0, 0, .3);
+}
+#nav-login {
+    display: none !important;
+}
+#nav a {
+    display: block;
+    height: 100%;
+    color: white;
+    padding-top: 15px;
+    padding-bottom: 15px;
+    font-style: normal;
+    
+}
+#nav {
+    width: 100%;
+    display: table;
+    table-layout: fixed;
+    text-align: center;
+}
+
+#loginDiv {
+    background-color: #D3E1E6;
+    float: right;
+    
+    margin-right: 3px;
+    border: 1px solid #BFCACF;
+    padding: 3px;
+    text-align: right;
+    border-radius: 5px;
+}
+#loginDiv * {
+    margin: 1px;
+}
+.loginInput {
+    width: 150px;
+}
+#calendarDiv {
+    float:right;
+    text-align: center;
+    padding: 5px;
+    margin: 10px;
+    background-color: #96A4A8;
+    border-radius: 4px;
+    color: whitesmoke
+}
+#calendarHeading {
+    margin-left: 15px;
+    margin-right: 15px;
+    min-width: 80px;
+    display: inline-block;
+}
+
+#calendarTable > tr > td {
+    width: 35px;
+}
+#calendarTable > tr > td > a {
+    display: block;
+    width: 100%;
+}
+.tablecell-day {
+    background-color: #D9D0C3;
+    border: 2px solid transparent;
+}
+.tablecell-today {
+    background-color: #D9C3D7;
+}
+.tablecell-selected {
+    border: 2px solid #FFCB2E;
+}
+.eventDiv {
+    max-width: 270px;
+    display: inline-block;
+    margin: 2px;
+    padding: 5px;
+    text-align: left;
+    background-color: #B4C8ED;
+    border-radius: 5px;
+}
+.eventDivOdd {
+    background-color: #C7D0ED;
+}
+#eventDisplayDiv {
+    display: block;
+    position: relative;
+    margin-left: auto;
+    margin-right: auto;
+}
+#menuToggle {
+    display: none;
+}
+.menuVisibility {
+    display: table;
+}
+
+/*for mobile*/
+@media all and (max-width: 630px) {
+    #nav-login {
+        display: block!important;
+    }
+    #loginDiv {
+        display: none;
+    }
+    #nav > li {
+        width: 100%;
+        display: block;
+    }
+    #nav {
+        text-align: center;
+    }
+    #menuToggle {
+        display: block;
+        text-align: center;
+        font-size: 25px;
+        font-family: sans-serif;
+        color: whitesmoke;
+    }
+    .menuVisibility {
+        display: none !important;
+    }
+}
