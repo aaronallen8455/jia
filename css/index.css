@@ -11,11 +11,21 @@
     box-shadow: 8px 8px 10px #C4C4C4;
 }
 #contentDiv {
-    position: relative;
+    position: static;
     background-color: #f6f6f6;
     border-radius: 10px;
     padding: 10px;
     padding-top: 12px;
+}
+#footerDiv {
+    max-width: 900px;
+    position: relative;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 25px;
+    margin-bottom: 15px;
+    text-align: center;
 }
 #titleDiv {
     font-family: sans-serif;
@@ -103,6 +113,7 @@
     margin-right: 15px;
     min-width: 80px;
     display: inline-block;
+    font-weight: bold;
 }
 
 #calendarTable > tr > td {
@@ -122,14 +133,20 @@
 .tablecell-selected {
     border: 2px solid #FFCB2E;
 }
-.eventDiv {
-    max-width: 270px;
+.eventDivWrapper {
+    width: 33.3%;
     display: inline-block;
+    vertical-align: text-top;
+}
+.eventDiv {
     margin: 2px;
     padding: 5px;
     text-align: left;
     background-color: #B4C8ED;
     border-radius: 5px;
+}
+.eventContent ul {
+    margin-left: -15px;
 }
 .eventDivOdd {
     background-color: #C7D0ED;
@@ -139,6 +156,8 @@
     position: relative;
     margin-left: auto;
     margin-right: auto;
+    margin-top: 11px;
+    margin-bottom: 11px;
 }
 #menuToggle {
     display: none;
@@ -146,9 +165,40 @@
 .menuVisibility {
     display: table;
 }
+.displayControlDiv {
+    text-align: center;
+}
+.error {
+    color: red;
+}
 
 /*for mobile*/
+@media all and (max-width: 850px) and  (min-width: 631px) {
+    .eventDivWrapper {
+        width: 50%;
+    }
+}
 @media all and (max-width: 630px) {
+    body {
+        margin: 0px;
+    }
+    #outerBorder {
+        border: none;
+        margin: 0;
+        box-shadow: none;
+        border-radius: 0px;
+    }
+    #contentDiv {
+        margin: 0;
+        border-radius: 0px;
+    }
+    #titleDiv {
+        float: none;
+        display: table;
+        min-width: 300px;
+        margin: 0 auto;
+        margin-bottom: 14px;
+    }
     #nav-login {
         display: block!important;
     }
@@ -171,5 +221,11 @@
     }
     .menuVisibility {
         display: none !important;
+    }
+    #calendarDiv {
+        display: none;
+    }
+    .eventDivWrapper {
+        width: 100%;
     }
 }
