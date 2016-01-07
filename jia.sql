@@ -8,6 +8,7 @@ CREATE TABLE `users` (
     `pass` VARCHAR(255) NOT NULL,
     `date_created` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     `type` CHAR(1) NULL,
+    `validation_code` CHAR(12) NOT NULL,
     PRIMARY KEY (`id`),
     UNIQUE INDEX `email_UNIQUE` (`email` ASC),
     INDEX `login` (`email` ASC, `pass` ASC)
@@ -16,7 +17,7 @@ CREATE TABLE `users` (
 CREATE TABLE `profiles` (
     `user_id` SMALLINT UNSIGNED NOT NULL,
     `instr_id` TINYINT UNSIGNED NOT NULL,
-    `bio` LONGTEXT NOT NULL,
+    `bio` TEXT NOT NULL,
     `pic` VARCHAR(100) NULL,
     `links` TINYTEXT NULL,
     PRIMARY KEY (`user_id`),
@@ -34,10 +35,11 @@ CREATE TABLE `events` (
     `date` DATE NOT NULL,
     `start_time` CHAR(4) NOT NULL,
     `end_time` CHAR(4) NOT NULL,
-    `desc` LONGTEXT NULL,
+    `desc` TEXT NULL,
     `title` VARCHAR(80) NOT NULL,
     `user_id` SMALLINT UNSIGNED NOT NULL,
     `date_created` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    `band` TEXT NULL,
     PRIMARY KEY (`id`),
     CONSTRAINT `fk_user_id`
         FOREIGN KEY (`user_id`)
@@ -47,7 +49,7 @@ CREATE TABLE `events` (
 CREATE TABLE `venues` (
     `id` SMALLINT UNSIGNED NOT NULL AUTO_INCREMENT,
     `name` VARCHAR(80) NOT NULL,
-    `desc` LONGTEXT NOT NULL,
+    `desc` TEXT NOT NULL,
     `pic` VARCHAR(100) NULL,
     `links` TINYTEXT NULL,
     PRIMARY KEY (`id`)
@@ -58,7 +60,37 @@ CREATE TABLE `instr` (
     `name` VARCHAR(80) NOT NULL,
     PRIMARY KEY (`id`),
     UNIQUE INDEX `name_UNIQUE` (`name` ASC)
-)
+) ENGINE = InnoDB  DEFAULT CHARSET=utf8;
+
+CREATE TABLE `rm_tokens` (
+    `id` SMALLINT UNSIGNED NOT NULL AUTO_INCREMENT,
+    `selector` CHAR(12) NOT NULL,
+    `token` CHAR(64) NOT NULL,
+    `user_id` SMALLINT UNSIGNED NOT NULL,
+    `expires` DATE NOT NULL,
+    PRIMARY KEY (`id`),
+    UNIQUE INDEX `selector_UNIQUE` (`selector` ASC),
+    CONSTRAINT `fk_tuser_id` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
+) ENGINE = InnoDB  DEFAULT CHARSET=utf8;
+
+CREATE TABLE `auth_tokens` (
+) ENGINE = InnoDB  DEFAULT CHARSET=utf8;
+
+CREATE TABLE `events_profiles` (
+    `profile_id` SMALLINT UNSIGNED NOT NULL,
+    `event_id` INT UNSIGNED NOT NULL,
+    PRIMARY KEY (`profile_id`, `event_id`),
+    CONSTRAINT `fk_profile_id` FOREIGN KEY (`profile_id`) REFERENCES `users` (`id`),
+    CONSTRAINT `fk_event_id` FOREIGN KEY (`event_id`) REFERENCES `events` (`id`)
+) ENGINE = InnoDB  DEFAULT CHARSET=utf8;
+
+CREATE TABLE `events_venues` (
+    `venue_id` SMALLINT UNSIGNED NOT NULL,
+    `event_id` INT UNSIGNED NOT NULL,
+    PRIMARY KEY (`venue_id`, `event_id`),
+    CONSTRAINT `fk_venue_id` FOREIGN KEY (`venue_id`) REFERENCES `venues` (`id`),
+    CONSTRAINT `fk_vevent_id` FOREIGN KEY (`event_id`) REFERENCES `events` (`id`)
+) ENGINE = InnoDB  DEFAULT CHARSET=utf8;
 
 -- stored procedures
 

@@ -167,9 +167,20 @@
 }
 .displayControlDiv {
     text-align: center;
+    margin-top: 10px;
 }
 .error {
     color: red;
+    border: 1px solid red;
+}
+#registerForm {
+    border: 1px solid lightgrey;
+    margin: 5px;
+    padding: 5px;
+}
+#registerForm input {
+    display: block;
+    margin-left: 20px;
 }
 
 /*for mobile*/

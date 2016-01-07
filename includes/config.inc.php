@@ -12,7 +12,7 @@ define('CONTACT_EMAIL', 'aaronallen8455@gmail.com');
 
 if($local) {
     define('BASE_URI', 'file:///B:/Applications/xampp/htdocs/jia');
-    define('BASE_URL', 'localhost/');
+    define('BASE_URL', 'localhost/jia/');
     define('MYSQL', BASE_URI . '/includes/mysql.inc.php');
 }else{//live
     define('MYSQL', '../mysql.inc.php'); //SQL config is outside of webdir on live
