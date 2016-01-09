@@ -9,7 +9,7 @@ if (isset($pageTitle)) {
     echo 'Jazz in Austin';
 } ?>
     </title>
-<link rel="stylesheet" type="text/css" href="./css/index.css">
+<link rel="stylesheet" type="text/css" href="./css/styles.css">
     <script type="application/javascript" src="./js/menu.js"></script>
     
     </head>
@@ -42,8 +42,8 @@ if (empty($_SESSION['id'])) { ?>
 }else{ 
     echo '<span>Welcome, ' . $_SESSION['name'] . '!</span>'; ?>
             <div>
-                <a href="#">My Account</a>,&nbsp;
-                <a href="addevent.php">Add Event</a>,&nbsp;
+                <a href="#">My Account</a> | 
+                <a href="addevent.php">Add Event</a> | 
                 <a href="logout.php">Log Out</a>
             
             </div>

@@ -14,14 +14,14 @@ if (isset($_SESSION['id']) && filter_var($_SESSION['id'], FILTER_VALIDATE_INT, a
         //validate title
         if (isset($_POST['title']) && strlen($_POST['title']) <= 80 && strlen($_POST['title']) >= 6) {
             $title = $_POST['title'];
-            $title = htmlspecialchars(strip_tags($title)); //strip any html tags
+            $title = strip_tags($title); //strip any html tags
         }else{
             $event_errors['title'] = 'Please enter a valid title for your event!';
         }
         //validate venue
         if (isset($_POST['venue']) && strlen($_POST['venue']) <= 80 && strlen($_POST['venue']) >= 2) {
             $venue = $_POST['venue'];
-            $venue = htmlspecialchars(strip_tags($venue));
+            $venue = strip_tags($venue);
         }else{
             $event_errors['venue'] = 'Please enter the name of the venue for your event!';
         }
@@ -65,7 +65,7 @@ if (isset($_SESSION['id']) && filter_var($_SESSION['id'], FILTER_VALIDATE_INT, a
         //filter description
         $desc = null;
         if (isset($_POST['desc'])) {
-            $desc = htmlspecialchars(strip_tags($_POST['desc']), ENT_QUOTES);
+            $desc = strip_tags($_POST['desc']);
             if (strlen($_POST['desc'])>65535) {
                 $desc = substr($desc, 0, 65535);
             }
@@ -80,7 +80,7 @@ if (isset($_SESSION['id']) && filter_var($_SESSION['id'], FILTER_VALIDATE_INT, a
                 $bn = str_replace(array(',','|'), '', $bn);
                 //validate instrument
                 if(isset($_POST['instr'][$i])) {
-                    $_POST['instr'][$i] = htmlspecialchars(strip_tags($_POST['instr'][$i]));
+                    $_POST['instr'][$i] = strip_tags($_POST['instr'][$i]);
                     $_POST['instr'][$i] = str_replace(array(',','|'), '', $_POST['instr'][$i]);
                 }
                 //check for duplicate names
@@ -134,7 +134,6 @@ if (isset($_SESSION['id']) && filter_var($_SESSION['id'], FILTER_VALIDATE_INT, a
 
                     exit();
                 }else{
-                    print_r($dbc->errorInfo());
                     trigger_error('A system error has occured, your event was not added. We apologize for the inconvenience.');
                 }
             }
@@ -159,7 +158,7 @@ if (isset($_SESSION['id']) && filter_var($_SESSION['id'], FILTER_VALIDATE_INT, a
     include './includes/footer.html';
     
 }else{
-    echo 'You must be logged in to create an event.';
+    echo '<div class="centeredDiv"><h2>You must be logged in to create an event.</h2></div>';
     include './includes/footer.html';
 }
 

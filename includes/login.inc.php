@@ -31,7 +31,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') { //otherwise check if form was submi
                         if ($row['type'] === 'a') {
                             session_regenerate_id(true); //prevent session fixation
                             $_SESSION['isAdmin'] = true;
-                        }
+                        }else $_SESSION['isAdmin'] = false;
                         //set other props
                         $_SESSION['id'] = $row['id'];
                         $_SESSION['name'] = $row['name'];

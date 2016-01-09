@@ -1,11 +1,12 @@
+<script type="application/javascript" src="./js/addevent.js"></script>
 <h2>Add New Event</h2>
 Fill out the form below to create a new event. You should only add events for gigs that are open
  to the public.<br />
 If you want to copy the details from one of your previously created events to this one, check the box
  then select that event's name from the drop-down menu.
 <br /><br />
-Copy from previous event: <input type="checkbox" id="copyCheck"><select id="copySelect" value="none">
-<option value="none"><i>Select Title</i></option>
+Copy from a previous event: <input type="checkbox" id="copyCheck"> <select id="copySelect" value="none" disabled>
+<option value="none" selected>Select Title</option>
 <?php
 //print an option for each event title.
 foreach ($r as $row) {
@@ -24,7 +25,7 @@ foreach ($r as $row) {
     createInput('venue', 'text', $event_errors, 'Venue: ');
     echo '<br />';
     
-    createInput('date', 'date', $event_errors, 'Date (MM/DD/YY): ');
+    createInput('date', 'date', $event_errors, 'Date (MM/DD/YY): ', null, array('size'=>8));
     echo '<br />';
     
     createInput('startHour', 'text', $event_errors, 'Start Time: ', null, array('size'=>2,'maxlength'=>2,'value'=>6));
@@ -47,12 +48,12 @@ foreach ($r as $row) {
     echo '<div class="memberDiv">';
     createInput('band[]', 'text', $event_errors, 'Name: ', null, array('value'=>$_SESSION['name']));
     createInput('instr[]', 'text', $event_errors, 'Instrument: ', null, array('value'=>$instr));
-    echo '<button class="memberDel">Remove</button>';
+    echo '<button class="memberDel" type="button">Remove</button>';
     echo '</div>';
     echo '</div>';
-    echo '<button id="addMember">Add Band Member</button>';
+    echo '<button id="addMember" type="button">Add Band Member</button>';
     echo '<br /><br />';
-    echo '<input type="submit">';
+    echo '<input type="submit" value="Submit">';
 ?>
     </form>
 </div>

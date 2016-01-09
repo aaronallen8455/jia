@@ -1,14 +1,21 @@
 <?php
 
 function createInput($name, $type, $errors = array(), $label, $values = 'POST', $options = array()) {
-    
+    global $event;
     $value = false;
     
     if ($values === 'SESSION') {
         if (isset($_SESSION[$name])) $value = htmlspecialchars($_SESSION[$name], ENT_QUOTES, 'UTF-8');
-    }else{
+    }else if ($values === 'POST') {
         if (isset($_POST[$name])) $value = htmlspecialchars($_POST[$name], ENT_QUOTES, 'UTF-8');
+    }else if ($values === 'EDIT') {
+        if (empty($_POST[$name])) {
+            $value = htmlspecialchars($event[$name], ENT_QUOTES, 'UTF-8');
+        }else{
+            $value = htmlspecialchars($_POST[$name], ENT_QUOTES, 'UTF-8');
+        }
     }
+    echo '<div class="formEleDiv">';
     
     if ($type === 'text' || $type === 'password') { //for text and password cases
         $ele = '<label for="'.$name.'">'.$label.'</label><input id="' . $name . '" name="'.$name.'" type="'.$type.'" ';
@@ -92,5 +99,5 @@ function createInput($name, $type, $errors = array(), $label, $values = 'POST', 
             }else $ele .= '>';
         }
     }
-    
+    echo '</div>';
 }

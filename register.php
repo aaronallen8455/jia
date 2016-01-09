@@ -6,6 +6,12 @@ $pageTitle = 'Register';
 include './includes/header.html';
 require './includes/form_functions.inc.php';
 
+//exit if user is logged in
+if (isset($_SESSION['id'])) {
+    echo '<div class="centeredDiv"><h2>You already have an account!</h2></div>';
+    include './includes/footer.html';
+    exit();
+}
 //check for account validation code
 if (isset($_GET['vc']) && (strlen($_GET['vc']) === 12)) {
     $vc = $_GET['vc'];

@@ -123,6 +123,10 @@
     display: block;
     width: 100%;
 }
+.calendarInput {
+    vertical-align: top;
+    margin-left: 10px;
+}
 .tablecell-day {
     background-color: #D9D0C3;
     border: 2px solid transparent;
@@ -182,6 +186,59 @@
     display: block;
     margin-left: 20px;
 }
+#registerForm .formEleDiv {
+    margin-bottom: 5px;
+    margin-top: 5px;
+}
+#eventForm {
+    border: 1px solid lightgrey;
+    margin: 5px;
+    padding: 5px;
+}
+#eventForm input, textarea {
+    margin: 5px;
+}
+.formEleDiv {
+    display: inline-block;
+    word-break: keep-all;
+}
+textarea {
+    resize: none;
+}
+#bandDiv {
+    border: 1px solid lightgrey;
+    padding: 5px;
+    margin: 5px;
+    display: table;
+}
+.eventDetails {
+    font-style: italic;
+    font-size: small;
+}
+.eventViewList > li:nth-child(even) {
+    background-color: #B4C8ED;
+}
+.eventViewList > li:nth-child(odd) {
+    background-color: #C7D0ED;
+}
+.eventViewList > li {
+    padding: 4px;
+    border-radius: 5px;
+    margin-bottom: 2px;
+}
+.centeredDiv {
+    position: relative;
+    margin-left: auto;
+    margin-right: auto;
+    border: 1px solid lightgrey;
+    text-align: center;
+    max-width: 700px;
+    padding: 10px;
+}
+#cancelButton {
+    margin-left: 15px;
+    margin-top: 20px;
+}
 
 /*for mobile*/
 @media all and (max-width: 850px) and  (min-width: 631px) {
@@ -238,5 +295,11 @@
     }
     .eventDivWrapper {
         width: 100%;
+    }
+    .calendarInput {
+        display: none;
+    }
+    .memberDiv {
+        border: 1px solid lightgrey;
     }
 }

@@ -1,0 +1,61 @@
+<?php if (isset($_SESSION['id']) && ($row['user_id'] === $_SESSION['id'] || $_SESSION['isAdmin'])) { //if user is the creator of this page or is admin
+    echo '<a href="./editevent.php?id='.$_GET['id'].'">Click here to edit this event!</a><br />'; //link to page editor
+    echo '<a href="./removeevent.php?id='.$_GET['id'].'">Click here to remove this event!</a>'; //link to delete event
+} ?>
+<h2><?php echo $row['title']; ?></h2>
+<span class="eventDetails">Added by <?php 
+    //if theres a profile associated with this creator, link to that profile page
+    if (!empty($row['profile'])) echo '<a href="./profiles.php?id='.$row['profiles'].'">';
+    echo $row['name'];
+    if (!empty($row['profile'])) echo '</a>';
+    echo ' on ' . $row['date_created']; ?>
+</span>
+<div class="eventViewDiv">
+    <ul class="eventViewList">
+        <li>Venue: <?php 
+            if (!empty($row['venue_id'])) echo '<a href="./venues.php?id=' . $row['venue_id'] . '">';
+            echo $row['venue'];
+            if (!empty($row['venue_id'])) echo '</a>';
+            ?></li>
+        <li>Date: <?php echo $row['date']; ?></li>
+        <li>Starts at <?php 
+            $hour = (int)substr($row['start_time'], 0 ,2);
+            if ($hour > 12) {
+                $hour -= 12;
+                $period = 'pm';
+            }else $period = 'am';
+            $min = substr($row['start_time'], -2);
+            echo $hour . ':' . $min . $period;
+            ?></li>
+        <li>Ends at <?php 
+            $hour = (int)substr($row['end_time'], 0 ,2);
+            if ($hour > 12) {
+                $hour -= 12;
+                $period = 'pm';
+            }else $period = 'am';
+            $min = substr($row['end_time'], -2);
+            echo $hour . ':' . $min . $period;
+            ?></li>
+        <?php if (!empty($row['desc'])) { //show description
+            echo '<li>About: '.$row['desc'].'</i>';
+        }
+        if (!empty($row['band'])) {
+            echo '<li>Personnel:';
+            echo '<ul>';
+            //generate list of band members
+            $band = explode('|', $row['band']);
+            for ($i=0; $i<count($band); $i++) {
+                $pair = explode(',', $band[$i]);
+                echo '<li>';
+                if (array_key_exists($pair[0], $profiles)) echo '<a href="./profiles.php?id=' . $profiles[$pair[0]] . '">';
+                echo $pair[0] . ', <i>' . $pair[1] . '</i>';
+                if (array_key_exists($pair[0], $profiles)) echo '</a>';
+                echo '</li>';
+            }
+            echo '</ul></li>';
+        }
+        
+        ?>
+    
+    </ul>
+</div>

@@ -23,7 +23,8 @@ CREATE TABLE `profiles` (
     PRIMARY KEY (`user_id`),
     CONSTRAINT `fk_user_id`
         FOREIGN KEY (`user_id`)
-        REFERENCES `users` (`id`),
+        REFERENCES `users` (`id`)
+        ON DELETE CASCADE,
     CONSTRAINT `fk_instr_id`
         FOREIGN KEY (`instr_id`)
         REFERENCES `instr` (`id`)
@@ -70,7 +71,7 @@ CREATE TABLE `rm_tokens` (
     `expires` DATE NOT NULL,
     PRIMARY KEY (`id`),
     UNIQUE INDEX `selector_UNIQUE` (`selector` ASC),
-    CONSTRAINT `fk_tuser_id` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
+    CONSTRAINT `fk_tuser_id` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
 ) ENGINE = InnoDB  DEFAULT CHARSET=utf8;
 
 CREATE TABLE `auth_tokens` (
@@ -80,16 +81,16 @@ CREATE TABLE `events_profiles` (
     `profile_id` SMALLINT UNSIGNED NOT NULL,
     `event_id` INT UNSIGNED NOT NULL,
     PRIMARY KEY (`profile_id`, `event_id`),
-    CONSTRAINT `fk_profile_id` FOREIGN KEY (`profile_id`) REFERENCES `users` (`id`),
-    CONSTRAINT `fk_event_id` FOREIGN KEY (`event_id`) REFERENCES `events` (`id`)
+    CONSTRAINT `fk_profile_id` FOREIGN KEY (`profile_id`) REFERENCES `users` (`id`) ON DELETE CASCADE,
+    CONSTRAINT `fk_event_id` FOREIGN KEY (`event_id`) REFERENCES `events` (`id`) ON DELETE CASCADE
 ) ENGINE = InnoDB  DEFAULT CHARSET=utf8;
 
 CREATE TABLE `events_venues` (
     `venue_id` SMALLINT UNSIGNED NOT NULL,
     `event_id` INT UNSIGNED NOT NULL,
     PRIMARY KEY (`venue_id`, `event_id`),
-    CONSTRAINT `fk_venue_id` FOREIGN KEY (`venue_id`) REFERENCES `venues` (`id`),
-    CONSTRAINT `fk_vevent_id` FOREIGN KEY (`event_id`) REFERENCES `events` (`id`)
+    CONSTRAINT `fk_venue_id` FOREIGN KEY (`venue_id`) REFERENCES `venues` (`id`) ON DELETE CASCADE,
+    CONSTRAINT `fk_vevent_id` FOREIGN KEY (`event_id`) REFERENCES `events` (`id`) ON DELETE CASCADE
 ) ENGINE = InnoDB  DEFAULT CHARSET=utf8;
 
 -- stored procedures
