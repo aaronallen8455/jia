@@ -14,7 +14,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['id']) && filter_var($_G
     //get profile id(s) from events_profiles table if exists
     $profiles = array();
     $q='SELECT profile_id, CONCAT_WS(\' \', first_name, last_name) AS name FROM events_profiles
-    INNER JOIN pofiles ON profile_id=profiles.id INNER JOIN users ON user_id=users.id WHERE event_id=?';
+    INNER JOIN profiles ON profile_id=profiles.user_id INNER JOIN users ON profiles.user_id=users.id WHERE event_id=?';
     $stmt = $dbc->prepare($q);
     $stmt->execute(array($_GET['id']));
     while ($r = $stmt->fetch(PDO::FETCH_ASSOC)) {

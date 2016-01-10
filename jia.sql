@@ -16,18 +16,21 @@ CREATE TABLE `users` (
 
 CREATE TABLE `profiles` (
     `user_id` SMALLINT UNSIGNED NOT NULL,
-    `instr_id` TINYINT UNSIGNED NOT NULL,
-    `bio` TEXT NOT NULL,
+    `instr_id` TINYINT UNSIGNED NULL,
+    `bio` TEXT NULL,
     `pic` VARCHAR(100) NULL,
     `links` TINYTEXT NULL,
     PRIMARY KEY (`user_id`),
     CONSTRAINT `fk_user_id`
         FOREIGN KEY (`user_id`)
         REFERENCES `users` (`id`)
-        ON DELETE CASCADE,
+        ON DELETE CASCADE
+        ON UPDATE CASCADE,
     CONSTRAINT `fk_instr_id`
         FOREIGN KEY (`instr_id`)
         REFERENCES `instr` (`id`)
+        ON DELETE SET NULL
+        ON UPDATE CASCADE
 ) ENGINE = InnoDB  DEFAULT CHARSET=utf8;
 
 CREATE TABLE `events` (
@@ -45,6 +48,7 @@ CREATE TABLE `events` (
     CONSTRAINT `fk_user_id`
         FOREIGN KEY (`user_id`)
         REFERENCES `users` (`id`)
+        ON DELETE CASCADE
 ) ENGINE = InnoDB  DEFAULT CHARSET=utf8;
 
 CREATE TABLE `venues` (

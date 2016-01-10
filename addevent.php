@@ -149,7 +149,7 @@ if (isset($_SESSION['id']) && filter_var($_SESSION['id'], FILTER_VALIDATE_INT, a
     WHERE u.id={$_SESSION['id']}");
     if ($r) {
         //get the user's instrument
-        $instr = $r->fetchColumn();
+        $instr = ucwords($r->fetchColumn());
     }
     //get the names of all this user's events
     $r = $dbc->query("SELECT title, id FROM events WHERE user_id={$_SESSION['id']}");

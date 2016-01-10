@@ -5,7 +5,7 @@
 <h2><?php echo $row['title']; ?></h2>
 <span class="eventDetails">Added by <?php 
     //if theres a profile associated with this creator, link to that profile page
-    if (!empty($row['profile'])) echo '<a href="./profiles.php?id='.$row['profiles'].'">';
+    if (!empty($row['profile'])) echo '<a href="./profiles.php?id='.$row['profile'].'">';
     echo $row['name'];
     if (!empty($row['profile'])) echo '</a>';
     echo ' on ' . $row['date_created']; ?>

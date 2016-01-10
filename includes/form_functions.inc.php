@@ -86,7 +86,7 @@ function createInput($name, $type, $errors = array(), $label, $values = 'POST', 
         sort($instruments);
         
         foreach ($instruments as $k=>$v) {
-            $ele .= '<option value="'.($k+1).'">'.$v.'</option>';
+            $ele .= '<option value="'.$v.'">'.$v.'</option>';
         }
         //'other' option
         $ele .= '<option value="other">Other...</option></select>';
@@ -98,6 +98,7 @@ function createInput($name, $type, $errors = array(), $label, $values = 'POST', 
                 $ele .= 'class="error"><span class="error">'. $errors[$name] . '</span>';
             }else $ele .= '>';
         }
+        echo $ele;
     }
     echo '</div>';
 }
