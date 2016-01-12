@@ -31,13 +31,22 @@ foreach ($r as $row) {
     createInput('startHour', 'text', $event_errors, 'Start Time: ', null, array('size'=>2,'maxlength'=>2,'value'=>6));
     echo ':';
     createInput('startMin', 'text', $event_errors, '', null, array('size'=>2,'maxlength'=>2,'value'=>'00'));
-    echo '<select name="startPeriod" id="startPeriod"><option value="am">AM</option><option value="pm" selected>PM</option></select>';
+    //allow for sticky form
+    if (isset($_POST['startPeriod'])) {
+        echo '<select name="startPeriod" id="startPeriod"><option value="am">AM</option><option value="pm" '.($_POST['startPeriod']==='pm'?'selected':'').'>PM</option></select>';
+    }else{
+        echo '<select name="startPeriod" id="startPeriod"><option value="am">AM</option><option value="pm" selected>PM</option></select>';
+    }
     echo '<br />';
     
     createInput('endHour', 'text', $event_errors, 'End Time: ', null, array('size'=>2,'maxlength'=>2,'value'=>8));
     echo ':';
     createInput('endMin', 'text', $event_errors, '', null, array('size'=>2,'maxlength'=>2,'value'=>'00'));
-    echo '<select name="endPeriod" id="endPeriod"><option value="am">AM</option><option value="pm" selected>PM</option></select>';
+    if (isset($_POST['endPeriod'])) {
+        echo '<select name="endPeriod" id="endPeriod"><option value="am">AM</option><option value="pm" '.($_POST['endPeriod']==='pm'?'selected':'').'>PM</option></select>';
+    }else{
+        echo '<select name="endPeriod" id="endPeriod"><option value="am">AM</option><option value="pm" selected>PM</option></select>';
+    }
     echo '<br />';
     
     createInput('desc', 'textarea', $event_errors, 'Description (Optional): ');
@@ -45,11 +54,22 @@ foreach ($r as $row) {
     
     echo 'Band Members (Optional): ';
     echo '<div id="bandDiv">';
-    echo '<div class="memberDiv">';
-    createInput('band[]', 'text', $event_errors, 'Name: ', null, array('value'=>$_SESSION['name']));
-    createInput('instr[]', 'text', $event_errors, 'Instrument: ', null, array('value'=>$instr));
-    echo '<button class="memberDel" type="button">Remove</button>';
-    echo '</div>';
+    //allow for sticky band forms
+    if (isset($_POST['band'])) {
+        for ($i=0; $i<count($_POST['band']); $i++) {
+            echo '<div class="memberDiv">';
+            createInput('band[]', 'text', $event_errors, 'Name: ', null, array('value'=>$_POST['band'][$i]));
+            createInput('instr[]', 'text', $event_errors, 'Instrument: ', null, array('value'=>$_POST['instr'][$i]));
+            echo '<button class="memberDel" type="button">Remove</button>';
+            echo '</div>';
+        }
+    }else{
+        echo '<div class="memberDiv">';
+        createInput('band[]', 'text', $event_errors, 'Name: ', null, array('value'=>$_SESSION['name']));
+        createInput('instr[]', 'text', $event_errors, 'Instrument: ', null, array('value'=>$instr));
+        echo '<button class="memberDel" type="button">Remove</button>';
+        echo '</div>';
+    }
     echo '</div>';
     echo '<button id="addMember" type="button">Add Band Member</button>';
     echo '<br /><br />';

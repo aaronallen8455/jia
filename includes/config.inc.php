@@ -40,5 +40,17 @@ function my_error_handler($e_number, $e_message, $e_file, $e_line, $e_vars) {
     }
     return true; //so that php doesn't try to handle the error too.
 }
+
 //use the error handler
 set_error_handler('my_error_handler');
+
+//utility function for parsing time values from the DB
+function parseTime($str) {
+    $hour = (int)substr($str,0,2);
+    if ($hour > 12) {
+        $hour -=12;
+        $period = 'pm';
+    }else $period = 'am';
+    $min = substr($str,-2);
+    return $hour.':'.$min.$period;
+}

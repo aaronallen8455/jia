@@ -14,8 +14,8 @@ function createInput($name, $type, $errors = array(), $label, $values = 'POST', 
         }else{
             $value = htmlspecialchars($_POST[$name], ENT_QUOTES, 'UTF-8');
         }
-    }
-    echo '<div class="formEleDiv">';
+    }else $value = false;
+    echo '<div class="formEleDiv'.(($type === 'textarea')?'Text':'').'">';
     
     if ($type === 'text' || $type === 'password') { //for text and password cases
         $ele = '<label for="'.$name.'">'.$label.'</label><input id="' . $name . '" name="'.$name.'" type="'.$type.'" ';
@@ -57,7 +57,7 @@ function createInput($name, $type, $errors = array(), $label, $values = 'POST', 
 		if (array_key_exists($name, $errors)) echo ' <span class="error">' . $errors[$name] . '</span><br />';
         echo '<span>'.$label.'</span><br />';
 		// Start creating the textarea:
-		echo '<textarea name="' . $name . '" id="' . $name . '" rows="5" cols="75"';
+		echo '<textarea name="' . $name . '" id="' . $name . '"';
 
 		// Add the error class, if applicable:
 		if (array_key_exists($name, $errors)) {
@@ -74,11 +74,10 @@ function createInput($name, $type, $errors = array(), $label, $values = 'POST', 
         
     }else if ($type === 'select') { //select input
         
-        $ele = '<label for="'.$name.'">'.$label.'</label><span class="instrSelectSpan"><select id="'.$name.'" name="'.$name.'" ';
+        $ele = '<label for="'.$name.'">'.$label.'</label><span class="instrSelectSpan"><select id="'.$name.'" name="'.$name.'" >';
         //sticky value
-        if ($value) {
-            $ele .= 'value="'.$value.'">';
-        }else $ele .= '>';
+        
+        $ele .= '<option value="none" style="font-style:italic;">Select One:</option>';
         
         $instruments = array(
             'Bass', 'Trumpet', 'Piano', 'Saxophone', 'Drums', 'Trombone', 'Guitar', 'Vocal'
@@ -86,14 +85,19 @@ function createInput($name, $type, $errors = array(), $label, $values = 'POST', 
         sort($instruments);
         
         foreach ($instruments as $k=>$v) {
-            $ele .= '<option value="'.$v.'">'.$v.'</option>';
+            $ele .= '<option value="'.$v.'" ';
+            if (isset($value) && ucwords($value) === $v) {
+                $ele .= 'selected'; //sticky selection
+                $value = false;
+            }
+            $ele .= '>'.$v.'</option>';
         }
         //'other' option
-        $ele .= '<option value="other">Other...</option></select>';
+        $ele .= '<option value="other" '. ($value?'selected':'') .'>Other...</option></select>';
         
         //show other input if value or error
-        if ($value === 'other') {
-            $ele .= '<input type="text" id="instrSelOther" name="instrSelOther" value="'. $_POST['instrSelOther']?$_POST['instrSelOther']:$_SESSION['instrSelOther'] .'">';
+        if ($value) {
+            $ele .= '<input type="text" id="instrSelOther" name="instrSelOther" value="'. (isset($_POST['instrSelOther'])?$_POST['instrSelOther']:$value) .'">';
             if (array_key_exists($name, $errors)) {
                 $ele .= 'class="error"><span class="error">'. $errors[$name] . '</span>';
             }else $ele .= '>';

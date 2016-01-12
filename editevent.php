@@ -107,6 +107,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && filter_var($_GET['id'], FILTER_VALI
                     exit();
                 }
             }
+            $q->closeCursor();
         }else{
             echo '<h2>This page has been accessed in error!</h2>';
             include './includes/footer.html';
@@ -119,23 +120,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && filter_var($_GET['id'], FILTER_VALI
             $eid = $_GET['id'];
             //show success message
             include './views/editevent_success.html';
-            include './includes/footer.html';
+            $event_errors['success'] = true;
+            //include './includes/footer.html';
             //if the band was changed, redo the events_profiles entries.
             if ($band !== $row['band']) {
                 //clear existing entries
                 $q = 'DELETE FROM events_profiles WHERE event_id=' . $eid;
-                if ($dbc->exec($q)) {
+                $dbc->exec($q);
+                //if ($dbc->exec($q)) {
                     //create new entries
-                    $q = 'SELECT u.id AS id FROM users AS u INNER JOIN profiles AS p ON p.user_id=u.id WHERE CONCAT_WS(\' \', LOWER(u.first_name), LOWER(u.last_name))=LOWER(?)';
-                    $stmt = $dbc->prepare($q);
-                    foreach ($_POST['band'] as $bn) {
-                        $stmt->execute(array($bn));
-                        $uid = $stmt->fetchColumn();
-                        if ($uid) {
-                            $dbc->exec('INSERT INTO events_profiles (profile_id, event_id) VALUES ('.$uid.', '.$eid.')');
-                        }
+                $q = 'SELECT u.id AS id FROM users AS u INNER JOIN profiles AS p ON p.user_id=u.id WHERE CONCAT_WS(\' \', LOWER(u.first_name), LOWER(u.last_name))=LOWER(?)';
+                $stmt = $dbc->prepare($q);
+                for ($i=0; $i<count($_POST['band']); $i++) {
+                    //foreach ($_POST['band'] as $bn) {
+                    $stmt->execute(array($_POST['band'][$i]));
+                    $uid = $stmt->fetchColumn();
+                    if ($uid) {
+                        $dbc->exec('INSERT INTO events_profiles (profile_id, event_id) VALUES ('.$uid.', '.$eid.')');
                     }
                 }
+                //}
             }
             //if venue was changed, redo events_venues entry.
             if ($venue !== $row['venue']) {
@@ -153,7 +157,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && filter_var($_GET['id'], FILTER_VALI
                     }
                 }
             }
-            exit();
+            //exit();
         }else{
             trigger_error('A system error has occured, your event was not updated. We apologize for the inconvenience.');
         }
@@ -163,7 +167,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && filter_var($_GET['id'], FILTER_VALI
 //validate event id
 if (($_SERVER['REQUEST_METHOD'] === 'GET' || !empty($event_errors)) && filter_var($_GET['id'], FILTER_VALIDATE_INT, array('min_range'=>1))) {
     //check user id against event user id or if user is admin
-    require MYSQL;
+    require_once MYSQL;
     //get all the details for the event
     $event = $dbc->query('SELECT user_id, title, venue, DATE_FORMAT(`date`, \'%c/%e/%y\') AS date, start_time, end_time, `desc`, band FROM events WHERE id=' . $_GET['id']);
     if ($event) {

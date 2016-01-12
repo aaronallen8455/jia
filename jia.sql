@@ -108,3 +108,16 @@ ORDER BY start_time ASC;
 END$$
 DELIMITER ;
 
+DELIMITER $$
+CREATE PROCEDURE get_profile (type VARCHAR(4), uid SMALLINT, uname VARCHAR(91))
+BEGIN
+IF type = 'id' THEN
+SELECT user_id, name AS instr_name, bio, pic, links, CONCAT_WS(' ', first_name, last_name) AS name FROM
+`profiles` JOIN users ON user_id=users.id JOIN instr ON instr.id=instr_id WHERE user_id=uid;
+ELSEIF type = 'name' THEN
+SELECT user_id, name AS instr_name, bio, pic, links, CONCAT_WS(' ', first_name, last_name) AS name FROM
+`profiles` JOIN users ON user_id=users.id JOIN instr ON instr.id=instr_id WHERE CONCAT_WS(' ', first_name, last_name)=uname;
+END IF;
+END$$
+DELIMITER ;
+

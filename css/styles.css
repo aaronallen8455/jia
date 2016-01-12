@@ -174,8 +174,11 @@
     margin-top: 10px;
 }
 .error {
-    color: red;
     border: 1px solid red;
+}
+.error:not(input):not(textarea) {
+    color: red;
+    margin-right: 5px;
 }
 #registerForm {
     border: 1px solid lightgrey;
@@ -202,10 +205,22 @@
     display: inline-block;
     word-break: keep-all;
 }
+.formEleDivText {
+    margin-right: 10px;
+}
 textarea {
     resize: none;
+    width: 75%;
+    height: 80px;
+    box-sizing: border-box;
 }
 #bandDiv {
+    border: 1px solid lightgrey;
+    padding: 5px;
+    margin: 5px;
+    display: table;
+}
+#linksDiv {
     border: 1px solid lightgrey;
     padding: 5px;
     margin: 5px;
@@ -238,6 +253,36 @@ textarea {
 #cancelButton {
     margin-left: 15px;
     margin-top: 20px;
+}
+.profileViewList {
+    background-color: #e4edf0;
+    border: 1px solid #bfcacf;
+    border-radius: 2px;
+    padding: 6px;
+}
+.profileViewList dt {
+    font-weight: 600;
+}
+.profileViewList dd {
+    background-color: #F0F4F5;
+    display: inline-block;
+    min-width: 30%;
+    padding: 3px 9px;
+    margin-top: 3px;
+    margin-bottom: 3px;
+    border: 1px solid #d8dbdc;
+    border-radius: 5px;
+}
+.profilePic {
+    max-width: 100%;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    border: 6px solid lightgrey;
+    border-radius: 6px;
+}
+.profileViewDiv h2 {
+    text-align: center;
 }
 
 /*for mobile*/
@@ -302,4 +347,6 @@ textarea {
     .memberDiv {
         border: 1px solid lightgrey;
     }
-}
+    textarea {
+        width: 100%;
+    }

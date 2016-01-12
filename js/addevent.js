@@ -103,8 +103,8 @@ window.addEventListener('load', function() {
             return [label, input];
         }
         //make the name and instrument inputs
-        var name = makeInput('Name: ', 'band['+i+']', name);
-        var instr = makeInput('Instrument: ', 'instr['+i+']', instr);
+        var name = makeInput('Name: ', 'band[]', name);
+        var instr = makeInput('Instrument: ', 'instr[]', instr);
         //make the remove button
         var remove = document.createElement('button');
         remove.className = 'memberDel';
@@ -125,10 +125,13 @@ window.addEventListener('load', function() {
     }
     
     //the remove button for initial row
-    var del = document.getElementsByClassName('memberDel')[0];
-    del.onclick = function() {
-        bandDiv.removeChild(this.parentElement);
-    }
+    var del = document.getElementsByClassName('memberDel');
+    Array.prototype.forEach.call(del, function(x) {
+        x.onclick = function() {
+            bandDiv.removeChild(this.parentElement);
+        };
+    });
+    
     
     //the calendar select element
     var cals = document.getElementsByClassName('calendarInput');
@@ -191,7 +194,9 @@ window.addEventListener('load', function() {
         }
         next.innerHTML = '&#10095;';
         
-        div.appendChild(prev);
+        //don't allow prev to go into the past
+        if (currentMonth<month && year === currentYear)
+            div.appendChild(prev);
         div.appendChild(calendarHeading);
         div.appendChild(next);
         
@@ -225,15 +230,18 @@ window.addEventListener('load', function() {
                     continue;
                 td.classList.add('tablecell-day');
                 var link = document.createElement('a');
-                link.setAttribute('href', '#');
                 var _date = col - startingDay + 1 + 7*row;
                 link.innerHTML = _date;
-                //click event
-                link.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    ele.previousSibling.value = date.getMonth()+1 + '/' + this.innerHTML + '/' + date.getFullYear().toString().slice(-2);
-                    close();
-                });
+                //dont set link for days that are past
+                if ((month===currentMonth && year===currentYear && _date>=currentDay) || month!==currentMonth || year!==currentYear) {
+                    link.setAttribute('href', '#');
+                    //click event
+                    link.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        ele.parentElement.children[1].value = date.getMonth()+1 + '/' + this.innerHTML + '/' + date.getFullYear().toString().slice(-2);
+                        close();
+                    });
+                }
                 td.appendChild(link);
                 
                 if (link.innerHTML == currentDay && month === currentMonth && year === currentYear)

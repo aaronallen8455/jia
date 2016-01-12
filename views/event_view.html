@@ -1,6 +1,6 @@
 <?php if (isset($_SESSION['id']) && ($row['user_id'] === $_SESSION['id'] || $_SESSION['isAdmin'])) { //if user is the creator of this page or is admin
-    echo '<a href="./editevent.php?id='.$_GET['id'].'">Click here to edit this event!</a><br />'; //link to page editor
-    echo '<a href="./removeevent.php?id='.$_GET['id'].'">Click here to remove this event!</a>'; //link to delete event
+    echo '<a href="./editevent.php?id='.$_GET['id'].'">Click here to edit this event</a><br />'; //link to page editor
+    echo '<a href="./removeevent.php?id='.$_GET['id'].'">Click here to remove this event</a>'; //link to delete event
 } ?>
 <h2><?php echo $row['title']; ?></h2>
 <span class="eventDetails">Added by <?php 
@@ -37,7 +37,7 @@
             echo $hour . ':' . $min . $period;
             ?></li>
         <?php if (!empty($row['desc'])) { //show description
-            echo '<li>About: '.$row['desc'].'</i>';
+            echo '<li><dl><dt>About:</dt><dd>'.nl2br($row['desc']).'</dd></dl></i>';
         }
         if (!empty($row['band'])) {
             echo '<li>Personnel:';

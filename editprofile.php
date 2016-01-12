@@ -1,25 +1,11 @@
 <?php
 require './includes/config.inc.php';
-$pageTitle = 'Create Profile';
+$pagetitle = 'Edit Profile';
 include './includes/header.html';
-//exit of user not logged in
-if (!isset($_SESSION['id'])) {
-    echo '<div class="centeredDiv"><h2>You must be logged in.</h2></div>';
-    include './includes/footer.html';
-    exit();
-}
-//check if user already has a profile
-require MYSQL;
-$r  = $dbc->query('SELECT user_id FROM profiles WHERE user_id='.$_SESSION['id']);
-if (!empty($r->fetch())) {
-    echo '<div class="centeredDiv"><h2>You already have a profile!</h2></div>';
-    include './includes/footer.html';
-    exit();
-}
-//validate form submissions
+//validate form submission
 $profile_errors = array();
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    //instr_id, bio, pic, links
+if (($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_GET['id'],$_SESSION['id']) && $_GET['id'] === $_SESSION['id']) || $_SESSION['isAdmin']) {
+    require_once MYSQL;
     //validate instrument and get id
     if (isset($_POST['instr']) && preg_match('/^[ \w\-.]{2,}$/', $_POST['instr']) && $_POST['instr'] !== 'none') {
         //if 'other' was selected get the value of that entry
@@ -147,6 +133,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }else {
         $pic = null;
+        //if pic failed to upload, find out why
         if (!empty($_FILES['pic']['name'])) {
             switch ($_FILES['pic']['error']) {
                 case 1:
@@ -168,25 +155,84 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
         }
     }
-    //if no errors, insert into DB
+    //if no errors, update the profile
     if (empty($profile_errors)) {
-        $q = 'INSERT INTO profiles (user_id, instr_id, bio, pic, links) VALUES (?,?,?,?,?)';
-        $stmt = $dbc->prepare($q);
-        if ($stmt->execute(array($_SESSION['id'], $instr, $bio, isset($_SESSION['profpic'])?$_SESSION['profpic']:null, $links))) {
+        
+        if (isset($pic) && $pic=== null && !isset($_POST['noPic'])) {
+            $q = 'UPDATE profiles SET bio=?, links=?, instr_id=? WHERE user_id='.$_GET['id'];
+            $stmt = $dbc->prepare($q);
+            $stmt->bindParam(1, $bio);
+            $stmt->bindParam(2, $links);
+            $stmt->bindParam(3, $instr);
+        }else{
+            $pic = isset($_POST['noPic'])?null:$_SESSION['profpic'];
+            $q = 'UPDATE profiles SET bio=?, links=?, instr_id=?, pic=? WHERE user_id='.$_GET['id'];
+            $stmt = $dbc->prepare($q);
+            $stmt->bindParam(1, $bio);
+            $stmt->bindParam(2, $links);
+            $stmt->bindParam(3, $instr);
+            $stmt->bindParam(4, $pic); //if no pic, insert null
+        }
+        if ($stmt->execute()) {
+            //success
+            if (!empty($_SESSION['profpic'])) {
+                //delete the old pic if a new one was selected
+                unlink($_SESSION['currentpic']);
+            }
+            if (isset($_POST['noPic'])) {
+                //delete the current picture if no pic was checked
+                unlink($_SESSION['currentpic']);
+            }
             //cleanup
-            unset($_SESSION['profpic'], $_SESSION['profpicname'], $file);
-            $_POST = array();
-            $_FILES = array();
-            include './views/addprofile_success.html';
+            unset($_SESSION['profpic'], $_SESSION['currentpic'], $_SESSION['profpicname']);
+            //success message
+            include './views/editprofile_success.html';
+            //the form will be displayed under this
+        }else{
+            trigger_error('The profile could not be updated due to a system error. We apologize for the inconvenience.');
             include './includes/footer.html';
             exit();
-        }else{
-            trigger_error('Your profile was not created because a system error occured. We apologize for the inconvenience.');
         }
     }
 }
-//show the form
-require './includes/form_functions.inc.php';
-include './views/addprofile_form.html';
-include './includes/footer.html';
-?>
+//check id and make sure user is logged in or is admin
+if (isset($_GET['id']) && filter_var($_GET['id'], FILTER_VALIDATE_INT, array('min_range'=>1))) {
+    if (!isset($_SESSION['id']) || $_SESSION['id'] !== $_GET['id'] && !$_SESSION['isAdmin']) {
+        echo '<div class="centeredDiv"><h2>Access denied.</h2></div>';
+        include './includes/footer.html';
+        exit();
+    }
+    //get profile info from DB
+    require_once MYSQL;
+    $q = 'SELECT name AS instr, bio, pic, links FROM profiles JOIN instr ON id=instr_id WHERE user_id='.$_GET['id'];
+    $event = $dbc->query($q);
+    if ($event = $event->fetch(PDO::FETCH_ASSOC)) {
+        //save path of current pic
+        $_SESSION['currentpic'] = $event['pic'];
+        //proccess link list
+        $linkURL = array();
+        $linkName = array();
+        if (!empty($event['links'])) {
+            $a = explode('|', $event['links']);
+            foreach ($a as $p) {
+                $p2 = explode('\\', $p);
+                $linkURL[] = $p2[0];
+                $linkName[] = $p2[1];
+            }
+        }
+        //show the form
+        require './includes/form_functions.inc.php';
+        include './views/editprofile_form.html';
+        include './includes/footer.html';
+        exit();
+    }else{
+        //no profile found
+        echo '<div class="centeredDiv"><h2>No profile exists for this user.</h2></div>';
+        include './includes/footer.html';
+        exit();
+    }
+}else{
+    //must be a get or post request
+    echo '<div class="centeredDiv"><h2>Access denied.</h2></div>';
+    include './includes/footer.html';
+}

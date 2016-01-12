@@ -1,7 +1,7 @@
 <script type="application/javascript" src="./js/addevent.js"></script>
 <script type="application/javascript" src="./js/cancel.js"></script>
 <h2>Edit Event</h2>
-Change any of the fields below then click 'Save' to save the changes.
+Edit any of the fields below then click 'Save'.
 <br /><br />
 
 <div id="eventForm">
@@ -20,13 +20,13 @@ Change any of the fields below then click 'Save' to save the changes.
     createInput('startHour', 'text', $event_errors, 'Start Time: ', 'EDIT', array('size'=>2,'maxlength'=>2));
     echo ':';
     createInput('startMin', 'text', $event_errors, '', 'EDIT', array('size'=>2,'maxlength'=>2));
-    echo '<select name="startPeriod" id="startPeriod" value="' . $event['startPeriod'] . '"><option value="am">AM</option><option value="pm" selected>PM</option></select>';
+    echo '<select name="startPeriod" id="startPeriod"><option value="am">AM</option><option value="pm" '.($event['startPeriod']==='pm'?'selected':'').'>PM</option></select>';
     echo '<br />';
     
     createInput('endHour', 'text', $event_errors, 'End Time: ', 'EDIT', array('size'=>2,'maxlength'=>2,'value'=>8));
     echo ':';
     createInput('endMin', 'text', $event_errors, '', 'EDIT', array('size'=>2,'maxlength'=>2,'value'=>'00'));
-    echo '<select name="endPeriod" id="endPeriod" value="' . $event['endPeriod'] . '"><option value="am">AM</option><option value="pm" selected>PM</option></select>';
+    echo '<select name="endPeriod" id="endPeriod"><option value="am">AM</option><option value="pm" '.($event['endPeriod']==='pm'?'selected':'').'>PM</option></select>';
     echo '<br />';
     
     createInput('desc', 'textarea', $event_errors, 'Description (Optional): ', 'EDIT');
@@ -40,7 +40,12 @@ Change any of the fields below then click 'Save' to save the changes.
         $band = array();
         $instr = array();
         $bands = explode('|', $event['band']);
-        
+        /*
+        foreach ($bands as $i=>$bi) {
+            list($b, $in) = (explode(',', $bi));
+            $band[$i] = $b;
+            $instr[$i] = $in;
+        }*/
         for ($i=0; $i<count($bands); $i++) {
             list($b, $in) = (explode(',', $bands[$i]));
             $band[$i] = $b;
@@ -51,7 +56,6 @@ Change any of the fields below then click 'Save' to save the changes.
         $instr = $_POST['instr'];
     }
     //create inputs
-    
     for ($i=0; $i<count($band); $i++) {
         echo '<div class="memberDiv">';
         createInput("band[]", 'text', $event_errors, 'Name: ', null, array('value'=>$band[$i]));
