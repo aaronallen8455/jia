@@ -17,7 +17,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') { //otherwise check if form was submi
             require_once MYSQL;
             $loginError = true; //turns false if login succeeds
             //get password from database
-            $q = 'SELECT id, pass, type, CONCAT_WS(\' \', first_name, last_name) AS name FROM users WHERE email=?';
+            $q = 'SELECT id, pass, type, CONCAT_WS(\' \', first_name, last_name) AS name, user_id FROM users LEFT OUTER JOIN profiles ON user_id=id WHERE email=?';
             $stmt = $dbc->prepare($q);
             $stmt->execute(array($e));
             $row = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -35,6 +35,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') { //otherwise check if form was submi
                         //set other props
                         $_SESSION['id'] = $row['id'];
                         $_SESSION['name'] = $row['name'];
+                        //check if has profile
+                        if (!empty($row['user_id'])) {
+                            $_SESSION['hasProfile'] = true;
+                        }
                         //set the remember me cookie
                         if (isset($_POST['login']['remember']) && $_POST['login']['remember'] === 'on') {
                             //create row in rm_token table

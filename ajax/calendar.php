@@ -3,7 +3,7 @@ if($_SERVER['REQUEST_METHOD'] != 'POST') { //post is the only way to access.
     exit();
 }
 
-require './config.inc.php';
+require '../includes/config.inc.php';
 require MYSQL;
 
 $c = file_get_contents('php://input');

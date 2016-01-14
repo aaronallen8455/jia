@@ -62,5 +62,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         include './includes/header.html';
         include './views/profile_view.html';
         include './includes/footer.html';
+        exit();
     }
 }
+//show the profile selection page.
+require MYSQL;
+$pageTitle = 'Musician Profiles';
+include './includes/header.html';
+//get all profiles sorted by instr
+$baseInstr = array ('bass','drums','guitar','piano','saxophone','trombone','trumpet','vocal');
+$r = $dbc->query('CALL get_profiles ()');
+$rows = array();
+while ($row = $r->fetch(PDO::FETCH_ASSOC)) {
+    $rows[$row['instr_name']][] = $row; //fetch all rows into this array of arrays indexed by instr name
+}
+if (empty($rows)) {
+    echo '<div class="centeredDiv"><h2>No profiles exist.</h2></div>';
+}else{
+    include './views/profiles.html';
+}
+include './includes/footer.html';
+?>

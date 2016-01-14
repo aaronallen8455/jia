@@ -36,7 +36,7 @@ window.addEventListener('load', function() {
                 var data = {id: this.value};
                 data = JSON.stringify(data);
                 var req = new XMLHttpRequest();
-                req.open('POST','./includes/addeventajax.inc.php',true);
+                req.open('POST','./ajax/addevent.php',true);
                 req.setRequestHeader('Content-type', 'application/json');
                 req.onreadystatechange = function() {
                     if(req.readyState === 4) {

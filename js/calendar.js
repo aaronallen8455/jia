@@ -90,7 +90,7 @@ window.onload = function() {
         msg = JSON.stringify(msg); //the object sent to the ajax script
         //query the database
         var req = new XMLHttpRequest();
-        req.open('POST','./includes/calendarajax.inc.php',true);
+        req.open('POST','./ajax/calendar.php',true);
         req.setRequestHeader('Content-type', 'application/json');
         req.onreadystatechange = function() {
             if(req.readyState === 4) {

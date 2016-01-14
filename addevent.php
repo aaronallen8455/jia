@@ -123,9 +123,9 @@ if (isset($_SESSION['id']) && filter_var($_SESSION['id'], FILTER_VALIDATE_INT, a
                         }
                     }
                     //if the venue has a page, create an events_venues listing
-                    $q = 'SELECT id FROM venues WHERE LOWER(name)=LOWER(?)';
-                    $stmt = $dbc->prepare($q);
-                    $stmt->execute(array($venue));
+                    $q = "SELECT id FROM venues WHERE name LIKE '%$venue%'";
+                    $stmt = $dbc->query($q);
+                    //$stmt->execute(array($venue));
                     $vid = $stmt->fetchColumn();
                     if ($vid) {
                         //create row

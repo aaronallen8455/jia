@@ -3,7 +3,7 @@ if($_SERVER['REQUEST_METHOD'] != 'POST' && isset($_SESSION['id'])) { //post is t
     exit();
 }
 
-require './config.inc.php';
+require '../includes/config.inc.php';
 require MYSQL;
 
 $c = file_get_contents('php://input');

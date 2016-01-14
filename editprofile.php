@@ -132,7 +132,7 @@ if (($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_GET['id'],$_SESSION['id'])
             //$pic = $name;
         }
     }else {
-        $pic = null;
+        $pic = false;
         //if pic failed to upload, find out why
         if (!empty($_FILES['pic']['name'])) {
             switch ($_FILES['pic']['error']) {
@@ -158,7 +158,7 @@ if (($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_GET['id'],$_SESSION['id'])
     //if no errors, update the profile
     if (empty($profile_errors)) {
         
-        if (isset($pic) && $pic=== null && !isset($_POST['noPic'])) {
+        if (isset($pic) && $pic=== false && !isset($_POST['noPic'])) {
             $q = 'UPDATE profiles SET bio=?, links=?, instr_id=? WHERE user_id='.$_GET['id'];
             $stmt = $dbc->prepare($q);
             $stmt->bindParam(1, $bio);
@@ -175,11 +175,11 @@ if (($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_GET['id'],$_SESSION['id'])
         }
         if ($stmt->execute()) {
             //success
-            if (!empty($_SESSION['profpic'])) {
+            if (!empty($_SESSION['profpic']) && isset($_SESSION['currentpic'])) {
                 //delete the old pic if a new one was selected
                 unlink($_SESSION['currentpic']);
             }
-            if (isset($_POST['noPic'])) {
+            if (isset($_POST['noPic']) && isset($_SESSION['currentpic'])) {
                 //delete the current picture if no pic was checked
                 unlink($_SESSION['currentpic']);
             }
@@ -236,3 +236,4 @@ if (isset($_GET['id']) && filter_var($_GET['id'], FILTER_VALIDATE_INT, array('mi
     echo '<div class="centeredDiv"><h2>Access denied.</h2></div>';
     include './includes/footer.html';
 }
+?>

@@ -120,4 +120,24 @@ SELECT user_id, name AS instr_name, bio, pic, links, CONCAT_WS(' ', first_name, 
 END IF;
 END$$
 DELIMITER ;
+-- get all profiles ordered by number of instr users and name
+DELIMITER $$
+CREATE PROCEDURE get_profiles ()
+BEGIN
+SELECT CONCAT_WS(' ', first_name, last_name) AS name, instr.name as instr_name
+FROM `profiles` JOIN instr ON instr_id=instr.id JOIN users ON user_id=users.id
+JOIN ( SELECT name, COUNT(*) AS cnt FROM `profiles` JOIN instr ON instr_id=id GROUP BY name) c ON c.name=instr.name
+ORDER BY c.cnt DESC, name DESC;
+END$$
+DELIMITER ;
+-- get all venues ordered by number of events
+DELIMITER $$
+CREATE PROCEDURE get_venues ()
+BEGIN
+SELECT name, pic, venues.id, `desc`
+FROM venues
+LEFT OUTER JOIN ( SELECT venue_id, COUNT(*) AS cnt FROM `events_venues` JOIN venues ON venue_id=venues.id GROUP BY venue_id) c ON c.venue_id=venues.id
+ORDER BY c.cnt DESC, name DESC;
+END $$
+DELIMITER ;
 

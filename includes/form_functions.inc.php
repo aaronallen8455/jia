@@ -97,7 +97,7 @@ function createInput($name, $type, $errors = array(), $label, $values = 'POST', 
         
         //show other input if value or error
         if ($value) {
-            $ele .= '<input type="text" id="instrSelOther" name="instrSelOther" value="'. (isset($_POST['instrSelOther'])?$_POST['instrSelOther']:$value) .'">';
+            $ele .= '<input type="text" id="instrSelOther" name="instrSelOther" value="'. (isset($_POST['instrSelOther'])?$_POST['instrSelOther']:$value) .'" ';
             if (array_key_exists($name, $errors)) {
                 $ele .= 'class="error"><span class="error">'. $errors[$name] . '</span>';
             }else $ele .= '>';

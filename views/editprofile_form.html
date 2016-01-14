@@ -11,7 +11,7 @@ Edit any of the fields below then click 'Save'.<br>Don't select a new picture to
     echo '<br />';
     //instr input
     createInput('instr', 'select', $profile_errors, 'Primary Instrument: ', 'EDIT');
-    echo '<br />';
+    echo '<br /><br />';
     //create pic input
     echo '<label for="pic">Choose a New Picture (Optional): </label>';
     if (array_key_exists('pic', $profile_errors)) {
@@ -23,9 +23,9 @@ Edit any of the fields below then click 'Save'.<br>Don't select a new picture to
         echo "<br />Currently '{$_SESSION['profpicname']}'";
     }
     echo '<br />';
-    echo '<label for="noPic">No Picture</label>';
+    echo '<label for="noPic">No Picture: </label>';
     echo '<input type="checkbox" name="noPic" id="noPic" />'; //check to not use a picture
-    echo '<br />';
+    echo '<br /><br/>';
     //create links input
     echo 'Additional Links (Optional): ';
     echo '<div id="linksDiv">';

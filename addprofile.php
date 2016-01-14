@@ -177,8 +177,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             unset($_SESSION['profpic'], $_SESSION['profpicname'], $file);
             $_POST = array();
             $_FILES = array();
+            //create an easy check for seeing if user has a profile
+            $_SESSION['hasProfile'] = true;
             include './views/addprofile_success.html';
             include './includes/footer.html';
+            //find any events that include this player and add to events_profiles table.
+            $q = 'SELECT events.id FROM events, users WHERE users.id='.$_SESSION['id'].' AND band LIKE CONCAT(CONCAT("%",CONCAT_WS(\' \', first_name, last_name)),"%")';
+            if ($r = $dbc->query($q)) {
+                $eids = array();
+                while ($eid = $r->fetchColumn()) {
+                    $eids[] = $eid; //get event ids
+                }
+                $q = 'INSERT INTO events_profiles (event_id, profile_id) VALUES (?,?)';
+                $stmt = $dbc->prepare($q);
+                foreach ($eids as $eid) {
+                    $stmt->execute(array($eid, $_SESSION['id'])); //insert into table
+                }
+            }
+            
             exit();
         }else{
             trigger_error('Your profile was not created because a system error occured. We apologize for the inconvenience.');

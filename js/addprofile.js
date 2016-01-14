@@ -1,17 +1,19 @@
 window.addEventListener('load', function() {
     //when 'other' is selected, show the text input.
     var instrSel = document.getElementById('instr');
-    instrSel.onchange = function(e) {
-        if (this.value === 'other') {
-            var instrSelOther = document.createElement('input');
-            instrSelOther.id = 'instrSelOther';
-            instrSelOther.setAttribute('name', 'instrSelOther');
-            instrSelOther.setAttribute('type', 'text');
-            instrSelOther.setAttribute('placeholder', 'Please specify...');
-            instrSel.parentElement.appendChild(instrSelOther);
-        }else{
-            if (instrSel.nextSibling) {
-                instrSel.nextSibling.remove();
+    if (instrSel) {
+        instrSel.onchange = function(e) {
+            if (this.value === 'other') {
+                var instrSelOther = document.createElement('input');
+                instrSelOther.id = 'instrSelOther';
+                instrSelOther.setAttribute('name', 'instrSelOther');
+                instrSelOther.setAttribute('type', 'text');
+                instrSelOther.setAttribute('placeholder', 'Please specify...');
+                instrSel.parentElement.appendChild(instrSelOther);
+            }else{
+                if (instrSel.nextSibling) {
+                    instrSel.nextSibling.remove();
+                }
             }
         }
     }
