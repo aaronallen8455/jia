@@ -2,11 +2,11 @@
 require './includes/config.inc.php';
 include './includes/login.inc.php';
 //check if we are viewing a specific profile
-if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+if ($_SERVER['REQUEST_METHOD'] === 'GET' && (isset($_GET['id']) || isset($_GET['name']))) {
     if (isset($_GET['id']) && filter_var($_GET['id'], FILTER_VALIDATE_INT, array('min_range'=>1))) {
         $pid = $_GET['id'];
         //query profiles database
-        require MYSQL;
+        require_once MYSQL;
         $r = $dbc->query("CALL get_profile ('id', $pid, NULL)");
         $row = $r->fetch(PDO::FETCH_ASSOC);
         if (empty($row)) { //if no results
@@ -20,7 +20,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     }else if (isset($_GET['name']) && preg_match('/^[a-zA-Z\'\-]+ [a-zA-Z\'\-]+$/', $_GET['name'])) {
         $name = $_GET['name'];
         //query profiles thru user name
-        require MYSQL;
+        require_once MYSQL;
         $q = "CALL get_profile ('name', NULL, '$name')";
         $stmt = $dbc->prepare($q);
         $stmt->execute(array($name));
@@ -66,7 +66,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     }
 }
 //show the profile selection page.
-require MYSQL;
+require_once MYSQL;
 $pageTitle = 'Musician Profiles';
 include './includes/header.html';
 //get all profiles sorted by instr

@@ -39,6 +39,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') { //otherwise check if form was submi
                         if (!empty($row['user_id'])) {
                             $_SESSION['hasProfile'] = true;
                         }
+                        //log their ip address
+                        $dbc->exec("UPDATE users SET ip='{$_SERVER['REMOTE_ADDR']}' WHERE id={$row['id']}");
                         //set the remember me cookie
                         if (isset($_POST['login']['remember']) && $_POST['login']['remember'] === 'on') {
                             //create row in rm_token table
@@ -80,20 +82,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') { //otherwise check if form was submi
         if (hash_equals($hash, hash('sha256', $v))) {
             //get account info
             $uid = $row['user_id'];
-            $q = 'SELECT type, CONCAT_WS(\' \', first_name, last_name) AS name FROM users WHERE id=?';
+            $q = 'SELECT type, CONCAT_WS(\' \', first_name, last_name) AS name, pic FROM users LEFT OUTER JOIN profiles ON user_id=id WHERE id=?';
             $stmt = $dbc->prepare($q);
             $stmt->execute(array($uid));
             $row = $stmt->fetch(PDO::FETCH_ASSOC);
-            if (!empty($row) && empty($stmt->fetch())) {
+            if (!empty($row) && empty($stmt->fetch()) && $row['type'] != null) {
                 //$row = $stmt->fetch(PDO::FETCH_ASSOC);
+                //check if profile exists
+                if (!empty($row['pic'])) {
+                    $_SESSION['hasProfile'] = true;
+                }
                 //check if admin
                 if ($row['type'] === 'a') {
                     session_regenerate_id(true);
                     $_SESSION['isAdmin'] = true;
-                }
+                }else $_SESSION['isAdmin'] = false;
                 //log them in
                 $_SESSION['id'] = $uid;
                 $_SESSION['name'] = $row['name'];
+                //log their ip address
+                $dbc->exec("UPDATE users SET ip='{$_SERVER['REMOTE_ADDR']}' WHERE id=$uid");
                 //renew cookie and expiration in DB
                 setcookie('rm', $s . '-' . $v, time()+60*60*60*24*31); //expire in 1 month
                 $q = 'UPDATE rm_tokens SET expires = DATE_ADD(NOW(), INTERVAL 31 DAY) WHERE user_id='.$uid;

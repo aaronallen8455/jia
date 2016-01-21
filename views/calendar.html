@@ -6,19 +6,42 @@
             <table id="calendarTable">
             </table>
         </div>
-         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum scelerisque vel tortor ac congue. Aliquam accumsan tempus mauris, id porta sem. Sed et aliquet diam. Suspendisse potenti. Proin turpis dolor, tempus et metus in, posuere malesuada nibh. Sed tempor convallis porttitor. Nam viverra pellentesque ante ut accumsan.
-
-Curabitur sed risus malesuada, porttitor enim vitae, molestie sem. Curabitur sodales scelerisque mi, nec venenatis quam dignissim id. Vivamus sed magna pharetra, sodales leo a, condimentum nunc. Phasellus elementum dapibus sem, nec lacinia quam scelerisque nec. Morbi in nisl finibus, sagittis ante vitae, porttitor est. Pellentesque efficitur eros et diam gravida, vitae interdum augue luctus. Fusce lobortis semper euismod. Quisque in scelerisque lacus, sed hendrerit diam. Quisque velit erat, hendrerit vel bibendum eu, varius eleifend ex. Etiam mollis dui a purus laoreet cursus. Nullam sollicitudin congue ipsum. Mauris eu magna sollicitudin diam vehicula euismod.
-
-Maecenas vel ex eget felis vulputate posuere ut vehicula tellus. Praesent ex nulla, volutpat vitae elementum a, finibus ut nibh. Interdum et malesuada fames ac ante ipsum primis in faucibus. Morbi mollis tellus sed dolor elementum tristique. Nulla sapien dolor, posuere vel commodo venenatis, ultrices nec nisl. Quisque et justo in purus volutpat luctus. Pellentesque sed tortor id purus rhoncus tempor. Proin eu metus metus. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Mauris et massa massa. Integer a purus sit amet eros tempus pulvinar. Praesent sit amet felis vulputate, ultricies neque id, tristique eros. Etiam ante erat, hendrerit id erat eget, rutrum sagittis lacus.
-
-Interdum et malesuada fames ac ante ipsum primis in faucibus. Pellentesque odio arcu, finibus eu laoreet vel, consectetur eget mauris. Vivamus pharetra suscipit ante vitae iaculis. Aliquam commodo lorem leo, sed pretium nisl bibendum sed. Curabitur eget pellentesque massa. Quisque sodales luctus nisi in tristique. In hac habitasse platea dictumst. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Suspendisse nibh enim, rutrum eu turpis sit amet, fringilla venenatis odio. Praesent vel turpis finibus dui dapibus aliquam. Integer malesuada tincidunt ipsum rhoncus pharetra. Cras porttitor neque maximus mauris euismod, a facilisis neque placerat. Phasellus eget cursus nunc, ut eleifend metus. Quisque ac ex velit. Ut vulputate blandit est, id sodales est. 
-        <?php
-if (isset($_SESSION['id'])) {
-?> <a href="addevent.php">Add Event</a> <?php
-}
-?>
+<h2>Welcome to Jazz in Austin!</h2>
+<dl>
+    <dt><b>What is Jazz in Austin?</b></dt>
+    <dd>
+This is a place where Austin jazz musicians can post where and when they'll be performing, so that you'll always know 
+what live jazz is happening here in Austin, Texas!</dd>
+    <br />
+    <dt><b>How does it work?</b></dt>
+    <dd>
+        - Use the calendar on this page to view all of the events for any given day. Click on an event's title to view 
+        the details for that event.
+    </dd>
+    <dd>
+        - Go to 'Musician Profiles' to find out about specific artists in the Austin jazz scene and to see where they'll be
+         playing next.
+    </dd>
+    <dd>
+        - 'Venues' has information about places you can go to hear live jazz, including a list of upcoming performances.
+    </dd>
+    <br />
+    <dt><b>How do I add my events to the calendar?</b></dt>
+    <dd>
+        Musicians or promoters wanting to add events must first <a href="./register.php">register an account</a>. Once 
+        you've done that, you can log in and create your event. If you're a musician, you can also use your account to make a 
+        personal profile page, where your bio and upcoming shows will be displayed.
+    </dd>
+    <br />
+</dl>
         <div class="displayControlDiv">
+            <label for="numDaysSelect">Show </label>
+            <select id="numDaysSelect">
+                <option value="7">7</option>
+                <option value="15">15</option>
+                <option value="31">31</option>
+            </select> Days
+            <br>
         </div>
         
         <div id="eventDisplayDiv">

@@ -55,6 +55,18 @@ window.addEventListener('load', function() {
     }
     
     var linksDiv = document.getElementById('linksDiv');
+    
+    //replace all name values with blank array
+    var formEleDiv = document.getElementsByClassName('formEleDiv');
+    for (var i=0; i<formEleDiv.length; i++) {
+        for (var t=0; t<formEleDiv[i].children.length; t++) {
+            var name = formEleDiv[i].children[t].getAttribute('name');
+            if (name === null) continue;
+            if (name.search(/\[\d+\]$/) !== -1) {
+                formEleDiv[i].children[t].setAttribute('name', name.replace(/\[\d+\]$/, '[]'));
+            }
+        }
+    }
     //the add member button
     var addMember = document.getElementById('addLink');
     addMember.setAttribute('type', 'button'); //otherwise it would submits the form

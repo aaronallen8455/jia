@@ -1,6 +1,6 @@
 <script type="application/javascript" src="./js/addevent.js"></script>
 <script type="application/javascript" src="./js/cancel.js"></script>
-<h2>Edit Event</h2>
+<span id="nameListJSON" style="display:none;"><?php echo isset($nameList)?$nameList:''; ?></span><h2>Edit Event</h2>
 Edit any of the fields below then click 'Save'.
 <br /><br />
 
@@ -58,8 +58,8 @@ Edit any of the fields below then click 'Save'.
     //create inputs
     for ($i=0; $i<count($band); $i++) {
         echo '<div class="memberDiv">';
-        createInput("band[]", 'text', $event_errors, 'Name: ', null, array('value'=>$band[$i]));
-        createInput('instr[]', 'text', $event_errors, 'Instrument: ', null, array('value'=>$instr[$i]));
+        createInput("band[$i]", 'text', $event_errors, 'Name: ', null, array('value'=>$band[$i]));
+        createInput("instr[$i]", 'text', $event_errors, 'Instrument: ', null, array('value'=>$instr[$i]));
         echo '<button class="memberDel" type="button">Remove</button>';
         echo '</div>';
     }

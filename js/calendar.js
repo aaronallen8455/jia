@@ -90,7 +90,7 @@ window.onload = function() {
         msg = JSON.stringify(msg); //the object sent to the ajax script
         //query the database
         var req = new XMLHttpRequest();
-        req.open('POST','./ajax/calendar.php',true);
+        req.open('POST','./ajax/calendar.ajax.php',true);
         req.setRequestHeader('Content-type', 'application/json');
         req.onreadystatechange = function() {
             if(req.readyState === 4) {
@@ -279,13 +279,15 @@ window.onload = function() {
         
         next.addEventListener('click', function(e) {
             //adjust the last selected values
-            lastSelected[2] += 7;
+            lastSelected[2] += daysSelected;
             if (lastSelected[2]-numDays(lastSelected[0],lastSelected[1]) > 0) { //if it goes to the next month
                 lastSelected[2] -= numDays(lastSelected[0],lastSelected[1]);
                 lastSelected[1]++;
+                lastDrawn[1] = lastSelected[1];
                 if (lastSelected[1] > 11) {
                     lastSelected[1] = 0;
                     lastSelected[0]++;
+                    lastDrawn[0] = lastSelected[0];
                 }
             }
             daySelectHandler(e, lastSelected[0], lastSelected[1], lastSelected[2]);
@@ -294,7 +296,7 @@ window.onload = function() {
         pre.addEventListener('click', function(e) {
             //adjust the last selected values
             
-            lastSelected[2] -= 7;
+            lastSelected[2] -= daysSelected;
             
             if (lastSelected[2] < 1) {
                 if (lastSelected[1] === 0) {
@@ -308,6 +310,12 @@ window.onload = function() {
             
         });
     }
+    //num of days selector
+    var numDaysSelect = document.getElementById('numDaysSelect');
+    numDaysSelect.onchange = function() {
+        daysSelected = parseInt(this.value); //change the number of days to select
+        daySelectHandler(false, lastSelected[0], lastSelected[1], lastSelected[2]);
+    };
     //getting the number of days in a month
     
     function numDays(year, month) {

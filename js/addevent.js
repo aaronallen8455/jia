@@ -11,6 +11,8 @@ window.addEventListener('load', function() {
     var endMin = document.getElementById('endMin');
     var endPeriod = document.getElementById('endPeriod');
     var desc = document.getElementById('desc');
+    var nameListJSON = document.getElementById('nameListJSON'); // hidden form with the array of profile names
+    var nameList = JSON.parse(nameListJSON.innerHTML);
     
     //make the check box enable/disable the select element.
     if (copyCheck && copySelect) { //no copycheck or copyselect in edit page
@@ -36,7 +38,7 @@ window.addEventListener('load', function() {
                 var data = {id: this.value};
                 data = JSON.stringify(data);
                 var req = new XMLHttpRequest();
-                req.open('POST','./ajax/addevent.php',true);
+                req.open('POST','./ajax/addevent.ajax.php',true);
                 req.setRequestHeader('Content-type', 'application/json');
                 req.onreadystatechange = function() {
                     if(req.readyState === 4) {
@@ -84,6 +86,7 @@ window.addEventListener('load', function() {
     }
     //function for created a band member's row
     function createMember(name, instr, div, i) {
+        if (div.children.length > 29) return false; //max band size is 30
         var memberDiv = document.createElement('div');
         memberDiv.className = 'memberDiv';
         function makeInput(_label, name, value) {
@@ -104,6 +107,13 @@ window.addEventListener('load', function() {
         }
         //make the name and instrument inputs
         var name = makeInput('Name: ', 'band[]', name);
+        //allow auto name handler
+        name[1].setAttribute('autocomplete', 'off');
+        name[1].addEventListener('input', autoName, false);
+        name[1].addEventListener('blur', function() {
+            if (document.getElementById('autoNameDiv'))
+                document.getElementById('autoNameDiv').remove();
+        }, true);
         var instr = makeInput('Instrument: ', 'instr[]', instr);
         //make the remove button
         var remove = document.createElement('button');
@@ -115,6 +125,18 @@ window.addEventListener('load', function() {
             div.removeChild(memberDiv);
         };
         div.appendChild(memberDiv);
+    }
+    
+    //replace all name values with blank array
+    var formEleDiv = document.getElementsByClassName('formEleDiv');
+    for (var i=0; i<formEleDiv.length; i++) {
+        for (var t=0; t<formEleDiv[i].children.length; t++) {
+            var name = formEleDiv[i].children[t].getAttribute('name');
+            if (name === null) continue;
+            if (name.search(/\[\d+\]$/) !== -1) {
+                formEleDiv[i].children[t].setAttribute('name', name.replace(/\[\d+\]$/, '[]'));
+            }
+        }
     }
     
     //the add member button
@@ -132,6 +154,17 @@ window.addEventListener('load', function() {
         };
     });
     
+    //don't allow hour to go over 12 and minute 59
+    function hourCap(ele) {
+        if (parseInt(ele.value)>12) ele.value = 12;
+    }
+    function minCap(ele) {
+        if (parseInt(ele.value)>59) ele.value = 59;
+    }
+    document.getElementById('startHour').onchange = function(){hourCap(this);};
+    document.getElementById('endHour').onchange = function(){hourCap(this);};
+    document.getElementById('startMin').onchange = function(){minCap(this);};
+    document.getElementById('endMin').onchange = function(){minCap(this);};
     
     //the calendar select element
     var cals = document.getElementsByClassName('calendarInput');
@@ -254,6 +287,12 @@ window.addEventListener('load', function() {
         ele.addEventListener('click', function(e){e.stopPropagation();});
         ele.parentElement.appendChild(div);
         
+        //shift to the left if over the edge of the contentDiv.
+        var contentDiv = document.getElementById('contentDiv');
+        if (div.getBoundingClientRect().right > contentDiv.getBoundingClientRect().right) {
+            div.style.left = div.offsetLeft - (div.getBoundingClientRect().right - contentDiv.getBoundingClientRect().right) + 'px';
+        }
+        
         //capture close click handler
         document.addEventListener('click', close, false);
         
@@ -261,6 +300,145 @@ window.addEventListener('load', function() {
         function close(e) {
             ele.parentElement.removeChild(div);
             document.removeEventListener('click', close, false);
+        }
+    }
+    
+    //Name hinting for existing inputs
+    var names = document.getElementsByName('band[]');
+    for (var i=0; i<names.length; i++) {
+        names[i].setAttribute('autocomplete', 'off');
+        names[i].addEventListener('input', autoName, false);
+        //on blur, remove the name selector
+        names[i].addEventListener('blur', function() {
+            if (document.getElementById('autoNameDiv'))
+                document.getElementById('autoNameDiv').remove();
+        }, true);
+    }
+    
+    //the auto hinting handler
+    function autoName() {
+        var _this = this;
+        //check if text entered has any match
+        var matches = [];
+        var reg = new RegExp('^'+this.value, 'i');
+        matches = nameList.filter(function(e) {
+            if (e.match(reg)) return true;
+            else return false;
+        });
+
+        //create the div if doesn't exist.
+        var autoNameDiv;
+        if (document.getElementById('autoNameDiv')) {
+            autoNameDiv = document.getElementById('autoNameDiv');
+            //clear it
+            while(autoNameDiv.firstChild) {
+                autoNameDiv.removeChild(autoNameDiv.firstChild);
+            }
+        }else{
+            autoNameDiv = document.createElement('div');
+            
+            autoNameDiv.style.position = 'absolute';
+            autoNameDiv.style.width = this.offsetWidth + 'px';
+            autoNameDiv.id = 'autoNameDiv';
+        }
+        
+        //do nothing if no matches or no text value
+        if (!matches.length || this.value === '') {
+            autoNameDiv.remove();
+            return;
+        }
+        
+        document.body.appendChild(autoNameDiv);
+        
+        //class for name spans
+        function nameSpan(name, parent) {
+            this.ele = document.createElement('span');
+            nameSpan.stack.push(this.ele);
+            parent.appendChild(this.ele);
+            this.ele.innerHTML = name;
+            this.ele.className = 'autoNameSpan';
+            //click
+            this.ele.onmousedown = function() {
+                _this.value = this.innerHTML;
+            }
+            //mouse over
+            this.ele.onmouseover = function() {
+                nameSpan.sel(this);
+            }
+            this.ele.onmouseout = function() {
+                this.classList.remove('autoNameSpanSel')
+                if (nameSpan.selected === this) nameSpan.selected = null;
+            }
+            var el = this.ele;
+            //down and up arrow and enter
+            _this.addEventListener('keydown', function(e) {
+                //down
+                if (e.keyCode === 40) {
+                    //if nothing selected and this is first ele, select it
+                    if (nameSpan.selected === null && nameSpan.stack[0] === el) {
+                        nameSpan.sel(el);
+                        return;
+                    }
+                    if (nameSpan.selected !== el) return;
+                    //if this is the selected element, go down the chain
+                    if (nameSpan.stack[nameSpan.stack.length-1] !== el) {
+                        nameSpan.sel(nameSpan.stack[nameSpan.stack.indexOf(el)+1]);
+                    }
+                    //up
+                }else if(e.keyCode === 38) {
+                    //if nothing selected and this is first ele, select it
+                    if (nameSpan.selected === null && nameSpan.stack[nameSpan.stack.length-1] === el) {
+                        nameSpan.sel(el);
+                        return;
+                    }
+                    if (nameSpan.selected !== el) return;
+                    //if this is the selected element, go up the chain
+                    if (nameSpan.stack[0] !== el) {
+                        nameSpan.sel(nameSpan.stack[nameSpan.stack.indexOf(el)-1]);
+                    }
+                }else if (e.keyCode === 13) {
+                    //on enter, set the input value and remove the list
+                    if (nameSpan.selected !== el) return;
+                    _this.value = el.innerHTML;
+                    el.parentElement.remove();
+                    e.preventDefault();
+                }
+            }, false);
+        }
+        nameSpan.stack = [];
+        nameSpan.selected = null;
+        nameSpan.sel = function(e) {
+            //deselect old element
+            if (nameSpan.selected) nameSpan.selected.classList.remove('autoNameSpanSel');
+            //select this element
+            nameSpan.selected = e;
+            e.classList.add('autoNameSpanSel');
+        }
+        //append the name options
+        for (var i=0; i<matches.length; i++) {
+            /*
+            var span = document.createElement('span');
+            span.innerHTML = matches[i];
+            span.className = 'autoNameSpan';
+            span.onmousedown = function() {
+                _this.value = this.innerHTML;
+            }
+            span.onmouseover = function() {
+                
+            }
+            autoNameDiv.appendChild(span);*/
+            new nameSpan(matches[i], autoNameDiv);
+        }
+        //position the div horizontally
+        var bb = this.getBoundingClientRect();
+        autoNameDiv.style.left = bb.left + window.scrollX + 'px';
+        //vertical
+        if (bb.bottom + autoNameDiv.offsetHeight > document.documentElement.clientHeight) {
+            //put div above the input if would go below the viewport
+            autoNameDiv.style.top = bb.top - autoNameDiv.offsetHeight + window.scrollY + 'px';
+        }else{
+            //otherwise put it below
+            autoNameDiv.style.top = bb.bottom + window.scrollY + 'px';
         }
     }
     

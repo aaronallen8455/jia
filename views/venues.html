@@ -10,18 +10,19 @@ if (isset($_SESSION['isAdmin']) && $_SESSION['isAdmin'] === true) {
     $descLength = 600;
     //display each venue row
 while ($row = $r->fetch(PDO::FETCH_ASSOC)) {
-    echo '<div class="venueDiv">';
+    echo '<a href="./venues.php?name='.urlencode($row['name']).'"><div class="venueDiv">';
     if (!empty($row['pic'])) {
         echo '<img src="'.$row['pic'].'" class="venuePicSmall" />';
     }
-    echo '<h3><a href=./venues.php?name='.urlencode($row['name']).'>'.$row['name'].'</a></h3>';
+    echo '<h3><a href="./venues.php?name='.urlencode($row['name']).'">'.$row['name'].'</a></h3>';
     echo '<p class="venueDesc">';
     if (strlen($row['desc']) > $descLength) {
-        echo nl2br(substr($row['desc'],0,$descLength-7)). '<a href=./venues.php?name='.urlencode($row[name]).'>...more</a>';
+        echo substr($row['desc'],0,$descLength-7). '<a href="./venues.php?name='.urlencode($row[name]).'">...more</a>';
     }else{
-        echo nl2br($row['desc']);
+        echo $row['desc'];
     }
-    echo '</p></div>';
+    echo '</p></div></a>';
 }
 ?>
+    <div style="clear:both"></div>
 </div>

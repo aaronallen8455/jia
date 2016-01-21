@@ -32,9 +32,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && filter_var($_GET['id'], FILTER_VALI
         $nums = preg_split('/\D/', $_POST['date']);
         $month = substr('0' . $nums[0], -2);
         $day = substr('0' . $nums[1], -2);
+        //validate year
         $year = substr('20' . $nums[2], -4);
-        $date = $year.'-'.$month.'-'.$day;
-        if (strtotime($date) < strtotime(date('Y-m-d'))) $event_errors['date'] = 'The date can\'t be in the past!';
+        if ((int)$year > date('Y')+4)
+            $event_errors['date'] = 'Date is too far in the future!';
+        if (empty($event_errors['date']) && checkdate($month, $day, $year)) { //make sure date is valid
+            $date = $year.'-'.$month.'-'.$day;
+            if (strtotime($date) < strtotime(date('Y-m-d'))) $event_errors['date'] = 'The date can\'t be in the past!';
+        }else $event_errors['date'] = 'Please enter a valid date!';
     }else{
         $event_errors['date'] = 'Please enter a valid date!';
     }
@@ -80,10 +85,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && filter_var($_GET['id'], FILTER_VALI
             if ($i !== 0) $band .= '|';
             $bn = htmlspecialchars(strip_tags($bn));
             $bn = str_replace(array(',','|'), '', $bn);
+            //filter
+            if (!preg_match('/^[a-zA-Z\- \'.]{3,}$/', $bn)) {
+                $event_errors['band['.$i.']'] = 'Invalid name.';
+            }
             //validate instrument
-            if(isset($_POST['instr'][$i])) {
+            if(!empty($_POST['instr'][$i])) {
                 $_POST['instr'][$i] = strip_tags($_POST['instr'][$i]);
                 $_POST['instr'][$i] = str_replace(array(',','|'), '', $_POST['instr'][$i]);
+                if (!preg_match('/^[a-zA-Z\- \']{3,}$/', $_POST['instr'][$i])) {
+                    $event_errors['instr['.$i.']'] = 'Invalid instrument.';
+                }
             }
             //check for duplicate names
             if (array_count_values($_POST['band'])[$bn] === 1) {
@@ -133,7 +145,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && filter_var($_GET['id'], FILTER_VALI
                 $stmt = $dbc->prepare($q);
                 for ($i=0; $i<count($_POST['band']); $i++) {
                     //foreach ($_POST['band'] as $bn) {
-                    $stmt->execute(array($_POST['band'][$i]));
+                    $stmt->execute(array(($_POST['band'][$i])));
                     $uid = $stmt->fetchColumn();
                     if ($uid) {
                         $dbc->exec('INSERT INTO events_profiles (profile_id, event_id) VALUES ('.$uid.', '.$eid.')');
@@ -145,17 +157,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && filter_var($_GET['id'], FILTER_VALI
             if ($venue !== $row['venue']) {
                 //delete existing entry
                 $q = 'DELETE FROM events_venues WHERE event_id=' . $eid;
-                if ($dbc->exec($q)) {
-                    //create new entry
-                    $q = 'SELECT id FROM venues WHERE LOWER(name)=LOWER(?)';
-                    $stmt = $dbc->prepare($q);
-                    $stmt->execute(array($venue));
-                    $vid = $stmt->fetchColumn();
-                    if ($vid) {
-                        //create row
-                        $dbc->exec("INSERT INTO events_venues (venue_id, event_id) VALUES ($vid, $eid)");
-                    }
+                $dbc->exec($q);
+                //create new entry
+                $q = "SELECT id FROM venues WHERE name LIKE '%$venue%'";
+                $stmt = $dbc->query($q);
+                $vid = $stmt->fetchColumn();
+                if ($vid) {
+                    //create row
+                    $dbc->exec("INSERT INTO events_venues (venue_id, event_id) VALUES ($vid, $eid)");
                 }
+                
             }
             //exit();
         }else{
@@ -178,6 +189,15 @@ if (($_SERVER['REQUEST_METHOD'] === 'GET' || !empty($event_errors)) && filter_va
                 include './includes/footer.html';
                 exit();
             }
+        }
+        //Query all the profile user names
+        $names = $dbc->query('SELECT CONCAT_WS(" ", first_name, last_name) AS name FROM users JOIN profiles ON id=user_id ORDER BY first_name, last_name ASC');
+        if ($names) {
+            $nameList = array();
+            while ($name = $names->fetchColumn()) {
+                $nameList[] = $name;
+            }
+            $nameList = json_encode($nameList); //this will be in a hidden form for the JS to access
         }
         //break up the time values
         $event['startHour'] = (int)substr($event['start_time'],0,2);

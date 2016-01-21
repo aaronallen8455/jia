@@ -15,7 +15,9 @@ if($local) {
     define('BASE_URL', 'localhost/jia/');
     define('MYSQL', BASE_URI . '/includes/mysql.inc.php');
 }else{//live
-    define('MYSQL', '../mysql.inc.php'); //SQL config is outside of webdir on live
+    define('BASE_URI', 'home/pronzneu/www/jazzinaustin.com');
+    define('BASE_URL', 'jazzinaustin.com/');
+    define('MYSQL', '/home/pronzneu/mysqljia.inc.php'); //SQL config is outside of webdir on live    
 }
 
 //start the session

@@ -2,8 +2,8 @@
 <h2><?php echo $row['name']; ?></h2>
 <?php //if user is admin, allow edit and remove links
 if (isset($_SESSION['isAdmin']) && $_SESSION['isAdmin'] === true) {
-    echo '<a href="editvenue.php?id='.$row['id'].'>Click here to edit this venue page.</a><br />';
-    echo '<a href="removevenue.php?id='.$row['id'].'>Click here to delete this venue page.</a><br /><br />';
+    echo '<a href="editvenue.php?id='.$row['id'].'">Click here to edit this venue page.</a><br />';
+    echo '<a href="removevenue.php?id='.$row['id'].'">Click here to delete this venue page.</a><br /><br />';
 } 
 //show image if exists
 if (!empty($row['pic'])) {
@@ -11,11 +11,13 @@ if (!empty($row['pic'])) {
 }
 //show description if exists
 if (!empty($row['desc'])) {
+    echo '<div class="venueViewDesc">';
     echo nl2br($row['desc']);
+    echo '</div>';
 }
 //show links
     if (!empty($linkURL)) {
-        echo '<br /><br />';
+        echo '<br />';
         echo '<h3>Additional Links</h3>';
         echo '<ul class="venueViewLinks">';
         foreach ($linkURL as $url=>$desc) {

@@ -9,9 +9,17 @@ CREATE TABLE `users` (
     `date_created` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     `type` CHAR(1) NULL,
     `validation_code` CHAR(12) NOT NULL,
+    `ip` VARCHAR(45) NULL,
     PRIMARY KEY (`id`),
     UNIQUE INDEX `email_UNIQUE` (`email` ASC),
     INDEX `login` (`email` ASC, `pass` ASC)
+) ENGINE = InnoDB  DEFAULT CHARSET=utf8;
+
+CREATE TABLE `instr` (
+    `id` TINYINT UNSIGNED NOT NULL AUTO_INCREMENT,
+    `name` VARCHAR(80) NOT NULL,
+    PRIMARY KEY (`id`),
+    UNIQUE INDEX `name_UNIQUE` (`name` ASC)
 ) ENGINE = InnoDB  DEFAULT CHARSET=utf8;
 
 CREATE TABLE `profiles` (
@@ -45,7 +53,7 @@ CREATE TABLE `events` (
     `date_created` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     `band` TEXT NULL,
     PRIMARY KEY (`id`),
-    CONSTRAINT `fk_user_id`
+    CONSTRAINT `fk_euser_id`
         FOREIGN KEY (`user_id`)
         REFERENCES `users` (`id`)
         ON DELETE CASCADE
@@ -60,13 +68,6 @@ CREATE TABLE `venues` (
     PRIMARY KEY (`id`)
 ) ENGINE = InnoDB  DEFAULT CHARSET=utf8;
 
-CREATE TABLE `instr` (
-    `id` TINYINT UNSIGNED NOT NULL AUTO_INCREMENT,
-    `name` VARCHAR(80) NOT NULL,
-    PRIMARY KEY (`id`),
-    UNIQUE INDEX `name_UNIQUE` (`name` ASC)
-) ENGINE = InnoDB  DEFAULT CHARSET=utf8;
-
 CREATE TABLE `rm_tokens` (
     `id` SMALLINT UNSIGNED NOT NULL AUTO_INCREMENT,
     `selector` CHAR(12) NOT NULL,
@@ -79,6 +80,11 @@ CREATE TABLE `rm_tokens` (
 ) ENGINE = InnoDB  DEFAULT CHARSET=utf8;
 
 CREATE TABLE `auth_tokens` (
+    `user_id` SMALLINT UNSIGNED NOT NULL AUTO_INCREMENT,
+    `token` CHAR(64) NOT NULL,
+    `expires` DATETIME NOT NULL,
+    PRIMARY KEY (`user_id`),
+    UNIQUE (`token`)
 ) ENGINE = InnoDB  DEFAULT CHARSET=utf8;
 
 CREATE TABLE `events_profiles` (
@@ -127,7 +133,7 @@ BEGIN
 SELECT CONCAT_WS(' ', first_name, last_name) AS name, instr.name as instr_name
 FROM `profiles` JOIN instr ON instr_id=instr.id JOIN users ON user_id=users.id
 JOIN ( SELECT name, COUNT(*) AS cnt FROM `profiles` JOIN instr ON instr_id=id GROUP BY name) c ON c.name=instr.name
-ORDER BY c.cnt DESC, name DESC;
+ORDER BY c.cnt DESC, name ASC;
 END$$
 DELIMITER ;
 -- get all venues ordered by number of events
@@ -137,7 +143,7 @@ BEGIN
 SELECT name, pic, venues.id, `desc`
 FROM venues
 LEFT OUTER JOIN ( SELECT venue_id, COUNT(*) AS cnt FROM `events_venues` JOIN venues ON venue_id=venues.id GROUP BY venue_id) c ON c.venue_id=venues.id
-ORDER BY c.cnt DESC, name DESC;
+ORDER BY c.cnt DESC, name ASC;
 END $$
 DELIMITER ;
 

@@ -30,9 +30,14 @@ if (isset($_SESSION['id']) && filter_var($_SESSION['id'], FILTER_VALIDATE_INT, a
             $nums = preg_split('/\D/', $_POST['date']);
             $month = substr('0' . $nums[0], -2);
             $day = substr('0' . $nums[1], -2);
+            //validate year
             $year = substr('20' . $nums[2], -4);
-            $date = $year.'-'.$month.'-'.$day;
-            if (strtotime($date) < strtotime(date('Y-m-d'))) $event_errors['date'] = 'The date can\'t be in the past!';
+            if ((int)$year > date('Y')+4)
+                $event_errors['date'] = 'Date is too far in the future!';
+            if (empty($event_errors['date']) && checkdate($month, $day, $year)) { //make sure date is valid
+                $date = $year.'-'.$month.'-'.$day;
+                if (strtotime($date) < strtotime(date('Y-m-d'))) $event_errors['date'] = 'The date can\'t be in the past!';
+            }else $event_errors['date'] = 'Please enter a valid date!';
         }else{
             $event_errors['date'] = 'Please enter a valid date!';
         }
@@ -75,13 +80,20 @@ if (isset($_SESSION['id']) && filter_var($_SESSION['id'], FILTER_VALIDATE_INT, a
         if (!empty($_POST['band'])) {
             $i = 0;
             foreach ($_POST['band'] as &$bn) {
-                if ($i !== 0) $band .= '|';
+                //if invalid, create error
+                if (!preg_match('/^[a-zA-Z\- \'.]{3,}$/', $bn)) {
+                    $event_errors['band['.$i.']'] = 'Invalid name.';
+                }
+                if ($band !== '') $band .= '|';
                 $bn = htmlspecialchars(strip_tags($bn));
                 $bn = str_replace(array(',','|'), '', $bn);
                 //validate instrument
-                if(isset($_POST['instr'][$i])) {
+                if(!empty($_POST['instr'][$i])) {
                     $_POST['instr'][$i] = strip_tags($_POST['instr'][$i]);
                     $_POST['instr'][$i] = str_replace(array(',','|'), '', $_POST['instr'][$i]);
+                    if (!preg_match('/^[a-zA-Z\- \']{3,}$/', $_POST['instr'][$i])) {
+                        $event_errors['instr['.$i.']'] = 'Invalid instrument.';
+                    }
                 }
                 //check for duplicate names
                 if (array_count_values($_POST['band'])[$bn] === 1) {
@@ -139,9 +151,16 @@ if (isset($_SESSION['id']) && filter_var($_SESSION['id'], FILTER_VALIDATE_INT, a
             }
         }
     }
-    
-    //show the form
     require_once MYSQL;
+    //Query all the profile user names
+    $names = $dbc->query('SELECT CONCAT_WS(" ", first_name, last_name) AS name FROM users JOIN profiles ON id=user_id ORDER BY first_name, last_name ASC');
+    if ($names) {
+        $nameList = array();
+        while ($name = $names->fetchColumn()) {
+            $nameList[] = $name;
+        }
+        $nameList = json_encode($nameList); //this will be in a hidden form for the JS to access
+    }
     //check if user has a profile to get their instrument
     $r = $dbc->query("SELECT i.name AS instrument FROM users AS u
     INNER JOIN profiles AS p ON p.user_id=u.id
@@ -154,6 +173,7 @@ if (isset($_SESSION['id']) && filter_var($_SESSION['id'], FILTER_VALIDATE_INT, a
     //get the names of all this user's events
     $r = $dbc->query("SELECT title, id FROM events WHERE user_id={$_SESSION['id']}");
     include './includes/form_functions.inc.php';
+    //show the form
     include './views/addevent_form.html';
     include './includes/footer.html';
     

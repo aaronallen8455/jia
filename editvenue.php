@@ -1,14 +1,14 @@
 <?php
 require './includes/config.inc.php';
-$pageTitle = 'Add Venue';
+$pageTitle = 'Edit Venue';
 include './includes/header.html';
 //require user to be admin
 if (isset($_SESSION['isAdmin']) && $_SESSION['isAdmin'] === true) {
     require MYSQL;
-    //if form submission, begin validating form
+    //if form submitted, validate it
     $venue_errors = array();
-    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        //name, desc, pic
+    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_GET['id'])) {
+        //name desc links pic
         //validate name
         if (!empty($_POST['name']) && preg_match('/^[\w \-\']{2,}$/', $_POST['name'])) {
             $name = $_POST['name'];
@@ -19,7 +19,7 @@ if (isset($_SESSION['isAdmin']) && $_SESSION['isAdmin'] === true) {
         if (!empty($_POST['desc'])) {
             $desc = strip_tags($_POST['desc']);
             if (strlen($_POST['desc'])>65535) {
-                $profile_errors['desc'] = "Description must be less than 65535 characters, currently ".strlen($_POST['desc']);
+                $venue_errors['desc'] = "Description must be less than 65535 characters, currently ".strlen($_POST['desc']);
             }
         }else $desc = null;
         //validate links
@@ -47,7 +47,7 @@ if (isset($_SESSION['isAdmin']) && $_SESSION['isAdmin'] === true) {
                 }
             }
         }else $links = null;
-        //validate pic
+        //validate picture
         if (is_uploaded_file($_FILES['pic']['tmp_name']) && ($_FILES['pic']['error'] === UPLOAD_ERR_OK)) {
             if (!empty($_FILES['pic']['name']) && isset($_SESSION['profpic'])) {
                 unlink($_SESSION['profpic']);
@@ -75,8 +75,8 @@ if (isset($_SESSION['isAdmin']) && $_SESSION['isAdmin'] === true) {
             //if no errors, we process the image
             if (empty($venue_errors['pic'])) {
                 //if file dimensions are too large, resize them.
-                $maxHeight = 400;
-                $maxWidth = 400;
+                $maxHeight = 500;
+                $maxWidth = 500;
                 //user proper image create function for each file type
                 switch ($file_ext) {
                     case '.jpg' :
@@ -112,8 +112,9 @@ if (isset($_SESSION['isAdmin']) && $_SESSION['isAdmin'] === true) {
                 //path to pic file:
                 //$pic = $name;
             }
-        }else{
-            $pic = null;
+        }else {
+            $pic = false;
+            //if pic failed to upload, find out why
             if (!empty($_FILES['pic']['name'])) {
                 switch ($_FILES['pic']['error']) {
                     case 1:
@@ -135,38 +136,91 @@ if (isset($_SESSION['isAdmin']) && $_SESSION['isAdmin'] === true) {
                 }
             }
         }
-        //insert into DB
+        //if no errors, update the DB entry
         if (empty($venue_errors)) {
-            $q = "INSERT INTO venues (name, pic, `desc`, links) VALUES (?, ?, ?, ?)";
-            $stmt = $dbc->prepare($q);
-            $stmt->execute(array($name, isset($_SESSION['profpic'])?$_SESSION['profpic']:null, $desc, $links));
-            if ($stmt->rowCount() === 1) {
+            
+            if (isset($pic) && $pic=== false && !isset($_POST['noPic'])) {
+                $q = 'UPDATE venues SET `desc`=?, links=?, name=? WHERE id='.$_GET['id'];
+                $stmt = $dbc->prepare($q);
+                $stmt->bindParam(1, $desc);
+                $stmt->bindParam(2, $links);
+                $stmt->bindParam(3, $name);
+            }else{
+                $pic = isset($_POST['noPic'])?null:$_SESSION['profpic'];
+                $q = 'UPDATE venues SET `desc`=?, links=?, name=?, pic=? WHERE id='.$_GET['id'];
+                $stmt = $dbc->prepare($q);
+                $stmt->bindParam(1, $desc);
+                $stmt->bindParam(2, $links);
+                $stmt->bindParam(3, $name);
+                $stmt->bindParam(4, $pic); //if no pic, insert null
+            }
+            if ($stmt->execute()) {
                 //success
-                $vid = $dbc->lastInsertId(); //get id for new entry
-                include './views/addvenue_success.html';
-                //find any events that reference this venue and add to events_venues table.
-                $name = str_ireplace('the ', '', $name); //remove 'The' prefix
-                $q = "SELECT id FROM events WHERE venue LIKE '%$name%'";
-                if ($r = $dbc->query($q)) {
-                    $eids = array();
-                    while ($eid = $r->fetchColumn()) {
-                        $eids[] = $eid;
-                    }
-                    $q = 'INSERT INTO events_venues (event_id, venue_id) VALUES (?, ?)';
-                    $stmt = $dbc->prepare($q);
-                    foreach ($eids as $eid) {
-                        $stmt->execute(array($eid, $vid));
+                if (isset($_SESSION['currentpic']) && !file_exists($_SESSION['currentpic'])) {
+                    unset($_SESSION['currentpic']);
+                }
+                if (!empty($_SESSION['profpic']) && isset($_SESSION['currentpic'])) {
+                    //delete the old pic if a new one was selected
+                    unlink($_SESSION['currentpic']);
+                }
+                if (isset($_POST['noPic']) && isset($_SESSION['currentpic'])) {
+                    //delete the current picture if no pic was checked
+                    unlink($_SESSION['currentpic']);
+                }
+                //if name was changed, update the events_venues table
+                if ($name !== $_SESSION['currentname']) {
+                    //delete old entries
+                    $dbc->exec('DELETE FROM events_venues WHERE venue_id='.$_GET['id']);
+                    //find events associated with the new name and create rows for them in the table
+                    $q = "SELECT id FROM events WHERE venue LIKE '%$name%'";
+                    if ($r = $dbc->query($q)) {
+                        $eids = array();
+                        while ($eid = $r->fetchColumn()) {
+                            $eids[] = $eid;
+                        }
+                        $q = 'INSERT INTO events_venues (event_id, venue_id) VALUES (?, ?)';
+                        $stmt = $dbc->prepare($q);
+                        foreach ($eids as $eid) {
+                            $stmt->execute(array($eid, $_GET['id']));
+                        }
                     }
                 }
                 //cleanup
-                unset ($_SESSION['profpic'], $_SESSION['profpicname']);
-                $_POST = $_FILES = array();
+                unset($_SESSION['profpic'], $_SESSION['currentpic'], $_SESSION['profpicname'], $_SESSION['currentname']);
+                //success message
+                include './views/editvenue_success.html';
+                //the form will be displayed under this
+            }else{
+                trigger_error('The venue profile could not be updated due to a system error. We apologize for the inconvenience.');
+                include './includes/footer.html';
+                exit();
             }
         }
     }
     //display the form
-    require './includes/form_functions.inc.php';
-    include './views/addvenue_form.html';
+    if (isset($_GET['id']) && filter_var($_GET['id'], FILTER_VALIDATE_INT, array('min_range'=>1))) {
+        //get venue info from DB
+        $r = $dbc->query('SELECT name, `desc`, pic, links FROM venues WHERE id='.$_GET['id']);
+        if ($event = $r->fetch(PDO::FETCH_ASSOC)) {
+            $_SESSION['currentname'] = $event['name'];
+            $_SESSION['currentpic'] = $event['pic'];
+            //parse links
+            $linkURL = array();
+            $linkName = array();
+            if (!empty($event['links'])) {
+                $a = explode('|', $event['links']);
+                foreach ($a as $p) {
+                    $p2 = explode('\\', $p);
+                    $linkURL[] = $p2[0];
+                    $linkName[] = $p2[1];
+                }
+            }
+            require './includes/form_functions.inc.php';
+            include './views/editvenue_form.html';
+        }else{
+            echo '<h2>No venue associated with this ID</h2>';
+        }
+    }
 }else{
     echo '<div class="centeredDiv"><h2>Access Denied</h2></div>'; //must be admin
 }

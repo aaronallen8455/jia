@@ -155,6 +155,7 @@ if (($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_GET['id'],$_SESSION['id'])
             }
         }
     }
+    
     //if no errors, update the profile
     if (empty($profile_errors)) {
         
@@ -175,6 +176,9 @@ if (($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_GET['id'],$_SESSION['id'])
         }
         if ($stmt->execute()) {
             //success
+            if (isset($_SESSION['currentpic']) && !file_exists($_SESSION['currentpic'])) {
+                unset($_SESSION['currentpic']);
+            }
             if (!empty($_SESSION['profpic']) && isset($_SESSION['currentpic'])) {
                 //delete the old pic if a new one was selected
                 unlink($_SESSION['currentpic']);

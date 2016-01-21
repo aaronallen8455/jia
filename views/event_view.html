@@ -48,7 +48,8 @@
                 $pair = explode(',', $band[$i]);
                 echo '<li>';
                 if (array_key_exists($pair[0], $profiles)) echo '<a href="./profiles.php?id=' . $profiles[$pair[0]] . '">';
-                echo $pair[0] . ', <i>' . $pair[1] . '</i>';
+                echo $pair[0];
+                if (!empty($pair[1])) echo ', <i>' . $pair[1] . '</i>';
                 if (array_key_exists($pair[0], $profiles)) echo '</a>';
                 echo '</li>';
             }
