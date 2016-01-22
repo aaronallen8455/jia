@@ -14,7 +14,7 @@ $event_errors = array();
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && filter_var($_GET['id'], FILTER_VALIDATE_INT, array('min_range'=>1))) {
     //fields: Title, Venue, Date, Start time, end time, description
     //validate title
-    if (isset($_POST['title']) && strlen($_POST['title']) <= 80 && strlen($_POST['title']) >= 6) {
+    if (isset($_POST['title']) && strlen($_POST['title']) <= 80 && strlen($_POST['title']) >= 3) {
         $title = $_POST['title'];
         $title = strip_tags($title); //strip any html tags
     }else{
@@ -144,7 +144,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && filter_var($_GET['id'], FILTER_VALI
                 $q = 'SELECT u.id AS id FROM users AS u INNER JOIN profiles AS p ON p.user_id=u.id WHERE CONCAT_WS(\' \', LOWER(u.first_name), LOWER(u.last_name))=LOWER(?)';
                 $stmt = $dbc->prepare($q);
                 for ($i=0; $i<count($_POST['band']); $i++) {
-                    //foreach ($_POST['band'] as $bn) {
                     $stmt->execute(array(($_POST['band'][$i])));
                     $uid = $stmt->fetchColumn();
                     if ($uid) {

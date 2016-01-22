@@ -22,6 +22,6 @@ if (empty($_SESSION['id'])) { ?>
 </div>
             <?php
 }else{ 
-    echo '<span>You\'re already logged in as ' . $_SESSION['name'] . '! <a href="logout.php">Log Out</a></span>';
+    echo '<span>You\'re logged in as ' . $_SESSION['name'] . '! <a href="myaccount.php">My Account</a></span>';
 }
 include './includes/footer.html';

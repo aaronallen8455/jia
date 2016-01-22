@@ -1,9 +1,10 @@
 <?php
 require './includes/config.inc.php';
 include './includes/login.inc.php';
+$row = null;
 require_once MYSQL;
 //if getting a specific venue
-if ($_SERVER['REQUEST_METHOD'] === 'GET' && !empty($_GET)) {
+if (!empty($_GET)) {
     //get venue details from DB based on whether we are getting name or id value
     if (isset($_GET['id']) && filter_var($_GET['id'], FILTER_VALIDATE_INT, array('min_range'=>1))) {
         $r = $dbc->query('SELECT * FROM venues WHERE id='.$_GET['id']);
@@ -22,7 +23,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && !empty($_GET)) {
     //get associated event info
     if ($r = $dbc->query("SELECT title, events.id, DATE_FORMAT(`date`, '%M %D, %Y') AS edate, start_time, end_time
     FROM venues JOIN events_venues ON venues.id=venue_id JOIN events ON events.id=event_id
-    WHERE venues.id={$row['id']} AND `date` >= CURDATE()")) {
+    WHERE venues.id={$row['id']} AND `date` >= CURDATE()
+    ORDER BY `date` ASC")) {
         $events = array();
         while ($row2 = $r->fetch(PDO::FETCH_ASSOC)) {
             $row2['time'] = parseTime($row2['start_time']) . ' - ' . parseTime($row2['end_time']);

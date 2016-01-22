@@ -12,7 +12,7 @@ if (isset($_SESSION['id']) && filter_var($_SESSION['id'], FILTER_VALIDATE_INT, a
         
         //fields: Title, Venue, Date, Start time, end time, description
         //validate title
-        if (isset($_POST['title']) && strlen($_POST['title']) <= 80 && strlen($_POST['title']) >= 6) {
+        if (isset($_POST['title']) && strlen($_POST['title']) <= 80 && strlen($_POST['title']) >= 3) {
             $title = $_POST['title'];
             $title = strip_tags($title); //strip any html tags
         }else{
@@ -126,8 +126,8 @@ if (isset($_SESSION['id']) && filter_var($_SESSION['id'], FILTER_VALIDATE_INT, a
                     if (!empty($_POST['band'])) {
                         $q = 'SELECT u.id AS id FROM users AS u INNER JOIN profiles AS p ON p.user_id=u.id WHERE CONCAT_WS(\' \', LOWER(u.first_name), LOWER(u.last_name))=LOWER(?)';
                         $stmt = $dbc->prepare($q);
-                        foreach ($_POST['band'] as $bn) {
-                            $stmt->execute(array($bn));
+                        for ($i = 0; $i < count($_POST['band']); $i++) {
+                            $stmt->execute(array($_POST['band'][$i]));
                             $uid = $stmt->fetchColumn();
                             if ($uid) {
                                 $dbc->exec('INSERT INTO events_profiles (profile_id, event_id) VALUES ('.$uid.', '.$eid.')');
@@ -136,12 +136,13 @@ if (isset($_SESSION['id']) && filter_var($_SESSION['id'], FILTER_VALIDATE_INT, a
                     }
                     //if the venue has a page, create an events_venues listing
                     $q = "SELECT id FROM venues WHERE name LIKE '%$venue%'";
-                    $stmt = $dbc->query($q);
-                    //$stmt->execute(array($venue));
-                    $vid = $stmt->fetchColumn();
-                    if ($vid) {
-                        //create row
-                        $dbc->exec("INSERT INTO events_venues (venue_id, event_id) VALUES ($vid, $eid)");
+                    if ($stmt = $dbc->query($q)) {
+                        //$stmt->execute(array($venue));
+                        $vid = $stmt->fetchColumn();
+                        if ($vid) {
+                            //create row
+                            $dbc->exec("INSERT INTO events_venues (venue_id, event_id) VALUES ($vid, $eid)");
+                        }
                     }
 
                     exit();

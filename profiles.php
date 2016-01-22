@@ -1,8 +1,9 @@
 <?php
 require './includes/config.inc.php';
 include './includes/login.inc.php';
+$row = null;
 //check if we are viewing a specific profile
-if ($_SERVER['REQUEST_METHOD'] === 'GET' && (isset($_GET['id']) || isset($_GET['name']))) {
+if (isset($_GET['id']) || isset($_GET['name'])) {
     if (isset($_GET['id']) && filter_var($_GET['id'], FILTER_VALIDATE_INT, array('min_range'=>1))) {
         $pid = $_GET['id'];
         //query profiles database

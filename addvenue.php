@@ -48,7 +48,7 @@ if (isset($_SESSION['isAdmin']) && $_SESSION['isAdmin'] === true) {
             }
         }else $links = null;
         //validate pic
-        if (is_uploaded_file($_FILES['pic']['tmp_name']) && ($_FILES['pic']['error'] === UPLOAD_ERR_OK)) {
+        if (isset($_FILES['pic']) && is_uploaded_file($_FILES['pic']['tmp_name']) && ($_FILES['pic']['error'] === UPLOAD_ERR_OK)) {
             if (!empty($_FILES['pic']['name']) && isset($_SESSION['profpic'])) {
                 unlink($_SESSION['profpic']);
             }

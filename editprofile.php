@@ -67,7 +67,7 @@ if (($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_GET['id'],$_SESSION['id'])
         }
     }else $links = null;
     //validate picture
-    if (is_uploaded_file($_FILES['pic']['tmp_name']) && ($_FILES['pic']['error'] === UPLOAD_ERR_OK)) {
+    if (isset($_FILES['pic']) && is_uploaded_file($_FILES['pic']['tmp_name']) && ($_FILES['pic']['error'] === UPLOAD_ERR_OK)) {
         if (!empty($_FILES['pic']['name']) && isset($_SESSION['profpic'])) {
             unlink($_SESSION['profpic']);
         }

@@ -25,12 +25,16 @@ if (!isset($_SESSION['id'])) {
                 $stmt = $dbc->prepare($q);
                 if ($stmt->execute(array($uid, $token)) && $stmt->rowCount() > 0) {
                     //Send email with instructions and token link
+                    $from = "admin@jazzinaustin.com";
+                    $headers = "From: JazzInAustin <$from>";
                     $url = 'http://' . BASE_URL . 'password.php?t=' . $token;
-                    $body = "This email is in response to a forgotten password reset request at 'Jazz in Austin'. If you did make this request, click the following link to be able to access your account:
-                    $url
-                    If you do not use this link to reset your password within 15 minutes, you'll need to request a password reset again.
-                    If you have _not_ forgotten your password, you can safely ignore this message and you will still be able to login with your existing password.";
-                    mail($email, 'Pass Reset Request', $body, 'FROM: '.CONTACT_EMAIL);
+                    $body = <<<EOT
+This email is in response to a forgotten password reset request at 'Jazz in Austin'. If you did make this request, click the following link to be able to access your account:
+$url
+If you do not use this link to reset your password within 15 minutes, you'll need to request a password reset again.
+If you have _not_ forgotten your password, you can safely ignore this message and you will still be able to login with your existing password.
+EOT;
+                    mail($email, 'Password Reset Request', $body, $headers, '-f '.$from);
                     //display the instruction message
                     echo '<h2>Reset Your Password</h2><p>You will receive an access code via email. Click the link in that email to gain access to the site. You can then change your password.</p>';
                     include './includes/footer.html';

@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <meta name="description" content="Jazz in Austin is a place where Austin jazz musicians can post where and when they'll be performing, so that you'll always know what live jazz is happening here in Austin, Texas!">
 <title>
     <?php
 if (isset($pageTitle)) {
@@ -27,7 +28,7 @@ if (isset($pageTitle)) {
         <div id="loginDiv">
             <?php
 if (empty($_SESSION['id'])) { ?>
-            <form action="<?php echo $_SERVER['PHP_SELF'];?>" method="post">
+            <form action="" method="post">
                 <label for="email">Email: </label>
                 <input type="text" id="email" class="loginInput" name="login[email]" value="<?php if (isset($loginEmail)) {echo $loginEmail;} ?>"/><br />
                 <label for="password">Password: </label>

@@ -1,8 +1,9 @@
 <?php
 require './includes/config.inc.php';
 include './includes/login.inc.php';
+$row = null;
 //make sure request method is get with a valid event id
-if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['id']) && filter_var($_GET['id'], FILTER_VALIDATE_INT, array('min_range'=>1))) {
+if (isset($_GET['id']) && filter_var($_GET['id'], FILTER_VALIDATE_INT, array('min_range'=>1))) {
     //get event details
     require_once MYSQL;
     $q='SELECT e.title, e.venue, DATE_FORMAT(e.date, \'%M %D, %Y\') AS date , e.start_time, e.end_time, e.desc, DATE_FORMAT(e.date_created, \'%M %D, %Y\') AS date_created, ev.venue_id, p.user_id AS profile, e.band, e.user_id, CONCAT_WS(\' \', u.first_name, u.last_name) AS name
