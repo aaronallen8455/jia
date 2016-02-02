@@ -374,6 +374,14 @@ textarea {
 .autoNameSpanSel {
     background-color: #9CE8FF;
 }
+.fb-like {
+    margin-left: 6%;
+    height: 20px;
+}
+.fb-share-button {
+    line-height: 20px;
+    margin-left: 10px;
+}
 
 /*for mobile*/
 @media all and (max-width: 850px) and  (min-width: 631px) {

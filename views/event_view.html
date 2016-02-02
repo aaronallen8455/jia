@@ -1,8 +1,20 @@
+<div id="fb-root"></div>
+<script>(function(d, s, id) { //facebook sharing
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.5";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
 <?php if (isset($_SESSION['id']) && ($row['user_id'] === $_SESSION['id'] || $_SESSION['isAdmin'])) { //if user is the creator of this page or is admin
     echo '<a href="./editevent.php?id='.$_GET['id'].'">Click here to edit this event</a><br />'; //link to page editor
     echo '<a href="./removeevent.php?id='.$_GET['id'].'">Click here to remove this event</a>'; //link to delete event
 } ?>
-<h2><?php echo $row['title']; ?></h2>
+<h2><?php echo $row['title']; ?>
+<div class="fb-share-button" data-href="https://jazzinaustin.com<?php echo $_SERVER['REQUEST_URI']; ?>" data-layout="button"></div>
+</h2>
+
 <span class="eventDetails">Added by <?php 
     //if theres a profile associated with this creator, link to that profile page
     if (!empty($row['profile'])) echo '<a href="./profiles.php?id='.$row['profile'].'">';

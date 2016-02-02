@@ -1,3 +1,12 @@
+<div id="fb-root"></div>
+<script>(function(d, s, id) { //facebook sharing
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.5";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
 <?php
 if (isset($_SESSION['id']) && ($_SESSION['id'] === $row['user_id'] || $_SESSION['isAdmin'])) {
     echo '<a href="./editprofile.php?id='.$row['user_id'].'">Click here to edit profile</a><br/>';
@@ -53,3 +62,4 @@ if (!empty($row['pic'])) {
     </ul>
         
 </div>
+<div class="fb-share-button" data-href="https://jazzinaustin.com<?php echo $_SERVER['REQUEST_URI']; ?>" data-layout="button"></div>

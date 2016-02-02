@@ -205,6 +205,7 @@ window.addEventListener('load', function() {
         function travCal(dir) {
             var d = new Date();
             d.setFullYear(year);
+            d.setDate(1); //prevent skipping when prev month was longer than next.
             d.setMonth(month+dir);
             close();
             drawCalendar(d.getFullYear(), d.getMonth(), ele);

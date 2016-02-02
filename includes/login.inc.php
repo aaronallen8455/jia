@@ -51,7 +51,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') { //otherwise check if form was submi
                             $stmt->execute(array($_SESSION['id'], hash('sha256', $v), $s));
                             //create the cookie
                             if ($stmt->rowCount() === 1) {
-                                setcookie('rm', $s.'-'.$v, time()+60*60*60*24*31);
+                                setcookie('rm', $s.'-'.$v, time()+60*60*60*24*31*3); //expires in 3 months
                             }
                         }else if (isset($_COOKIE['email'], $_COOKIE['pass']) && isset($_POST['login'])) {
                             //if the box was not checked, we delete existing cookie.
@@ -103,7 +103,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') { //otherwise check if form was submi
                 //log their ip address
                 $dbc->exec("UPDATE users SET ip='{$_SERVER['REMOTE_ADDR']}' WHERE id=$uid");
                 //renew cookie and expiration in DB
-                setcookie('rm', $s . '-' . $v, time()+60*60*60*24*31); //expire in 1 month
+                setcookie('rm', $s . '-' . $v, time()+60*60*60*24*31*3); //expire in 3 months
                 $q = 'UPDATE rm_tokens SET expires = DATE_ADD(NOW(), INTERVAL 31 DAY) WHERE user_id='.$uid;
                 $dbc->query($q);
             }
