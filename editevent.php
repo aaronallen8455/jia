@@ -47,9 +47,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && filter_var($_GET['id'], FILTER_VALI
     if (isset($_POST['startHour'], $_POST['startMin'], $_POST['startPeriod'])) {
         //time values are validated with JS
         $hour = (int) $_POST['startHour'];
-        if ($_POST['startPeriod'] === 'pm' && ($_POST['startHour'] < 12)) {
+        if ($_POST['startPeriod'] === 'pm' && ($hour < 12)) {
             $hour += 12;
-        }
+        }else if ($_POST['startPeriod'] === 'am' && $hour === 12) $hour = 0;
         $hour = substr('0' . $hour, -2);
         $min = substr('0' . $_POST['startMin'], -2);
         $start = $hour . $min;
@@ -60,9 +60,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && filter_var($_GET['id'], FILTER_VALI
     if (isset($_POST['endHour'], $_POST['endMin'], $_POST['endPeriod'])) {
         //time values are validated with JS
         $hour = (int) $_POST['endHour'];
-        if ($_POST['endPeriod'] === 'pm' && ($_POST['endHour'] < 12)) {
+        if ($_POST['endPeriod'] === 'pm' && ($hour < 12)) {
             $hour += 12;
-        }
+        }else if ($_POST['endPeriod'] === 'am' && $hour === 12) $hour = 0;
         $hour = substr('0' . $hour, -2);
         $min = substr('0' . $_POST['endMin'], -2);
         $end = $hour . $min;
@@ -200,17 +200,25 @@ if (($_SERVER['REQUEST_METHOD'] === 'GET' || !empty($event_errors)) && filter_va
         }
         //break up the time values
         $event['startHour'] = (int)substr($event['start_time'],0,2);
-        if ($event['startHour'] > 12) {
-            $event['startHour'] -= 12;
+        if ($event['startHour'] < 12) {
+            $event['startPeriod'] = 'am';
+            if ($event['startHour'] === 0) $event['startHour'] = 12; //convert zero hour to midnight
+        }else{
             $event['startPeriod'] = 'pm';
-        }else $event['startPeriod'] = 'am';
+            if ($event['startHour'] !== 12)
+                $event['startHour'] -= 12;
+        } 
         $event['startMin'] = substr($event['start_time'],-2);
         
         $event['endHour'] = (int)substr($event['end_time'],0,2);
-        if ($event['endHour'] > 12) {
-            $event['endHour'] -= 12;
+        if ($event['endHour'] < 12) {
+            $event['endPeriod'] = 'am';
+            if ($event['endHour'] === 0) $event['endHour'] = 12; //convert zero hour to midnight
+        }else{
             $event['endPeriod'] = 'pm';
-        }else $event['endPeriod'] = 'am';
+            if ($event['endHour'] !== 12)
+                $event['endHour'] -= 12;
+        } 
         $event['endMin'] = substr($event['end_time'],-2);
         //display the edit event form
         include './includes/form_functions.inc.php';

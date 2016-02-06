@@ -1,8 +1,12 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <?php if (!isset($pageDesc)): ?>
     <meta name="description" content="Jazz in Austin is a place where Austin jazz musicians can post where and when they'll be performing, so that you'll always know what live jazz is happening here in Austin, Texas!">
-<title>
+    <?php else: ?>
+    <meta name="description" content="<?php echo $pageDesc; ?>">
+    <?php endif ?>
+    <title>
     <?php
 if (isset($pageTitle)) {
     echo 'Jazz in Austin: '.$pageTitle;
@@ -60,7 +64,7 @@ if (empty($_SESSION['id'])) { ?>
                 <li><a href="index.php">Calendar / About</a></li>
                 <li><a href="profiles.php">Musician Profiles</a></li>
                 <li><a href="venues.php">Venues</a></li>
-                <li><a href="#">Booking</a></li>
+                <li><a href="booking.php">Booking</a></li>
                 <?php
                 //check if user is logged in
                 if (isset($_SESSION['id']) && filter_var($_SESSION['id'], FILTER_VALIDATE_INT, array('min_range'=>1))) {

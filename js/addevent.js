@@ -321,7 +321,11 @@ window.addEventListener('load', function() {
         var _this = this;
         //check if text entered has any match
         var matches = [];
-        var reg = new RegExp('^'+this.value, 'i');
+        var reg;
+        if (this.value.length <= 3) //if 3 or less chars, only match beginning of string
+            reg = new RegExp('^' + this.value, 'i');
+        else //match anywhere in string
+            reg = new RegExp(this.value, 'i');
         matches = nameList.filter(function(e) {
             if (e.match(reg)) return true;
             else return false;

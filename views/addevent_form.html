@@ -26,7 +26,7 @@ foreach ($r as $row) {
     createInput('venue', 'text', $event_errors, 'Venue: ');
     echo '<br />';
     
-    createInput('date', 'date', $event_errors, 'Date (MM/DD/YY): ', null, array('size'=>8));
+    createInput('date', 'date', $event_errors, 'Date (MM/DD/YY): ', 'POST', array('size'=>8));
     echo '<br />';
     
     createInput('startHour', 'text', $event_errors, 'Start Time: ', null, array('size'=>2,'maxlength'=>2, 'value'=>isset($_POST['startHour'])?$_POST['startHour']:6));

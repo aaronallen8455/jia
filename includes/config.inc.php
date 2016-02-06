@@ -49,10 +49,15 @@ set_error_handler('my_error_handler');
 //utility function for parsing time values from the DB
 function parseTime($str) {
     $hour = (int)substr($str,0,2);
-    if ($hour > 12) {
-        $hour -=12;
+    if ($hour >= 12) {
+        if ($hour !== 12)
+            $hour -=12;
         $period = 'pm';
-    }else $period = 'am';
+    }else{
+        $period = 'am';
+        if ($hour === 0)
+            $hour = 12; //midnight
+    } 
     $min = substr($str,-2);
     return $hour.':'.$min.$period;
 }

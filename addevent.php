@@ -45,9 +45,9 @@ if (isset($_SESSION['id']) && filter_var($_SESSION['id'], FILTER_VALIDATE_INT, a
         if (isset($_POST['startHour'], $_POST['startMin'], $_POST['startPeriod'])) {
             //time values are validated with JS
             $hour = (int) $_POST['startHour'];
-            if ($_POST['startPeriod'] === 'pm' && ($_POST['startHour'] < 12)) {
+            if ($_POST['startPeriod'] === 'pm' && ($hour < 12)) {
                 $hour += 12;
-            }
+            }else if ($_POST['startPeriod'] === 'am' && $hour === 12) $hour = 0; //midnight
             $hour = substr('0' . $hour, -2);
             $min = substr('0' . $_POST['startMin'], -2);
             $start = $hour . $min;
@@ -60,7 +60,7 @@ if (isset($_SESSION['id']) && filter_var($_SESSION['id'], FILTER_VALIDATE_INT, a
             $hour = (int) $_POST['endHour'];
             if ($_POST['endPeriod'] === 'pm' && ($_POST['endHour'] < 12)) {
                 $hour += 12;
-            }
+            }else if ($_POST['endPeriod'] === 'am' && $hour === 12) $hour = 0; //midnight
             $hour = substr('0' . $hour, -2);
             $min = substr('0' . $_POST['endMin'], -2);
             $end = $hour . $min;

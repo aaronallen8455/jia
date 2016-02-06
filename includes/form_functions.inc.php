@@ -35,7 +35,6 @@ function createInput($name, $type, $errors = array(), $label, $values = 'POST', 
         
     }else if ($type === 'date') { //date input
         $ele = '<span><label for="'.$name.'">'.$label.'</label><input id="' . $name . '" name="'.$name.'" type="text" ';
-        
         if ($value) $ele .= 'value="'.$value.'" ';
         
         if (!empty($options)) { //append options

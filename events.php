@@ -31,6 +31,7 @@ if (empty($row)) {
     exit();
 }
 $pageTitle = $row['title'];
+$pageDesc = $row['desc'];
 include './includes/header.html';
 include './views/event_view.html';
 include './includes/footer.html';

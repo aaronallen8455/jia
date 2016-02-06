@@ -213,21 +213,21 @@ window.onload = function() {
                 var startHour = ele.start.slice(0,2);
                 var startMin = ele.start.slice(2);
                 startHour = parseInt(startHour);
-                if (startHour -12 > 0) {
+                if (startHour -12 >= 0) {
                     startPeriod = 'p';
                     if (startHour !== 12)
                         startHour -= 12;
-                }
+                }else if (startHour === 0) startHour = 12; //midnight
                 //get end time values
                 var endPeriod = 'a';
                 var endHour = ele.end.slice(0,2);
                 var endMin = ele.end.slice(2);
                 endHour = parseInt(endHour);
-                if (endHour -12 > 0) {
+                if (endHour -12 >= 0) {
                     endPeriod = 'p';
                     if (endHour !== 12)
                         endHour -= 12;
-                }
+                }else if (endHour === 0) endHour = 12;
                 var time = document.createTextNode(startHour + ':' + startMin + startPeriod + ' - ' + endHour +':'+ endMin + endPeriod + ' ');
                 item.appendChild(time);
                 item.appendChild(link);

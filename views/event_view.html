@@ -32,19 +32,29 @@
         <li>Date: <?php echo $row['date']; ?></li>
         <li>Starts at <?php 
             $hour = (int)substr($row['start_time'], 0 ,2);
-            if ($hour > 12) {
-                $hour -= 12;
+            if ($hour >= 12) {
+                if ($hour !== 12)
+                    $hour -= 12;
                 $period = 'pm';
-            }else $period = 'am';
+            }else{
+                $period = 'am';
+                if ($hour === 0)
+                    $hour = 12; //midnight
+            } 
             $min = substr($row['start_time'], -2);
             echo $hour . ':' . $min . $period;
             ?></li>
         <li>Ends at <?php 
             $hour = (int)substr($row['end_time'], 0 ,2);
-            if ($hour > 12) {
-                $hour -= 12;
+            if ($hour >= 12) {
+                if ($hour !== 12)
+                    $hour -= 12;
                 $period = 'pm';
-            }else $period = 'am';
+            }else{
+                $period = 'am';
+                if ($hour === 0)
+                    $hour = 12; //midnight
+            } 
             $min = substr($row['end_time'], -2);
             echo $hour . ':' . $min . $period;
             ?></li>
