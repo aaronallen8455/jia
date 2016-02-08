@@ -146,4 +146,21 @@ LEFT OUTER JOIN ( SELECT venue_id, COUNT(*) AS cnt FROM `events_venues` JOIN ven
 ORDER BY c.cnt DESC, name ASC;
 END $$
 DELIMITER ;
+-- Mass venue insert
+DELIMITER $$
+CREATE PROCEDURE mass_insert (club VARCHAR(60), _date DATE, _start CHAR(4), _end CHAR(4), _title VARCHAR(80), _id SMALLINT UNSIGNED)
+BEGIN
+DECLARE _vid SMALLINT;
+DECLARE _eid SMALLINT;
+DECLARE _pid SMALLINT;
+SELECT venues.id INTO _vid FROM venues WHERE venues.name=club;
+INSERT INTO `events` (venue, date, start_time, end_time, title, user_id) VALUES (club, _date, _start, _end, _title, _id);
+SET _eid=LAST_INSERT_ID();
+INSERT INTO events_venues (venue_id, events_venues.event_id) VALUES (_vid, _eid);
+SELECT user_id INTO _pid FROM `profiles` WHERE user_id=_id;
+IF _pid>=1 THEN
+INSERT INTO events_profiles (events_profiles.event_id, profile_id) VALUES (_eid, _pid);
+END IF;
+END $$
+DELIMITER ;
 

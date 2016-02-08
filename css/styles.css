@@ -157,6 +157,11 @@
 .eventContent ul {
     margin-left: -15px;
 }
+.eventContent li:not(:last-child) {
+    border-bottom: 1px solid black;
+    padding-bottom: 8px;
+    margin-bottom: 8px;
+}
 .eventDivOdd {
     background-color: #C7D0ED;
 }

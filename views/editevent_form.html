@@ -46,10 +46,13 @@ Edit any of the fields below then click 'Save'.
             $band[$i] = $b;
             $instr[$i] = $in;
         }*/
-        for ($i=0; $i<count($bands); $i++) {
-            list($b, $in) = (explode(',', $bands[$i]));
-            $band[$i] = $b;
-            $instr[$i] = $in;
+        if (!empty($bands[0])) {
+            for ($i=0; $i<count($bands); $i++) {
+
+                list($b, $in) = (explode(',', $bands[$i]));
+                $band[$i] = $b;
+                $instr[$i] = $in;
+            }
         }
     }else{
         $band = $_POST['band'];
