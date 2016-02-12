@@ -77,7 +77,7 @@ if (isset($_SESSION['id']) && $_SESSION['isAdmin'] === true) {
             $cell = $row->cells[$p];
             if (empty($cell->content)) continue;
             //check for user name
-            $uid = 1; //default creator account
+            $uid = 3; //default creator account
             foreach ($userNames as $name=>$id) {
                 if (stristr($cell->content, $name)) {
                     //match found, use their id
@@ -94,7 +94,7 @@ if (isset($_SESSION['id']) && $_SESSION['isAdmin'] === true) {
             $hhcell = Row::$rows[$i+1]->cells[$p];
             if (!empty($hhcell->content)) {
                 //check for owner
-                $uid = 1; //default creator account
+                $uid = 3; //default creator account
                 foreach ($userNames as $name=>$id) {
                     if (stristr($cell->content, $name)) {
                         //match found, use their id

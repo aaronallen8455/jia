@@ -158,7 +158,9 @@ window.onload = function() {
         this.wrapper.className = 'eventDivWrapper';
         this.div = document.createElement('div');
         this.div.classList.add('eventDiv');
-        if (odd) this.div.classList.add('eventDivOdd'); //odd listings have different color scheme
+        if (year === currentYear && month === currentMonth && date === currentDate) {
+            this.div.classList.add('eventDivNow');
+        }else if (odd) this.div.classList.add('eventDivOdd'); //odd listings have different color scheme
         this.wrapper.appendChild(this.div);
         eventDisplayDiv.appendChild(this.wrapper);
         //holds the date: Sat, Dec 8th

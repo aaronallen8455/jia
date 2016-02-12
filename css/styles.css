@@ -165,6 +165,9 @@
 .eventDivOdd {
     background-color: #C7D0ED;
 }
+.eventDivNow {
+    background-color: #d9c3d7;
+}
 #eventDisplayDiv {
     display: block;
     /*
