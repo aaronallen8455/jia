@@ -1,7 +1,6 @@
 window.onload = function() {
     var date = new Date();
     var currentDate = date.getDate(); //date number 1-31
-    var currentDay = date.getDay(); //day of the week
     var currentMonth = date.getMonth();
     var currentYear = date.getFullYear();
     var calendarTable = document.getElementById('calendarTable');
@@ -47,7 +46,7 @@ window.onload = function() {
                 var link = document.createElement('a');
                 link.setAttribute('href', '#');
                 var _date = col - startingDay + 1 + 7*row;
-                link.innerHTML = _date;
+                link.innerHTML = _date.toString();
                 //click event
                 link.addEventListener('click', function(e) {
                     daySelectHandler(e,year,month,parseInt(this.innerHTML));
@@ -103,45 +102,6 @@ window.onload = function() {
                 }
                 result = JSON.parse(result);
                 //build content for each date
-                /*
-                var odd = 0; //keeps track of whether an element is odd numbered.
-                for (var date in result) {
-                    if (!result.hasOwnProperty(date)) continue;
-                    var content = document.createElement('ul');//a list of all events for this date
-                    var year = parseInt(date.slice(0,4));
-                    var month = parseInt(date.slice(5,7))-1;
-                    var day = parseInt(date.slice(8));
-                    for (var ele in result[date]) {
-                        if (!result[date].hasOwnProperty(ele)) continue;
-                        var item = document.createElement('li');
-                        var link = document.createElement('a');
-                        link.setAttribute('href', './events.php?id='+ele.id);
-                        item.appendChild(link);
-                        content.appendChild(item);
-                        //get start time values
-                        var startPeriod = 'am';
-                        var startHour = ele.start.slice(0,2);
-                        var startMin = ele.start.slice(2);
-                        startHour = parseInt(startHour);
-                        if (12 - startHour > 0) {
-                            startPeriod = 'pm';
-                            startHour -= 12;
-                        }
-                        //get end time values
-                        var endPeriod = 'am';
-                        var endHour = ele.end.slice(0,2);
-                        var endMin = ele.end.slice(2);
-                        endHour = parseInt(endHour);
-                        if (12 - endHour > 0) {
-                            endPeriod = 'pm';
-                            endHour -= 12;
-                        }
-                        //build the link text
-                        link.innerHTML = startHour + ':' + startMin + startPeriod + ' - ' + endHour +':'+ endMin + endPeriod + ' ' + ele.title + ' @' + ele.venue;
-                    }
-                    new DayDisplay(year, month, day, (odd++%2===1), content);
-                }
-                */
                 for (var i=0; i<daysSelected; i++) {
                     var odd = i%2 === 1;
                     new DayDisplay(year, month, _date+i, odd, result);

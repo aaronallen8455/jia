@@ -34,7 +34,7 @@ if (!empty($row['desc'])) {
         foreach ($linkURL as $url=>$desc) {
             echo '<li>';
             echo $desc. ' - ';
-            echo '<a href="'.$url.'">'.substr($url, strpos($url, '/')+2).'</a>';
+            echo '<a href="'.$url.'" target="_blank">'.substr($url, strpos($url, '/')+2).'</a>';
             echo '</li>';
         }
         echo '</ul>';

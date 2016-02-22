@@ -10,9 +10,9 @@ if (isset($_SESSION['isAdmin']) && $_SESSION['isAdmin'] === true) {
         //remove database row
         if ($dbc->exec('DELETE FROM venues WHERE id='.$_GET['id'])) {
             //success
-            echo '<div class="centeredDiv"><h2>The event was successfully removed!</h2></div>';
+            echo '<div class="centeredDiv"><h2>The venue was successfully removed!</h2></div>';
         }else{
-            trigger_error('The event was not deleted due to a system error. We apologize for the inconvenience.');
+            trigger_error('The venue was not deleted due to a system error. We apologize for the inconvenience.');
         }
     }else if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['id']) && filter_var($_GET['id'], FILTER_VALIDATE_INT, array('min_range'=>1))) {
         //if initial get request, show confirmation form

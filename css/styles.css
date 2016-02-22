@@ -456,3 +456,7 @@ textarea {
     textarea {
         width: 100%;
     }
+    .profileViewList dd {
+        display: block;
+    }
+}

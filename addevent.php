@@ -115,10 +115,13 @@ if (isset($_SESSION['id']) && filter_var($_SESSION['id'], FILTER_VALIDATE_INT, a
                 $event_errors['date'] = 'An event has already been created with this date, time, and venue!';
             }else{
                 //add event to DB
-                $q = 'INSERT INTO events (title, venue, start_time, end_time, `date`, `desc`, user_id, band) VALUES (?,?,?,?,?,?,?,?)';
+                //$q = 'INSERT INTO events (title, venue, start_time, end_time, `date`, `desc`, user_id, band) VALUES (?,?,?,?,?,?,?,?)';
+                $q = 'CALL create_event(?, ?, ?, ?, ?, ?, ?, ?, @eid)';
                 $stmt = $dbc->prepare($q);
-                if ($stmt->execute(array($title, $venue, $start, $end, $date, $desc, $_SESSION['id'], $band))) {
-                    $eid = $dbc->lastInsertId();
+                if ($stmt->execute(array($venue, $date, $start, $end, $title, $band, $_SESSION['id'], $desc))) {
+                //if ($stmt->execute(array($title, $venue, $start, $end, $date, $desc, $_SESSION['id'], $band))) {
+                    //$eid = $dbc->lastInsertId();
+                    $eid = $dbc->query('SELECT @eid')->fetchColumn();
                     //show success message
                     include './views/addevent_success.html';
                     include './includes/footer.html';
@@ -135,7 +138,7 @@ if (isset($_SESSION['id']) && filter_var($_SESSION['id'], FILTER_VALIDATE_INT, a
                         }
                     }
                     //if the venue has a page, create an events_venues listing
-                    $q = "SELECT id FROM venues WHERE name LIKE '%$venue%'";
+                    /*$q = "SELECT id FROM venues WHERE name LIKE '%$venue%'";
                     if ($stmt = $dbc->query($q)) {
                         //$stmt->execute(array($venue));
                         $vid = $stmt->fetchColumn();
@@ -143,7 +146,7 @@ if (isset($_SESSION['id']) && filter_var($_SESSION['id'], FILTER_VALIDATE_INT, a
                             //create row
                             $dbc->exec("INSERT INTO events_venues (venue_id, event_id) VALUES ($vid, $eid)");
                         }
-                    }
+                    }*/
 
                     exit();
                 }else{

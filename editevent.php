@@ -135,7 +135,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && filter_var($_GET['id'], FILTER_VALI
             $event_errors['success'] = true;
             //include './includes/footer.html';
             //if the band was changed, redo the events_profiles entries.
-            if ($band !== $row['band']) {
+            if ($band != $row['band']) {
                 //clear existing entries
                 $q = 'DELETE FROM events_profiles WHERE event_id=' . $eid;
                 $dbc->exec($q);

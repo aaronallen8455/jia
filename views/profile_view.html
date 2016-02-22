@@ -33,7 +33,7 @@ if (!empty($row['pic'])) {
             echo '<dd>';
             foreach ($linkURL as $i=>$link) {
                 if ($i !== 0) echo '<br />';
-                echo $linkDesc[$i].' - '.'<a href="'.$link.'">'.substr($link, strpos($link, '/')+2).'</a>';
+                echo $linkDesc[$i].' - '.'<a href="'.$link.'" target="_blank">'.substr($link, strpos($link, '/')+2).'</a>';
             }
             echo '</dd>';
         }
