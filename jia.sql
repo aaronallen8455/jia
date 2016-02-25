@@ -176,3 +176,13 @@ INSERT INTO events_venues (venue_id, events_venues.event_id) VALUES (_vid, eid);
 END IF;
 END $$
 DELIMITER ;
+-- Get event info for profile associated with given ID
+DELIMITER $$
+CREATE PROCEDURE get_profile_events (uid SMALLINT UNSIGNED)
+BEGIN
+SELECT `events`.id AS id, DATE_FORMAT(`date`, '%M %D, %Y') AS edate, start_time, end_time, title, venue
+FROM `events` JOIN events_profiles ON `events`.id=event_id
+WHERE profile_id=uid AND `date` >= CURDATE()
+ORDER BY `date` ASC, start_time ASC;
+END $$
+DELIMITER ;

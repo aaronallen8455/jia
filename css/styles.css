@@ -390,6 +390,14 @@ textarea {
     line-height: 20px;
     margin-left: 10px;
 }
+#serviceUITable {
+    display: inline-block;
+    vertical-align: top;
+}
+#serviceUIPreview {
+    display: inline-block;
+    min-width: 53%;
+}
 
 /*for mobile*/
 @media all and (max-width: 850px) and  (min-width: 631px) {
@@ -444,12 +452,16 @@ textarea {
     #calendarDiv {
         display: none;
     }
+    span > #calendarDiv { /* allow calendar input on mobile */
+        display: block;
+        left: inherit !important;
+    }
     .eventDivWrapper {
         width: 100%;
     }
-    .calendarInput {
+    /*.calendarInput {
         display: none;
-    }
+    }*/
     .memberDiv {
         border: 1px solid lightgrey;
     }
