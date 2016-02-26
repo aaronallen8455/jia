@@ -67,7 +67,7 @@ if (isset($_SESSION['id']) && $_SESSION['isAdmin'] === true) {
     }
 
     //$sql = 'INSERT INTO `events` (venue, date, start_time, end_time, title, user_id) VALUES ("Elephant Room", ?, ?, ?, ?, ?)';
-    $sql = 'CALL mass_insert(?,?,?,?,?,?)';
+    $sql = 'CALL mass_insert(?,?,?,?,?,?,?,?)';
     $stmt = $dbc->prepare($sql);
     //loop through all rows (main rows, not happy hour)
     for ($i=0; $i<count(Row::$rows); $i+=2) {
@@ -86,7 +86,7 @@ if (isset($_SESSION['id']) && $_SESSION['isAdmin'] === true) {
             }
 
             //import 930 show
-            $data = array('Elephant Room', date('Y').'-'.$month.'-'.$cell->day, '2130', '0130', $cell->content, $uid);
+            $data = array('Elephant Room', date('Y').'-'.$month.'-'.$cell->day, '2130', '0130', $cell->content, $uid, '', '');
             //dont import if already exists
             if (!array_key_exists($data[1], $existingDates) || ($existingDates[$data[1]] && $existingDates[$data[1]] !== $data[2]))
                 $stmt->execute($data);

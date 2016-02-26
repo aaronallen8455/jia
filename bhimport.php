@@ -21,7 +21,7 @@ if (isset($_SESSION['id']) && $_SESSION['isAdmin'] === true) {
             $userNames[$row[0]] = $row[1];
         }
         //prepare query
-        $sql = 'CALL mass_insert(?,?,?,?,?,?)';
+        $sql = 'CALL mass_insert(?,?,?,?,?,?,?,?)';
         $stmt = $dbc->prepare($sql);
         //loop through shows
         foreach ($_POST['shows'] as $show) {
@@ -39,7 +39,7 @@ if (isset($_SESSION['id']) && $_SESSION['isAdmin'] === true) {
                 }
             }
             //add show to DB
-            $data = array('Brass House', $show->date, $show->startTime, $show->endTime, $show->summary, $uid);
+            $data = array('Brass House', $show->date, $show->startTime, $show->endTime, $show->summary, $uid, '', '');
             if ($stmt->execute($data)) {
                 echo "$show->summary was added.<br>";
             }else print_r($dbc->errorInfo());
