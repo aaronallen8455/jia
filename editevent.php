@@ -57,7 +57,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && filter_var($_GET['id'], FILTER_VALI
         $event_errors['start'] = 'Please enter a valid start time!';
     }
     //validate end time
-    if (isset($_POST['endHour'], $_POST['endMin'], $_POST['endPeriod'])) {
+    $end = null;
+    if (!empty($_POST['endHour']) && !empty($_POST['endMin']) && !empty($_POST['endPeriod'])) {
         //time values are validated with JS
         $hour = (int) $_POST['endHour'];
         if ($_POST['endPeriod'] === 'pm' && ($hour < 12)) {
@@ -66,9 +67,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && filter_var($_GET['id'], FILTER_VALI
         $hour = substr('0' . $hour, -2);
         $min = substr('0' . $_POST['endMin'], -2);
         $end = $hour . $min;
-    }else{
+    }/*else{ end time is now optional
         $event_errors['end'] = 'Please enter a valid ending time!';
-    }
+    }*/
     //filter description
     $desc = null;
     if (isset($_POST['desc'])) {
@@ -210,16 +211,19 @@ if (($_SERVER['REQUEST_METHOD'] === 'GET' || !empty($event_errors)) && filter_va
         } 
         $event['startMin'] = substr($event['start_time'],-2);
         
-        $event['endHour'] = (int)substr($event['end_time'],0,2);
-        if ($event['endHour'] < 12) {
-            $event['endPeriod'] = 'am';
-            if ($event['endHour'] === 0) $event['endHour'] = 12; //convert zero hour to midnight
-        }else{
-            $event['endPeriod'] = 'pm';
-            if ($event['endHour'] !== 12)
-                $event['endHour'] -= 12;
-        } 
-        $event['endMin'] = substr($event['end_time'],-2);
+        if (!empty($event['endHour'])) {
+            $event['endHour'] = (int)substr($event['end_time'],0,2);
+            if ($event['endHour'] < 12) {
+                $event['endPeriod'] = 'am';
+                if ($event['endHour'] === 0) $event['endHour'] = 12; //convert zero hour to midnight
+            }else{
+                $event['endPeriod'] = 'pm';
+                if ($event['endHour'] !== 12)
+                    $event['endHour'] -= 12;
+            } 
+            $event['endMin'] = substr($event['end_time'],-2);
+        }
+        
         //display the edit event form
         include './includes/form_functions.inc.php';
         include './views/editevent_form.html';

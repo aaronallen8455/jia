@@ -78,15 +78,19 @@ if (isset($_SESSION['id']) && $_SESSION['isAdmin'] === true) {
             if (empty($cell->content)) continue;
             //check for user name
             $uid = 3; //default creator account
+            $band = null;
             foreach ($userNames as $name=>$id) {
                 if (stristr($cell->content, $name)) {
                     //match found, use their id
                     $uid = $id;
+                    //make band be this user
+                    $band = $name;
+                    break;
                 }
             }
 
             //import 930 show
-            $data = array('Elephant Room', date('Y').'-'.$month.'-'.$cell->day, '2130', '0130', $cell->content, $uid, '', '');
+            $data = array('Elephant Room', date('Y').'-'.$month.'-'.$cell->day, '2130', '0130', $cell->content, $uid, $band, '');
             //dont import if already exists
             if (!array_key_exists($data[1], $existingDates) || ($existingDates[$data[1]] && $existingDates[$data[1]] !== $data[2]))
                 $stmt->execute($data);

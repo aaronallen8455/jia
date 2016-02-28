@@ -55,7 +55,8 @@ if (isset($_GET['id']) || isset($_GET['name'])) {
         WHERE profile_id={$row['user_id']} AND `date` >= CURDATE()
         ORDER BY `date` ASC");
         while ($r = $q->fetch(PDO::FETCH_ASSOC)) {
-            $r['time'] = parseTime($r['start_time']).'-'.parseTime($r['end_time']);
+            $r['time'] = parseTime($r['start_time']);
+            if (!empty($r['end_time'])) $r['time'] .= '-' . parseTime($r['end_time']);
             $events[$r['edate']][] = $r;
         }
         //display the profile view

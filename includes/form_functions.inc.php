@@ -10,9 +10,9 @@ function createInput($name, $type, $errors = array(), $label, $values = 'POST', 
         if (isset($_POST[$name])) $value = htmlspecialchars($_POST[$name], ENT_QUOTES, 'UTF-8');
     }else if ($values === 'EDIT') {
         if (empty($_POST[$name])) {
-            $value = htmlspecialchars($event[$name], ENT_QUOTES, 'UTF-8');
+            $value = htmlspecialchars((isset($event[$name])?$event[$name]:''), ENT_QUOTES, 'UTF-8');
         }else{
-            $value = htmlspecialchars($_POST[$name], ENT_QUOTES, 'UTF-8');
+            $value = htmlspecialchars((isset($_POST[$name])?$_POST[$name]:''), ENT_QUOTES, 'UTF-8');
         }
     }else $value = false;
     echo '<div class="formEleDiv'.(($type === 'textarea')?'Text':'').'">';

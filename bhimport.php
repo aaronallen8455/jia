@@ -32,14 +32,17 @@ if (isset($_SESSION['id']) && $_SESSION['isAdmin'] === true) {
             }
             //check for authorship
             $uid = 3; //the admin user acct
+            $band = null;
             foreach ($userNames as $name=>$id) {
                 if (stristr($show->summary, $name)) {
                     $uid = $id;
+                    //add this user to band
+                    $band = $name;
                     break;
                 }
             }
             //add show to DB
-            $data = array('Brass House', $show->date, $show->startTime, $show->endTime, $show->summary, $uid, '', '');
+            $data = array('Brass House', $show->date, $show->startTime, $show->endTime, $show->summary, $uid, $name, '');
             if ($stmt->execute($data)) {
                 echo "$show->summary was added.<br>";
             }else print_r($dbc->errorInfo());

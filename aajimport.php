@@ -18,21 +18,25 @@ if (isset($_SESSION['id']) && $_SESSION['isAdmin'] === true) {
             //extract details from event link page
             $show->parseLink();
             //get the end time by add 3 hours to start time
-            $endTime = (int)substr($show->startTime, 0, 2);
+            /*$endTime = (int)substr($show->startTime, 0, 2);
             $endTime += 3;
             if ($endTime >= 24) $endTime -= 24;
-            $endTime = substr('0'.$endTime,-2) . substr($show->startTime, -2);
+            $endTime = substr('0'.$endTime,-2) . substr($show->startTime, -2); */
             //check for author
             $uid = 3; //default creator account
             foreach ($userNames as $name=>$id) {
                 if (stristr($show->title, $name)) {
                     //match found, use their id
                     $uid = $id;
+                    //if band empty, make band be the leader
+                    if (empty($this->band)) {
+                        $this->band = $name;
+                    }
                     break;
                 }
             }
             //add to DB
-            if ($stmt->execute(array($show->venue, $show->edate, $show->startTime, $endTime, $show->title, $uid, $show->band, $show->desc)))
+            if ($stmt->execute(array($show->venue, $show->edate, $show->startTime, null, $show->title, $uid, $show->band, $show->desc)))
                 echo "Successfully added $show->title.<br />";
         }
     }else{
