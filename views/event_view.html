@@ -43,7 +43,7 @@
             } 
             $min = substr($row['start_time'], -2);
             echo $hour . ':' . $min . $period;
-            ?></li>
+            ?></li> <?php if (!empty($row['end_time'])): //end time is optional?>
         <li>Ends at <?php 
             $hour = (int)substr($row['end_time'], 0 ,2);
             if ($hour >= 12) {
@@ -57,8 +57,8 @@
             } 
             $min = substr($row['end_time'], -2);
             echo $hour . ':' . $min . $period;
-            ?></li>
-        <?php if (!empty($row['desc'])) { //show description
+            ?></li> <?php endif;
+        if (!empty($row['desc'])) { //show description
             echo '<li><dl><dt>About:</dt><dd>'.nl2br($row['desc']).'</dd></dl></i>';
         }
         if (!empty($row['band'])) {

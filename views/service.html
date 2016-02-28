@@ -35,17 +35,28 @@ To display your Jazz in Austin events on your personal website, follow these ste
         </td>
     </tr>
     <tr>
-        <td align="right">Background Color: </td>
-        <td><input type="color" id="bg" value="#FFFFFF"/></td>
-    </tr>
-    <tr>
         <td align="right">Text Color: </td>
-        <td><input type="color" id="color" value="#000000"/></td>
+        <td><input type="color" id="color" value="#000000"/>
+            <input type="text" id="colorhex" size="7" />
+        </td>
     </tr>
     <tr>
         <td align="right">Link Color: </td>
-        <td><input type="color" id="link" value="#0000EE"/></td>
+        <td><input type="color" id="link" value="#0000EE"/>
+            <input type="text" id="linkhex" size="7" />
+        </td>
     </tr>
+    <tr>
+        <td align="right">No Background: </td>
+        <td><input type="checkbox" id="nobg" checked /></td>
+    </tr>
+    <tr>
+        <td align="right">Background Color: </td>
+        <td><input type="color" id="bg" value="#FFFFFF" disabled />
+            <input type="text" id="bghex" size="7" disabled />
+        </td>
+    </tr>
+    
     <tr>
         <td align="right">HTML Code: </td>
         <td>

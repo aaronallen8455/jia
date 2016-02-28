@@ -1,9 +1,16 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <style type="text/css">
 <?php
 require '../includes/config.inc.php';
+
+function toJSON($text) {
+    //the JSONP call back
+    return 'callBack(' . json_encode($text).');';
+}
+ob_start('toJSON');
+//buffer all output to JSON
+
+?>
+        <style type="text/css">
+<?php
 //assemble style
 if (isset($_GET['bg'], $_GET['font'], $_GET['color'], $_GET['link'])) {
     $bg = urldecode($_GET['bg']);
@@ -13,32 +20,36 @@ if (isset($_GET['bg'], $_GET['font'], $_GET['color'], $_GET['link'])) {
     if (validateColors($_GET['bg'], $_GET['color'], $_GET['link'])) {
         //echo '<style type="text/css">';
         echo <<<EOF
-body {
+#jiaDiv {
     color: $color;
     background-color: $bg;
     font-family: $font;
+    padding: 5px;
 }
-h2 {
+#jiaDiv h2 {
     font-size: 2em;
 }
-a {
+#jiaDiv a {
     color: $link;
 }
-ul {
+#jiaDiv ul {
     list-style-type: none;
     padding-left: 10px;
 }
-li.date {
+#jiaDiv li.date {
     font-weight: bold;
     font-size: 1.5em;
 }
-li.event {
+#jiaDiv li.event {
     font-weight: 500;
     margin-top: 7px;
     font-size: .7em;
 }
-li.date:not(:last-child) {
+#jiaDiv li.date:not(:last-child) {
     margin-bottom: 15px;
+}
+#jiaDiv .jiaFooter {
+    font-size: .7em;
 }
 
 EOF;
@@ -65,10 +76,10 @@ if (isset($_GET['id']) && filter_var($_GET['id'], FILTER_VALIDATE_INT, array('mi
     //build the calendar list
     if (!empty($name)) {
         //print the header
-        echo "<h2>Upcoming Shows For $name</h2>";
+        echo "<h2>My Upcoming Shows</h2>";
         //create the list
         if (empty(Event::$events)) {
-            echo '<i>There are currently no upcoming events.</i>';
+            echo '<i>There are currently no upcoming events.</i><br />';
         }else{
             echo '<ul>';
             foreach (Event::$events as $date=>$eventArray) {
@@ -86,7 +97,7 @@ if (isset($_GET['id']) && filter_var($_GET['id'], FILTER_VALIDATE_INT, array('mi
             }
             echo '</ul>';
         }
-        echo '<i>Courtesy of <a href="http://jazzinaustin.com">Jazz in Austin</a></i>';
+        echo '<i class="jiaFooter">Courtesy of <a href="http://jazzinaustin.com" target="_blank">Jazz in Austin</a></i>';
     }
 }
 
@@ -102,7 +113,11 @@ class Event
     public function getHTML()
     {
         //print formatted event info
-        echo parseTime($this->start_time) . ' - ' . parseTime($this->end_time) . ': ';
+        if (!empty($this->end_time)){
+            echo parseTime($this->start_time) . ' - ' . parseTime($this->end_time) . ': ';
+        }else{
+            echo parseTime($this->start_time) . ': ';
+        }
         echo '<a href="http://jazzinaustin.com/events.php?id=' . $this->id . '" target="_blank">' . $this->title;
         echo ' @ ' . $this->venue . '</a>';
     }
@@ -124,7 +139,4 @@ function validateColors() {
     }
     return true;
 }
-
 ?>
-</body>
-</html>

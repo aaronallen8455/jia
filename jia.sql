@@ -46,7 +46,7 @@ CREATE TABLE `events` (
     `venue` VARCHAR(80) NOT NULL,
     `date` DATE NOT NULL,
     `start_time` CHAR(4) NOT NULL,
-    `end_time` CHAR(4) NOT NULL,
+    `end_time` CHAR(4) NULL,
     `desc` TEXT NULL,
     `title` VARCHAR(80) NOT NULL,
     `user_id` SMALLINT UNSIGNED NOT NULL,

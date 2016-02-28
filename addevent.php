@@ -55,7 +55,8 @@ if (isset($_SESSION['id']) && filter_var($_SESSION['id'], FILTER_VALIDATE_INT, a
             $event_errors['start'] = 'Please enter a valid start time!';
         }
         //validate end time
-        if (isset($_POST['endHour'], $_POST['endMin'], $_POST['endPeriod'])) {
+        $end = null;
+        if (!empty($_POST['endHour']) && !empty($_POST['endMin']) && !empty($_POST['endPeriod'])) {
             //time values are validated with JS
             $hour = (int) $_POST['endHour'];
             if ($_POST['endPeriod'] === 'pm' && ($_POST['endHour'] < 12)) {
@@ -64,9 +65,9 @@ if (isset($_SESSION['id']) && filter_var($_SESSION['id'], FILTER_VALIDATE_INT, a
             $hour = substr('0' . $hour, -2);
             $min = substr('0' . $_POST['endMin'], -2);
             $end = $hour . $min;
-        }else{
+        }/*else{ end time is now optional
             $event_errors['end'] = 'Please enter a valid ending time!';
-        }
+        }*/
         //filter description
         $desc = null;
         if (isset($_POST['desc'])) {

@@ -181,17 +181,23 @@ window.onload = function() {
                     if (startHour !== 12)
                         startHour -= 12;
                 }else if (startHour === 0) startHour = 12; //midnight
-                //get end time values
-                var endPeriod = 'a';
-                var endHour = ele.end.slice(0,2);
-                var endMin = ele.end.slice(2);
-                endHour = parseInt(endHour);
-                if (endHour -12 >= 0) {
-                    endPeriod = 'p';
-                    if (endHour !== 12)
-                        endHour -= 12;
-                }else if (endHour === 0) endHour = 12;
-                var time = document.createTextNode(startHour + ':' + startMin + startPeriod + ' - ' + endHour +':'+ endMin + endPeriod + ' ');
+                //get end time values if exists
+                if (ele.end) {
+                    var endPeriod = 'a';
+                    var endHour = ele.end.slice(0,2);
+                    var endMin = ele.end.slice(2);
+                    endHour = parseInt(endHour);
+                    if (endHour -12 >= 0) {
+                        endPeriod = 'p';
+                        if (endHour !== 12)
+                            endHour -= 12;
+                    }else if (endHour === 0) endHour = 12;
+                    var time = document.createTextNode(startHour + ':' + startMin + startPeriod + ' - ' + endHour +':'+ endMin + endPeriod + ' ');
+                }else{
+                    var time = document.createTextNode(startHour + ':' + startMin + startPeriod + ' ');
+                }
+                
+                
                 item.appendChild(time);
                 item.appendChild(link);
                 content.appendChild(item);

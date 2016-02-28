@@ -23,10 +23,10 @@ Edit any of the fields below then click 'Save'.
     echo '<select name="startPeriod" id="startPeriod"><option value="am">AM</option><option value="pm" '.($event['startPeriod']==='pm'?'selected':'').'>PM</option></select>';
     echo '<br />';
     
-    createInput('endHour', 'text', $event_errors, 'End Time: ', 'EDIT', array('size'=>2,'maxlength'=>2,'value'=>8));
+    createInput('endHour', 'text', $event_errors, 'End Time: ', 'EDIT', array('size'=>2,'maxlength'=>2));
     echo ':';
-    createInput('endMin', 'text', $event_errors, '', 'EDIT', array('size'=>2,'maxlength'=>2,'value'=>'00'));
-    echo '<select name="endPeriod" id="endPeriod"><option value="am">AM</option><option value="pm" '.($event['endPeriod']==='pm'?'selected':'').'>PM</option></select>';
+    createInput('endMin', 'text', $event_errors, '', 'EDIT', array('size'=>2,'maxlength'=>2));
+    echo '<select name="endPeriod" id="endPeriod"><option value="am">AM</option><option value="pm" '.(isset($event['endPeriod']) && $event['endPeriod']==='pm'?'selected':'').'>PM</option></select>';
     echo '<br />';
     
     createInput('desc', 'textarea', $event_errors, 'Description (Optional): ', 'EDIT');
