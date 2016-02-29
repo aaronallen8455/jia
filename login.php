@@ -1,9 +1,15 @@
 <?php
 require './includes/config.inc.php';
 require './includes/login.inc.php';
+
+if (isset($_SESSION['id'])) {
+    //redirect to the myaccount page if user successfully logged in.
+    header('Location: http://'. $_SERVER['HTTP_HOST'] . dirname($_SERVER['PHP_SELF']) . '/myaccount.php');
+}
+
 include './includes/header.html';
 //show a login form if user isn't logged in.
-if (empty($_SESSION['id'])) { ?>
+?>
 <div id="registerForm">
             <form action="<?php echo $_SERVER['PHP_SELF'];?>" method="post">
                 <label for="email">Email: </label>
@@ -21,7 +27,5 @@ if (empty($_SESSION['id'])) { ?>
             </form>
 </div>
             <?php
-}else{ 
-    echo '<span>You\'re logged in as ' . $_SESSION['name'] . '! <a href="myaccount.php">My Account</a></span>';
-}
+
 include './includes/footer.html';

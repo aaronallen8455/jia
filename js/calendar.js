@@ -53,10 +53,10 @@ window.onload = function() {
                 });
                 td.appendChild(link);
                 //determine if this day is in the selected group
-                if (year === lastSelected[0] || year === (lastSelected[0]+1)) { //could carry over into next year
+                if (year === lastSelected[0] || (year === (lastSelected[0]+1) && lastSelected[1] === 11 && month === 0) ) { //could carry over into next year
                     if (_date >= lastSelected[2] && _date < lastSelected[2]+daysSelected && month === lastSelected[1]) {
                         td.classList.add('tablecell-selected');
-                    }else if ((month === (lastSelected[1]+1)) || (month === 0 && lastSelected[1] === 11)) { //could carry over into next month
+                    }else if ((month === (lastSelected[1]+1)) || (month === 0 && lastSelected[1] === 11 && year === lastSelected[0]+1)) { //could carry over into next month
                         var carryOver = lastSelected[2]+daysSelected - numDays(lastSelected[0],lastSelected[1]);
                         if (carryOver > 0 && _date < carryOver) 
                             td.classList.add('tablecell-selected');
