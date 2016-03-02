@@ -42,7 +42,7 @@ window.addEventListener('load', function() {
             links[i].style.textDecoration = 'underline';
         }
         //out put the code
-        var code = '<div id="jiaDiv"></div><script type="application/javascript">function callBack(j){jiaDiv.innerHTML=j;}</script><script src="http://jazzinaustin.com/service/service.php?id=';
+        var code = '<div id="jiaDiv"></div><script type="application/javascript">function jia_callBack(j){jiaDiv.innerHTML=j;}</script><script src="http://jazzinaustin.com/service/service.php?id=';
         code += userId;
         if (!bg.hasAttribute('disabled'))
             code += '&bg=' + encodeURIComponent(bg.value);

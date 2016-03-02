@@ -3,7 +3,7 @@ require '../includes/config.inc.php';
 
 function toJSON($text) {
     //the JSONP call back
-    return 'callBack(' . json_encode($text).');';
+    return 'jia_callBack(' . json_encode($text).');';
 }
 ob_start('toJSON');
 //buffer all output to JSON
@@ -18,7 +18,6 @@ if (isset($_GET['bg'], $_GET['font'], $_GET['color'], $_GET['link'])) {
     $color = urldecode($_GET['color']);
     $link = urldecode($_GET['link']);
     if (validateColors($_GET['bg'], $_GET['color'], $_GET['link'])) {
-        //echo '<style type="text/css">';
         echo <<<EOF
 #jiaDiv {
     color: $color;
@@ -134,7 +133,7 @@ function validateColors() {
     $args = func_get_args();
     foreach ($args as &$arg) {
         if (!isset($arg)) return false;
-        if (!preg_match('/^#[0-9A-Fa-f]{3,6}$/', $arg)) return false;
+        if (!preg_match('/^#[0-9A-Fa-f]{3,6}$|^none$/', $arg)) return false;
         $arg = urldecode($arg);
     }
     return true;
