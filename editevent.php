@@ -211,7 +211,7 @@ if (($_SERVER['REQUEST_METHOD'] === 'GET' || !empty($event_errors)) && filter_va
         } 
         $event['startMin'] = substr($event['start_time'],-2);
         
-        if (!empty($event['endHour'])) {
+        if (!empty($event['end_time'])) {
             $event['endHour'] = (int)substr($event['end_time'],0,2);
             if ($event['endHour'] < 12) {
                 $event['endPeriod'] = 'am';

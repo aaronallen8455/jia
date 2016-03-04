@@ -322,10 +322,12 @@ window.addEventListener('load', function() {
         //check if text entered has any match
         var matches = [];
         var reg;
+        //escape special chars
+        var str = this.value.replace(/([\(\)\[\].\\\-*?!])/, '\\$1');
         if (this.value.length <= 3) //if 3 or less chars, only match beginning of string
-            reg = new RegExp('^' + this.value, 'i');
+            reg = new RegExp('^' + str, 'i');
         else //match anywhere in string
-            reg = new RegExp(this.value, 'i');
+            reg = new RegExp(str, 'i');
         matches = nameList.filter(function(e) {
             if (e.match(reg)) return true;
             else return false;
