@@ -1,6 +1,7 @@
 <?php
 require './includes/config.inc.php';
 $pageTitle = 'Reset Password';
+$noLogin = true;
 include './includes/header.html';
 //check that user is not logged in
 if (!isset($_SESSION['id'])) {

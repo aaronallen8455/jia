@@ -1,6 +1,7 @@
 <?php
 require './includes/config.inc.php';
 $pageTitle = 'Change Password';
+$noLogin = true;
 include './includes/header.html';
 //on form submit, validate
 $pw_errors = array();

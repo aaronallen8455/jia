@@ -1,8 +1,8 @@
 <?php
 require './includes/config.inc.php';
-include './includes/login.inc.php';
 require_once MYSQL;
 $pageTitle = 'Register';
+$noLogin = true;
 include './includes/header.html';
 require './includes/form_functions.inc.php';
 
