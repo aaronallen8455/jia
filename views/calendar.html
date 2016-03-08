@@ -1,64 +1,59 @@
-<div id="fb-root"></div>
-    <script>(function(d, s, id) { //facebook like button
-      var js, fjs = d.getElementsByTagName(s)[0];
-      if (d.getElementById(id)) return;
-      js = d.createElement(s); js.id = id;
-      js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.5";
-      fjs.parentNode.insertBefore(js, fjs);
-    }(document, 'script', 'facebook-jssdk'));</script>
+<div class="welcome">
+    <div class="splashWide">
+        <h1>Welcome to Jazz in Austin</h1>
+    </div>
+    <div class="splashNarrow">
+        <h1>Welcome to<br />
+            Jazz in Austin</h1>
+    </div>
+    <div class="whatis padToView">
+        <div class="question">
+            <h2>What is Jazz in Austin?</h2>
 
-<script type="application/javascript" src="./js/calendar.js"></script>
-<div id="calendarDiv">
-            <a href="#" id="calendarLeft">&#10094;</a>
-            <span id="calendarHeading"></span>
-            <a href="#" id="calendarRight">&#10095; </a>
-            <table id="calendarTable">
-            </table>
+            <p>Jazz in Austin is a place where Austin jazz musicians can post where and when they'll be performing, and where jazz lovers can always find what shows are happening in the Capitol City</p>
         </div>
-<!--FACEBOOK-->
-        <div class="fb-like" data-href="http://jazzinaustin.com" data-layout="button_count" data-action="like" data-show-faces="true" data-share="true"></div>
-        
-<h2>Welcome to Jazz in Austin!</h2>
-<dl>
-    <dt><b>What is Jazz in Austin?</b></dt>
-    <dd>
-This is a place where Austin jazz musicians can post where and when they'll be performing, so that you'll always know 
-what live jazz is happening here in Austin, Texas!</dd>
-    <br />
-    <dt><b>How does it work?</b></dt>
-    <dd>
-        - Use the calendar on this page to view all of the events for any given day. Click on an event's title to view 
-        the details for that event.
-    </dd>
-    <dd>
-        - Go to 'Musician Profiles' to find out about specific artists in the Austin jazz scene and to see where they'll be
-         playing next.
-    </dd>
-    <dd>
-        - 'Venues' has information about places you can go to hear live jazz, including a list of upcoming performances.
-    </dd>
-    <br />
-    <dt><b>How do I add my events to the calendar?</b></dt>
-    <dd>
-        Musicians or promoters wanting to add events must first <a href="./register.php">register an account</a>. Once 
-        you've done that, you can log in and create your event. If you're a musician, you can also use your account to make a 
-        personal profile page, where your bio and upcoming shows will be displayed.
-    </dd>
-    <br />
-</dl>
-        <div class="displayControlDiv">
-            <label for="numDaysSelect">Show </label>
-            <select id="numDaysSelect">
-                <option value="7">7</option>
-                <option value="15">15</option>
-                <option value="31">31</option>
-            </select> Days
-            <br>
+        <div class="question">
+            <h2>How does it work?</h2>
+
+            <p><em>View shows and concerts</em> by day from the <a href="./index.php#cal">Calendar</a></p>
+            <p><em>Learn about Austin's artists</em> at the <a href="./profiles.php">Musician Profiles</a> page</p>
+            <p><em>Discover jazz hot spots</em> on the <a href="./venues.php">Venues</a> page</p>
         </div>
-        
-        <div id="eventDisplayDiv">
-        
+        <div class="question">
+            <h2>How do I sign up?</h2>
+
+            <p>Musicians and promoters who have <a href="./register.php">registered an account</a> can log in and create events, make a personal profile page, add a bio and manage their upcoming shows
         </div>
-        
-        <div class="displayControlDiv">
-        </div>
+    </div>
+</div>
+
+<div id="cal">
+    <div class="calHeader">
+        <h1>Calendar</h1>
+    </div>
+    <script type="application/javascript" src="./js/calendar.js"></script>
+    <div class="calendarDiv">
+        <a href="#" id="calendarLeft">&#10094;</a>
+        <span id="calendarHeading"></span>
+        <a href="#" id="calendarRight">&#10095; </a>
+        <table id="calendarTable">
+        </table>
+    </div>
+
+    <div class="displayControlDiv">
+        <label for="numDaysSelect">Show </label>
+        <select id="numDaysSelect">
+            <option value="7">7</option>
+            <option value="15">15</option>
+            <option value="31">31</option>
+        </select> Days
+        <br>
+    </div>
+
+    <div id="eventDisplayDiv">
+    </div>
+
+    <div class="displayControlDiv">
+    </div>
+</div>
+<script type="application/javascript" src="./js/bgscroll.js"></script>

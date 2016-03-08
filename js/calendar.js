@@ -181,8 +181,7 @@ window.onload = function() {
                     if (startHour !== 12)
                         startHour -= 12;
                 }else if (startHour === 0) startHour = 12; //midnight
-                //get end time values if exists
-                var time;
+                
                 if (ele.end) {
                     var endPeriod = 'a';
                     var endHour = ele.end.slice(0,2);
@@ -197,14 +196,12 @@ window.onload = function() {
                 }else{
                     time = document.createTextNode(startHour + ':' + startMin + startPeriod + ' ');
                 }
-                
-                
                 item.appendChild(time);
                 item.appendChild(link);
                 content.appendChild(item);
                 
                 //build the link text
-                link.innerHTML =  ele.title + ' @' + ele.venue;
+                link.innerHTML =  ele.title + ' @ ' + ele.venue;
             }
             this.contentDiv.appendChild(content);
         }else{
@@ -293,7 +290,12 @@ window.onload = function() {
     //Event element sizer. Make row heights uniform
     function resizeEventElements() {
         var elements = document.getElementsByClassName('eventDivWrapper');
-        var margin = parseInt(window.getComputedStyle(elements[0].children[0]).marginTop.slice(0,-2))*2;
+        try {
+            var margin = parseInt(window.getComputedStyle(elements[0].children[0]).marginTop.slice(0,-2))*2;
+        }
+        catch(e) { //don't bomb if user resizes before elements are defined.
+            return;
+        }
         //determine how many items are in each row
         var numPerRow = 1;
         var ele = elements[0];
@@ -315,7 +317,7 @@ window.onload = function() {
             var height = row[0].offsetHeight - margin;
             //set heights equal
             row.forEach(function(x,t,a){
-                if (t === 0) return;
+                //if (t === 0) return;
                 a[t].style.height = parseFloat(height) + 'px';
             });
         }

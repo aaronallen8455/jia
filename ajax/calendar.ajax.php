@@ -6,6 +6,7 @@ if($_SERVER['REQUEST_METHOD'] != 'POST') { //post is the only way to access.
 require '../includes/config.inc.php';
 require MYSQL;
 
+
 $c = file_get_contents('php://input');
 $c = json_decode($c);
 

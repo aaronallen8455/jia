@@ -46,7 +46,7 @@ CREATE TABLE `events` (
     `venue` VARCHAR(80) NOT NULL,
     `date` DATE NOT NULL,
     `start_time` CHAR(4) NOT NULL,
-    `end_time` CHAR(4) NULL,
+    `end_time` CHAR(4) NOT NULL,
     `desc` TEXT NULL,
     `title` VARCHAR(80) NOT NULL,
     `user_id` SMALLINT UNSIGNED NOT NULL,
@@ -148,47 +148,19 @@ END $$
 DELIMITER ;
 -- Mass venue insert
 DELIMITER $$
-CREATE PROCEDURE mass_insert (club VARCHAR(60), _date DATE, _start CHAR(4), _end CHAR(4), _title VARCHAR(80), _id SMALLINT UNSIGNED, _band TEXT, _desc TEXT)
+CREATE PROCEDURE mass_insert (club VARCHAR(60), _date DATE, _start CHAR(4), _end CHAR(4), _title VARCHAR(80), _id SMALLINT UNSIGNED)
 BEGIN
 DECLARE _vid SMALLINT;
 DECLARE _eid SMALLINT;
 DECLARE _pid SMALLINT;
-DECLARE dupe SMALLINT;
-SELECT `events`.id INTO dupe FROM `events` WHERE LOWER(`events`.venue)=LOWER(club) AND `events`.start_time=_start AND `events`.date=_date;
-IF dupe IS NULL THEN
-    SELECT venues.id INTO _vid FROM venues WHERE venues.name=club;
-    INSERT INTO `events` (venue, date, start_time, end_time, title, user_id, band, `desc`) VALUES (club, _date, _start, _end, _title, _id, _band, _desc);
-    SET _eid=LAST_INSERT_ID();
-    IF _vid>=1 THEN
-        INSERT INTO events_venues (venue_id, events_venues.event_id) VALUES (_vid, _eid);
-    END IF;
-    SELECT user_id INTO _pid FROM `profiles` WHERE user_id=_id;
-END IF;
+SELECT venues.id INTO _vid FROM venues WHERE venues.name=club;
+INSERT INTO `events` (venue, date, start_time, end_time, title, user_id) VALUES (club, _date, _start, _end, _title, _id);
+SET _eid=LAST_INSERT_ID();
+INSERT INTO events_venues (venue_id, events_venues.event_id) VALUES (_vid, _eid);
+SELECT user_id INTO _pid FROM `profiles` WHERE user_id=_id;
 IF _pid>=1 THEN
-    INSERT INTO events_profiles (events_profiles.event_id, profile_id) VALUES (_eid, _pid);
+INSERT INTO events_profiles (events_profiles.event_id, profile_id) VALUES (_eid, _pid);
 END IF;
 END $$
 DELIMITER ;
--- Create new event and associated event_venue if applicable
-DELIMITER $$
-CREATE PROCEDURE create_event (club VARCHAR(60), _date DATE, _start CHAR(4), _end CHAR(4), _title VARCHAR(80), _band TEXT, _id SMALLINT UNSIGNED, _desc TEXT, OUT eid SMALLINT)
-BEGIN
-DECLARE _vid SMALLINT;
-SELECT venues.id INTO _vid FROM venues WHERE club LIKE CONCAT('%', CONCAT(venues.name, '%')) LIMIT 1;
-INSERT INTO `events` (venue, date, start_time, end_time, title, user_id, band, `desc`) VALUES (club, _date, _start, _end, _title, _id, _band, _desc);
-SET eid=LAST_INSERT_ID();
-IF _vid>=1 THEN
-INSERT INTO events_venues (venue_id, events_venues.event_id) VALUES (_vid, eid);
-END IF;
-END $$
-DELIMITER ;
--- Get event info for profile associated with given ID
-DELIMITER $$
-CREATE PROCEDURE get_profile_events (uid SMALLINT UNSIGNED)
-BEGIN
-SELECT `events`.id AS id, DATE_FORMAT(`date`, '%M %D, %Y') AS edate, start_time, end_time, title, venue
-FROM `events` JOIN events_profiles ON `events`.id=event_id
-WHERE profile_id=uid AND `date` >= CURDATE()
-ORDER BY `date` ASC, start_time ASC;
-END $$
-DELIMITER ;
+

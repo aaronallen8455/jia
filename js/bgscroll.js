@@ -1,6 +1,7 @@
 window.addEventListener('load', function() {
     //get the elements with bg images
     var header = document.querySelector('.splashWide');
+    var headerNarrow = document.querySelector('.splashNarrow');
     var calHeader = document.querySelector('.calHeader');
     
     function scrollHandler(element) {
@@ -8,16 +9,18 @@ window.addEventListener('load', function() {
         //image is centered when in the middle of the screen
         var halfWay = window.innerHeight/2;
         var eleCenter = element.offsetHeight/2 + bb.top;
-        element.style.backgroundPosition = '50% ' + ((eleCenter - halfWay) * .25) + 'px';
+        element.style.backgroundPosition = '50% ' + ((eleCenter - halfWay) * .20) + 'px';
     }
     
     scrollHandler(header);
     scrollHandler(calHeader);
+    scrollHandler(headerNarrow);
     
     window.onscroll = function() {
         window.requestAnimationFrame(function() {
             scrollHandler(header);
             scrollHandler(calHeader);
+            scrollHandler(headerNarrow);
         });
     }
 });

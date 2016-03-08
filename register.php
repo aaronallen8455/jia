@@ -1,5 +1,6 @@
 <?php
 require './includes/config.inc.php';
+include './includes/login.inc.php';
 require_once MYSQL;
 $pageTitle = 'Register';
 $noLogin = true;
@@ -52,7 +53,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($_POST['pass1'] === $_POST['pass2']) {
             $pass = $_POST['pass1'];
         }else{
-            $reg_errors['pass2'] = 'Passwords don\'nt match!';
+            $reg_errors['pass2'] = 'Passwords don\'t match!';
         }
     }else{
         $reg_errors['pass1'] = 'Please enter a valid password!';

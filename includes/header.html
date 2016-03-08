@@ -2,83 +2,111 @@
 <html>
 <head>
     <?php if (!isset($pageDesc)): ?>
-    <meta name="description" content="Jazz in Austin is a place where Austin jazz musicians can post where and when they'll be performing, so that you'll always know what live jazz is happening here in Austin, Texas!">
+    <meta name="description" content="Jazz in Austin is a place where Austin jazz musicians can post where and when they'll be performing, so that you'll always know what live jazz is happening here in Austin, Texas!" />
     <?php else: ?>
-    <meta name="description" content="<?php echo $pageDesc; ?>">
+    <meta name="description" content="
+        <?php echo $pageDesc; ?>
+    " />
     <?php endif ?>
+    <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />
     <title>
     <?php
-if (isset($pageTitle)) {
-    echo 'Jazz in Austin: '.$pageTitle;
-}else{
-    echo 'Jazz in Austin';
-} ?>
+        if (isset($pageTitle)) {
+            echo 'Jazz in Austin: '.$pageTitle;
+        }
+        else {
+            echo 'Jazz in Austin';
+        } 
+    ?>
     </title>
-        <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />
-
-<link rel="stylesheet" type="text/css" href="./css/styles.css?<?php echo filemtime('./css/styles.css');?>" media="all">
+    <link href='https://fonts.googleapis.com/css?family=Raleway:400,800' rel='stylesheet' type='text/css' />
+    <link rel="stylesheet" type="text/css" href="./css/normalize.css" media="all"/>
+    <link rel="stylesheet" type="text/css" href="./css/styles.css?<?php echo filemtime('./css/styles.css');?>" media="all" />
     <script type="application/javascript" src="./js/menu.js"></script>
-    
-    </head>
-<body>
 
-    <div id="outerBorder">
-    <div id="contentDiv">
-        <div id="titleDiv">
-        <h1>Jazz in Austin</h1>
-            <br />
-            <i>A Guide to Live Jazz in Austin, Texas</i>
-        </div>
-        <?php if (!isset($noLogin)): ?>
-        <div id="loginDiv">
-            <?php
-if (empty($_SESSION['id'])) { ?>
-            <form action="" method="post">
-                <label for="email">Email: </label>
-                <input type="text" id="email" class="loginInput" name="login[email]" value="<?php if (isset($loginEmail)) {echo $loginEmail;} ?>"/><br />
-                <label for="password">Password: </label>
-                <input type="password" id="password" class="loginInput" name="login[pass]"/><br />
-                <?php if (isset($loginError) && $loginError === true) {
-    echo '<span class="error">Invalid Email or Password</span><br />';
-} ?>
-                <a href="./password_reset.php" title="Forgot your password?">Forgot?</a>
-                <label for="remember">Remember Me: </label>
-                <input type="checkbox" name="login[remember]"/>
-                <input type="submit" id="login" value="Log-in"/>
-            </form>
-            <?php
-}else{ 
-    echo '<span>Welcome, ' . $_SESSION['name'] . '!</span>'; ?>
-            <div>
-                <a href="myaccount.php">My Account</a> | 
-                <a href="addevent.php">Add Event</a> | 
-                <a href="logout.php">Log Out</a>
-            
-            </div>
-    <?php
-} ?>
-        
-        </div>
-        <?php endif; ?>
-        <div id="navbar-container">
-            <span id="menuToggle">&#8801; Menu</span>
-            <ul id="nav" class="menuVisibility">
-                <li><a href="index.php">Calendar / About</a></li>
-                <li><a href="profiles.php">Musician Profiles</a></li>
-                <li><a href="venues.php">Venues</a></li>
-                <li><a href="booking.php">Booking</a></li>
-                <?php
-                //check if user is logged in
-                if (isset($_SESSION['id']) && filter_var($_SESSION['id'], FILTER_VALIDATE_INT, array('min_range'=>1))) {
+</head> 
+<body>
+    <div class="outerBorder">
+        <div class="contentDiv">
+            <div class="header padToView">
+                <div class="titleDiv">
+                    <div class="logo">
+                        <a href="./index.php">
+                            <h1>JIA</h1>
+                            <p>Jazz In Austin</p>
+                        </a>
+                    </div>
+                    <div class="caption">A Guide to Live Jazz in Austin, Texas</div>
+                </div>
+                <?php if (!isset($noLogin)): ?>
+                <div class="loginDiv userAction">
+                    <?php if (empty($_SESSION['id'])) { ?>
+                    <form action="" method="post">
+                        <div class="email">
+                            <label for="email">Email: </label>
+                            <input type="text" id="email" class="loginInput" name="login[email]" value="<?php if (isset($loginEmail)) {echo $loginEmail;} ?>"/>
+                        </div>
+                        <div class="password">
+                            <label for="password">Password: </label>
+                            <input type="password" id="password" class="loginInput" name="login[pass]"/>
+                            <?php 
+                                if (isset($loginError) && $loginError === true) {
+                                    echo '<span class="error">Invalid Email or Password</span>';
+                                } 
+                            ?>
+                        </div>
+                        <div class="utilities">
+                            <a href="./password_reset.php" title="Forgot your password?">Forgot?</a>
+                            |
+                            <label for="remember">Remember Me</label>
+                            <input type="checkbox" name="login[remember]"/>
+                            |
+                            <input type="submit" id="login" value="Log-in" />
+                        </div>
+                    </form>
+                    <?php
+                        }
+                        else { 
+                        echo '<span class="userWelcome">Welcome, ' . $_SESSION['name'] . '!</span>'; 
                     ?>
-                <li><a href="addevent.php">Add Event</a></li>
-                <li class="nav-login"><a href="myaccount.php">My Account</a></li>
-                <?php
-                }else{ ?>
-                <li class="nav-login"><a href="login.php">Login</a></li>
-                <li><a href="register.php">Register</a></li>
-                <?php } ?>
-            </ul>
-        </div>
-        
-        <!--CONTENT-->
+                    <div class="memberControls">
+                        <a href="myaccount.php">My Account</a> | 
+                        <a href="addevent.php">Add Event</a> | 
+                        <a href="logout.php">Log Out</a>
+                    </div>
+                    <?php
+                        } 
+                    ?>
+                </div>
+                <?php endif; ?>
+            </div>
+            <div class="navbar-container userAction padToView">
+                <span id="menuToggle">&#8801; Menu</span>
+                <ul class="nav menuVisibility">
+                    <li><a href="index.php#cal">Calendar / About</a></li>
+                    <li><a href="profiles.php">Musician Profiles</a></li>
+                    <li><a href="venues.php">Venues</a></li>
+                    <li><a href="booking.php">Booking</a></li>
+                    <?php
+                    //check if user is logged in
+                    if (isset($_SESSION['id']) && filter_var($_SESSION['id'], FILTER_VALIDATE_INT, array('min_range'=>1))) {
+                        ?>
+                    <li class="nav-login"><a href="myaccount.php">My Account</a></li>
+                    <?php
+                    }else{ ?>
+                    <li class="nav-login"><a href="login.php">Login</a></li>
+                    <li><a href="register.php">Register</a></li>
+                    <?php }
+                    if (isset($_SESSION['id']) && filter_var($_SESSION['id'], FILTER_VALIDATE_INT, array('min_range'=>1))) {
+                    ?>
+                    <li><a href="addevent.php">Add Event</a></li>
+                    <?php } ?>
+                </ul>
+            </div>
+        <?php
+        if (basename($_SERVER['PHP_SELF']) != "login.php" && $pageTitle != "Calendar") {
+            echo '<div class="bodyDiv">';
+        }
+        ?>
+    <!--CONTENT-->
+</body>

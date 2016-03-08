@@ -1,8 +1,6 @@
 /************************************************Resets************************************************/
-body {
-    min-width: 300px;
-}
-html, body, div, h1, h2, h3, p, ul, span {
+
+html, body, div, h1, p, ul {
     font-family: "Raleway", Arial, sans-serif;
     line-height: 1.6em;
     margin: 0;
@@ -11,9 +9,6 @@ html, body, div, h1, h2, h3, p, ul, span {
     box-sizing: border-box;
     position: relative;
     border: none;
-}
-h2, h3 {
-    margin-bottom: 10px;
 }
 ul {
     list-style-type: none;
@@ -24,20 +19,16 @@ a {
 /************************************************Sitewide************************************************/
 .userAction {
     background-color: #222;
-    background: #222;
+    background: linear-gradient(to bottom, #444, #111);
 }
 .bodyDiv {
-    min-height: 100vh;
     background-color: white;
     margin-top: 0;
-    margin-bottom: 20px;
-    padding: 20px 20px;
+    margin-bottom: 200px;
+    padding: 20px 200px;
 }
 .bodyDiv h2:first-of-type {
     margin-top: 0;
-}
-.bodyDiv p {
-    width: 100%;
 }
 .padToView {
     padding-left: 200px;
@@ -45,6 +36,10 @@ a {
 }
 .opaqueBG {
     background-color: white;
+}
+.footerMargin {
+    margin-bottom: 200px;
+    padding-bottom: 20px;
 }
 /************************************************Header************************************************/
 .outerBorder, .footerDiv {
@@ -57,14 +52,14 @@ a {
 }
 .outerBorder {
     margin: auto;
+    margin-bottom: 200px;
 }
 .header {
     display: block;
     width: 100%;
     height: 9em;
-    background-color: #182F47;
-    background-color: #14206c;
-    background: linear-gradient(to bottom, #0b113b, #14206c 50%);
+    background: linear-gradient(to bottom, black, navy);
+    background-color: #113;
 }
 .titleDiv a {
     color: whitesmoke;
@@ -104,16 +99,14 @@ a {
     bottom: 0;
     right: 200px;
     height: 9em;
+    background-color: #D3E1E6;
     text-align: right;
-    background-color: rgba(16, 16, 16, 0.5);
-    background: linear-gradient(to bottom, rgba(16,16,16,0.5) 50%, rgba(16,16,16,0) 95%);
 }
 .loginDiv input {
     color: teal;
 }
 .email, .password, .utilities, .loginDiv #login {
-    margin: 0;
-    padding: 2px;
+    padding: 3px;
     color: white;
     border: none;
     background: none;
@@ -124,33 +117,20 @@ a {
 .utilities input {
     text-decoration: underline;
 }
-.userWelcome {
-    color: white;
-    font-weight: bold;
-}
-.memberControls a:hover {
-    color: yellow;
-}
 /************************************************Main Nav************************************************/
 .navbar-container {
-    background-color: #000;
+    background-color: #cc4545;
 }
 .navbar-container ul {
     width: 100%;
     border-collapse: collapse;
 }
-.nav {
-    width: 100%;
-    display: table;
-    table-layout: fixed;
-    text-align: center;
-}
 .nav li {
     list-style-type: none;
     display: table-cell;
     width: 20%;
-    border-right: thin solid silver;
-    border-left: thin solid silver;
+    border-right: thin solid white;
+    border-left: thin solid white;
     vertical-align: middle;
 }
 .nav a {
@@ -160,20 +140,27 @@ a {
 .nav a:hover {
     color: yellow;
 }
-.nav .nav-login {
-    display: none;
+.nav {
+    width: 100%;
+    display: table;
+    table-layout: fixed;
+    text-align: center;
 }
+
+
 /************************************************Footer************************************************/
 .footerDiv {
-    z-index: 10;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    z-index: -10;
     height: 150px;
     padding: 20px 0;
+    margin-top: 200px;
     background-color: #555;
     color: #ddd;
     font-size: small;
-}
-.footerDiv a {
-    color: cornflowerblue;
+    font-style: italic;
 }
 
 /************************************************Welcome************************************************/
@@ -188,25 +175,19 @@ a {
     text-align: center;
 }
 .splashWide, .splashNarrow {
-    background: black url("../images/congress-ave-webres.jpg") no-repeat;
+    height: 400px;
+    padding: 150px;
+    background: url("../images/congress-ave-webres.jpg");
     background-position: center center;
     background-attachment: fixed;
-    background-size: cover;
     color: white;
-}
-.splashWide {
-    height: 600px;
-    padding: 225px;
 }
 .splashWide h1, .splashNarrow h1 {
     font-size: 4em;
     height: 600px;
-    text-shadow: 3px 0px 5px rgba(0, 0, 0, 0.5), -3px 0px 5px rgba(0, 0, 0, 0.5);
 }
 .splashNarrow {
     display: none;
-    height: 500px;
-    padding-top: 150px;
 }
 .whatis {
     background-color: white;
@@ -215,7 +196,6 @@ a {
     min-height: 200px;
     padding: 80px;
     background-color: #f5f5f5;
-    text-align: center !important;
 }
 .question:nth-child(2) {
     background-color: white;
@@ -235,22 +215,18 @@ a {
     text-align: center;
     font-size: 2em;
     padding: 2em 0;
-    background: black url("../images/paramount-webres.jpg") no-repeat;
+    background: url("../images/paramount-webres.jpg");
     background-position: center center;
     background-attachment: fixed;
-    background-size: cover;
     color: whitesmoke;
-    -webkit-font-smoothing: antialiased;
-    font-smoothing: antialiased;
 }
-.calendarDiv, .formEleDiv #calendarDiv {
+.calendarDiv {
     display: block;
     text-align: center;
     padding: 5px 0px;
     margin-top: 10px;
     color: white;
     color: #222;
-    z-index: 10;
 }
 #calendarHeading {
     margin-left: 15px;
@@ -259,14 +235,13 @@ a {
     display: inline-block;
     font-weight: bold;
 }
-.calendarDiv table, .formEleDiv table {
+.calendarDiv table {
     margin: 0 auto;
     width: 300px;
     height: 200px;
     border-collapse: collapse;
-    background-color: white;
 }
-.calendarDiv td, .formEleDiv td {
+.calendarDiv td {
     width: 35px;
     margin: 2px;
     vertical-align: middle;
@@ -277,32 +252,28 @@ a {
     width: 100%;
 }
 .calendarInput {
-    display: inline-block;
-    height: 25px;
     margin-left: 10px;
-    vertical-align: middle;
 }
 .tablecell-day {
-    background-color: #B19FC2;
+    background-color: #D9D0C3;
+}
+.tablecell-today {
+    background-color: #D9C3D7;
 }
 .tablecell-selected {
     background-color: #e9d3f7;
 }
-.tablecell-today {
-    background-color: #F1F7D3;
-    text-shadow: 0px 0px 6px rgba(98, 59, 198, 0.6);
-}
 .eventDivWrapper {
-    width: 33.33%;
+    width: 33.3%;
     display: inline-block;
     vertical-align: text-top;
-    margin-top: 1px;
+    /*margin-top: 4px;*/
 }
 .eventDiv {
     margin: 2px;
     padding: 5px;
     text-align: left;
-    background-color: #B5DAE5;
+    background-color: #B4C8ED;
     height: 100%;
 }
 .eventDiv h2 {
@@ -333,11 +304,10 @@ a {
     content: "\25CF";
 }
 .eventDivOdd {
-    background-color: #C3EBF7;
+    background-color: #C7D0ED;
 }
 .eventDivNow {
-    background-color: #F1F7D3;
-    border: thin solid #B4C8ED;
+    background-color: #d9c3d7;
 }
 
 
@@ -358,11 +328,13 @@ a {
     flex-wrap: wrap;
     -webkit-flex-wrap: wrap;*/
     position: relative;
-    margin: 11px auto;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 11px;
+    margin-bottom: 11px;
 }
 #menuToggle {
     display: none;
-    cursor: pointer;
 }
 .menuVisibility {
     display: table;
@@ -372,101 +344,40 @@ a {
     margin: 10px 0;
     clear: both;
 }
-.error:not(input):not(textarea) {
-    color: red;
-    padding: 0 5px;
-    margin-top: 5px;
-    display: block;
+.error {
     border: 1px solid red;
 }
-
-/************************************************Register Form************************************************/
+.error:not(input):not(textarea) {
+    color: red;
+    margin-right: 5px;
+}
 #registerForm {
-    border: 1px solid silver;
+    border: 1px solid lightgrey;
     margin: 5px;
-    padding: 10px;
-}
-#registerForm label {
-    display: inline-block;
-    width: 120px;
-    color: black;
-}
-#registerForm .utilities {
-    display: block;
-    margin-top: 5px;
-}
-#registerForm .utilities input:last-of-type {
-    color: teal;
-    text-decoration: none;
-    margin-left: 10px;
-}
-#registerForm .utilities .forgot {
-    display: block;
-    margin-top: 5px;
-}
-#registerForm .formEleDiv {
-    display: block;
-    margin: 10px auto;
-}
-.passwordHint {
-    display: block;
-    margin: 5px auto;
-    font-size: 90%;
-    font-style: italic;
-}
-#registerForm span.error {
-    display: block;
-    width: 100%;
-}
-.loginSuccess {
-    display: block;
-    min-width: 320px;
-    margin: 20px auto;
-    text-align: center;
-}
-.loginSuccess a {
-    display: block;
-}
-.eventOptions {
-    display: block;
-}
-.eventOptions p {
-    margin-bottom: 15px;
-}
-.eventOptions p:last-of-type {
-    text-align: left;
-}
-.eventOptions input[type="checkbox"] {
-    margin-left: 5px;
-}
-.eventOptions input[type="checkbox"], .eventOptions select {
-    display: inline;
-}
-#eventForm {
-    border: 1px solid silver;
-    margin: 10px 0;
     padding: 5px;
 }
-#eventForm input {
-    margin: 5px;
-}
-#eventForm textarea {
-    margin: 5px 0;
-}
-.eventFormDivider {
+#registerForm input {
     display: block;
+    margin-left: 20px;
+}
+#registerForm .formEleDiv {
+    margin-bottom: 5px;
+    margin-top: 5px;
+}
+#eventForm {
+    border: 1px solid lightgrey;
+    margin: 5px;
+    padding: 5px;
+}
+#eventForm input, textarea {
+    margin: 5px;
 }
 .formEleDiv {
     display: inline-block;
-    word-break: keep-all;;
+    word-break: keep-all;
 }
 .formEleDivText {
     margin-right: 10px;
-}
-.formEleDiv #calendarDiv {
-    border: thin solid #B19FC2;
-    background: white;
-    padding: 0;
 }
 textarea {
     resize: none;
@@ -475,19 +386,13 @@ textarea {
     box-sizing: border-box;
 }
 #bandDiv {
-    border: 1px solid silver;
+    border: 1px solid lightgrey;
     padding: 5px;
-    margin: 5px 0;
+    margin: 5px;
     display: table;
 }
-#bandDiv .formEleDiv {
-    padding: 0 5px;
-}
-#bandDiv button {
-    margin: 5px;
-}
 #linksDiv {
-    border: 1px solid silver;
+    border: 1px solid lightgrey;
     padding: 5px;
     margin: 5px;
     display: table;
@@ -513,7 +418,7 @@ textarea {
     position: relative;
     margin-left: auto;
     margin-right: auto;
-    border: 1px solid silver;
+    border: 1px solid lightgrey;
     text-align: center;
     max-width: 700px;
     padding: 10px;
@@ -546,7 +451,7 @@ textarea {
     display: block;
     margin-left: auto;
     margin-right: auto;
-    border: 6px solid silver;
+    border: 6px solid lightgrey;
     border-radius: 6px;
 }
 .profileViewDiv h2 {
@@ -566,7 +471,7 @@ textarea {
     height: auto;
     display: block;
     float: left;
-    border: 6px solid silver;
+    border: 6px solid lightgrey;
     border-radius: 6px;
     margin-right: 10px;
 }
@@ -597,16 +502,14 @@ textarea {
 .venueViewEventsDiv > ul > li:nth-of-type(2n+1){
     background-color: #B4C8ED;
 }
-.changePassword {
-    display: block;
-    margin-bottom: 15px;
-}
 .accountEventsDiv {
-    background-color: #B4C8ED;
+    background-color: #e4edf0;
+    border: 1px solid #bfcacf;
+    border-radius: 2px;
     padding: 6px;
     display: inline-block;
     vertical-align: top;
-    margin-right: 5px;
+    margin: 5px;
 }
 .accountEventsDiv td {
     padding: 5px;
@@ -617,16 +520,23 @@ textarea {
     border-radius: 5px;
 }
 .accountProfileDiv {
-    background-color: #B4C8ED;
+    background-color: #e4edf0;
+    border: 1px solid #bfcacf;
+    border-radius: 2px;
     padding: 6px;
     display: inline-block;
     vertical-align: top;
+    margin: 5px;
 }
 .accountProfileDiv ul {
+    background-color: #F0F4F5;
+    border: 1px solid #d8dbdc;
     border-radius: 5px;
 }
 .accountProfileDiv li {
-    padding: 6px;
+    margin-top: 6px;
+    margin-bottom: 6px;
+    margin-right: 6px;
 }
 #autoNameDiv {
     background-color: whitesmoke;
@@ -647,22 +557,7 @@ textarea {
     line-height: 20px;
     margin-left: 10px;
 }
-#serviceUITable {
-    display: inline-block;
-    vertical-align: top;
-}
-#serviceUITable td, th {
-    padding: 7px;
-}
-#serviceUIPreview {
-    display: inline-block;
-    min-width: 53%;
-    font-family: "Times New Roman", Times, serif;
-}
-#serviceUIPreview * {
-    font-family: inherit;
-    background-color: inherit;
-}
+
 /************************************************Media Queries************************************************/
 @media all and (max-width: 1130px) {
     .padToView {
@@ -672,12 +567,13 @@ textarea {
     }
     .bodyDiv {
         margin: 0;
-        padding: 20px;
+        padding: 20px 0 20px 0;
     }
     .splashWide {
         display: none;
     }
     .splashNarrow {
+        padding: 100px 50px 0 50px;
         display: inline-block;
     }
     .loginDiv {
@@ -695,11 +591,9 @@ textarea {
         width: 50%;
     }
 }
-@media all and (max-width: 720px) {
+@media all and (max-width: 680px) {
     .header {
-        margin-top: 40px;
         text-align: center;
-        border-bottom: solid 2px black;
     }
     .logo p {
         padding-top: 0.5em;
@@ -715,31 +609,8 @@ textarea {
         font-size: 0.85em;
         padding-left: 10px;
         padding-right: 10px;
-        height: 200px;
-        padding-top: 20px;
-    }
-    .nav {
-        position: fixed;
-        top: 40px;
-        z-index: 100;
-        background-color: #000;
-    }
-    .nav li {
-        display: block;
-        width: 100%;
-        border: none;
-        border-top: thin solid silver;
-    }
-    .nav .nav-login {
-        display: block;
     }
     #menuToggle {
-        z-index: 100;
-        background-color: #000;
-        position: fixed;
-        top: 0;
-        width: 100%;
-        height: 40px;
         display: block;
         text-align: center;
         font-size: 25px;
@@ -755,21 +626,14 @@ textarea {
     .eventDivWrapper {
         width: 100%;
     }
-    .eventDiv {
-        margin: 0px;
+    .calendarInput {
+        display: none;
     }
     .question {
-        padding: 30px 5px;
-    }
-    .question p {
-        margin: 10px 0;
-        width: 100%;
-    }
-    .question em {
-        display: block;
+        padding: 50px;
     }
     .memberDiv {
-        border: 1px solid silver;
+        border: 1px solid lightgrey;
     }
     textarea {
         width: 100%;
@@ -777,23 +641,8 @@ textarea {
     .profileViewList dd {
         display: block;
     }
-    .accountEventsDiv, .accountProfileDiv {
-        margin-bottom: 5px;
-        width: 100%;
-    }
-}
-@media all and (max-width: 480px) {
-    p {
-        text-align: justify;;
-    }
-    .question:nth-child(2) p, .footerDiv p {
-        text-align: center;
-    }
 }
 @media all and (max-width: 390px) {
-    .bodyDiv {
-        padding: 5px;
-    }
     .splashNarrow {
         font-size: 0.65em;
     }

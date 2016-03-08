@@ -52,22 +52,18 @@ window.addEventListener('load', function() {
                         venue.value = res.venue;
                         //set time values
                         var hour = res.start.slice(0,2);
-                        if (parseInt(hour) >= 12) {
+                        if (parseInt(hour) > 12) {
                             hour -= 12;
-                            if (hour === 0) hour = 12;
                             startPeriod.value = 'pm';
                         }else startPeriod.value = 'am';
-                        if (hour === '00') hour = '12';
                         startHour.value = hour;
                         startMin.value = res.start.slice(-2);
 
                         var hour = res.end.slice(0,2);
-                        if (parseInt(hour) >= 12) {
+                        if (parseInt(hour) > 12) {
                             hour -= 12;
-                            if (hour === 0) hour = 12;
                             endPeriod.value = 'pm';
                         }else endPeriod.value = 'am';
-                        if (hour === '00') hour = '12';
                         endHour.value = hour;
                         endMin.value = res.end.slice(-2);
 
@@ -183,6 +179,7 @@ window.addEventListener('load', function() {
         //draw the calendar on click
         var d = new Date();
         cals[i].addEventListener('click', function(e) {
+            if (document.querySelector("#calendarDiv")) { return; }
             drawCalendar(d.getFullYear(), d.getMonth(), this);
             e.stopPropagation();
         }); 
@@ -196,9 +193,10 @@ window.addEventListener('load', function() {
         var currentDay = date.getDate();
         //create containing div and position it.
         var div = document.createElement('div');
+        div.style.marginTop = '0px';
         div.style.position = 'absolute';
-        div.style.left = ele.offsetLeft -12 + 'px';
-        div.style.top = ele.offsetTop-28 +'px';
+        div.style.left = ele.offsetLeft + 'px';
+        div.style.top = ele.offsetTop +'px';
         div.id = 'calendarDiv';
         //prev link
         var prev = document.createElement('a');
@@ -233,7 +231,7 @@ window.addEventListener('load', function() {
         next.innerHTML = '&#10095;';
         
         //don't allow prev to go into the past
-        if (currentMonth<month && year === currentYear)
+        if ((year > currentYear) || (currentMonth<month && year === currentYear))
             div.appendChild(prev);
         div.appendChild(calendarHeading);
         div.appendChild(next);
@@ -279,6 +277,8 @@ window.addEventListener('load', function() {
                         ele.parentElement.children[1].value = date.getMonth()+1 + '/' + this.innerHTML + '/' + date.getFullYear().toString().slice(-2);
                         close();
                     });
+                }else{
+                    td.style.backgroundColor = 'lightgrey';
                 }
                 td.appendChild(link);
                 
@@ -293,7 +293,7 @@ window.addEventListener('load', function() {
         ele.parentElement.appendChild(div);
         
         //shift to the left if over the edge of the contentDiv.
-        var contentDiv = document.getElementById('contentDiv');
+        var contentDiv = document.querySelector('.bodyDiv');
         if (div.getBoundingClientRect().right > contentDiv.getBoundingClientRect().right) {
             div.style.left = div.offsetLeft - (div.getBoundingClientRect().right - contentDiv.getBoundingClientRect().right) + 'px';
         }
@@ -326,12 +326,10 @@ window.addEventListener('load', function() {
         //check if text entered has any match
         var matches = [];
         var reg;
-        //escape special chars
-        var str = this.value.replace(/([\(\)\[\].\\\-*?!])/, '\\$1');
         if (this.value.length <= 3) //if 3 or less chars, only match beginning of string
-            reg = new RegExp('^' + str, 'i');
+            reg = new RegExp('^' + this.value, 'i');
         else //match anywhere in string
-            reg = new RegExp(str, 'i');
+            reg = new RegExp(this.value, 'i');
         matches = nameList.filter(function(e) {
             if (e.match(reg)) return true;
             else return false;

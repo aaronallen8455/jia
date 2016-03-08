@@ -27,8 +27,7 @@ if (!empty($_GET)) {
     ORDER BY `date` ASC")) {
         $events = array();
         while ($row2 = $r->fetch(PDO::FETCH_ASSOC)) {
-            $row2['time'] = parseTime($row2['start_time']);
-            if (!empty($row2['end_time'])) $row2['time'] .= ' - ' . parseTime($row2['end_time']);
+            $row2['time'] = parseTime($row2['start_time']) . ' - ' . parseTime($row2['end_time']);
             $events[$row2['edate']][] = $row2; //array of an array of events indexed by date
         }
     }
