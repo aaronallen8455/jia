@@ -1,8 +1,8 @@
-		</div>
-	</div>
+		</div> <!-- close contentDiv /-->
+	</div> <!-- close outerBorder /-->
     <?php
-    //the 'bodyDiv' element if this page has it
-    if (!in_array($pageTitle, $noBodyDiv)) {
+    //close the 'bodyDiv' element if this page has it
+    if (isset($pageTitle) && !in_array($pageTitle, $noBodyDiv)) {
         echo '</div>';
     }
     ?>

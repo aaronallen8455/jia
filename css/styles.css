@@ -19,7 +19,7 @@ ul {
     list-style-type: none;
 }
 a {
-    color: teal;
+    color: #006f9c;
 }
 /************************************************Sitewide************************************************/
 .userAction {
@@ -109,7 +109,7 @@ a {
     background: linear-gradient(to bottom, rgba(16,16,16,0.5) 50%, rgba(16,16,16,0) 95%);
 }
 .loginDiv input {
-    color: teal;
+    color: #006f9c;
 }
 .email, .password, .utilities, .loginDiv #login {
     margin: 0;
@@ -293,8 +293,11 @@ a {
     background-color: #e9d3f7;
 }
 .tablecell-today {
-    background-color: #F1F7D3;
+    background-color: #b2b898;
     text-shadow: 0px 0px 6px rgba(98, 59, 198, 0.6);
+}
+.tablecell-selected.tablecell-today {
+    background-color: #F1F7D3;
 }
 .eventDivWrapper {
     width: 33.33%;
@@ -306,7 +309,7 @@ a {
     margin: 2px;
     padding: 5px;
     text-align: left;
-    background-color: #B5DAE5;
+    background-color: #c8dde3;
     height: 100%;
 }
 .eventDiv h2 {
@@ -337,7 +340,7 @@ a {
     content: "\25CF";
 }
 .eventDivOdd {
-    background-color: #C3EBF7;
+    background-color: #d7eff5;
 }
 .eventDivNow {
     background-color: #F1F7D3;

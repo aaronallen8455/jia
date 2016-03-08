@@ -92,6 +92,7 @@
                     if (isset($_SESSION['id']) && filter_var($_SESSION['id'], FILTER_VALIDATE_INT, array('min_range'=>1))) {
                         ?>
                     <li class="nav-login"><a href="myaccount.php">My Account</a></li>
+                    <li class="nav-login"><a href="logout.php">Log Out</a></li>
                     <?php
                     }else{ ?>
                     <li class="nav-login"><a href="login.php">Login</a></li>
@@ -104,12 +105,12 @@
                 </ul>
             </div>
         <?php
-        //these pages do not contain the 'bodyDiv' element
+        //the pages listed won't contain the 'bodyDiv' element
         $noBodyDiv = array(
             'Login',
             'Calendar',
         );
-        if (!in_array($pageTitle, $noBodyDiv)) {
+        if (isset($pageTitle) && !in_array($pageTitle, $noBodyDiv)) {
             echo '<div class="bodyDiv">';
         }
         ?>

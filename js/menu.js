@@ -95,8 +95,10 @@ window.addEventListener('load', function() {
 
     //switch between mobile and regular stopgap
     window.addEventListener('resize', function() {
-        if (window.getComputedStyle(toggle).display === 'block')
+        if (window.getComputedStyle(toggle).display === 'block') {
+            nav.style.position = 'fixed';
             document.addEventListener('scroll', menuScrollHandler, false);
+        }
         else {
             nav.style.position = 'static';
             document.removeEventListener('scroll', menuScrollHandler, false);
