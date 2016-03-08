@@ -1,17 +1,98 @@
 window.addEventListener('load', function() {
-    var nav = document.querySelector('.nav');
+    var nav = document.querySelectorAll('.nav')[0];
     var toggle = document.getElementById('menuToggle');
     toggle.onclick = function() {
         if (nav.classList.contains('menuVisibility')) {
             nav.classList.remove('menuVisibility');
         }else nav.classList.add('menuVisibility');
-    }
+    };
     
     //in mobile, menu is fixed when scrolling up but rolls up when scrolling down.
-    var scroll = window.scrollY;
+
+    /*var menuScrollHandler = (function() {
+        var scroll = window.scrollY;
+        return function() {
+            //check direction of scroll
+            var newPos = window.scrollY;
+
+            if (newPos > scroll) {
+                //scrolling down, make elements slide up, if menu isn't visible
+                if (nav.classList.contains('menuVisibility')) {
+                    toggle.style.top = toggle.offsetTop + (scroll - newPos) + 'px';
+                    nav.style.top = 40 + toggle.offsetTop + (scroll - newPos) + 'px';
+                    if (toggle.offsetTop <= -toggle.offsetHeight) {
+                        toggle.style.top = -toggle.offsetHeight + 'px';
+                        nav.style.top = toggle.offsetHeight - toggle.offsetHeight + 'px';
+                    }
+                }
+            }else{
+                toggle.style.top = toggle.offsetTop + (scroll - newPos) + 'px';
+                nav.style.top = 33 + toggle.offsetTop + (scroll - newPos) + 'px';
+                if (toggle.offsetTop >= 0) {
+                    toggle.style.top = '0px';
+                    nav.style.top = toggle.offsetHeight + 'px';
+                }
+            }
+            scroll = newPos;
+        };
+    })();*/
+
+    var menuScrollHandler = (function() {
+        var scroll = undefined;
+        var isRunning = false;
+        return function() {
+            var newPos = window.scrollY;
+            if (scroll === undefined) scroll = newPos;
+            if (newPos <= toggle.offsetHeight*3) {
+                toggle.style.top = '0px';
+                scroll = undefined;
+                isRunning = false;
+                return;
+            }
+            if (Math.abs(scroll - newPos) >= toggle.offsetHeight) {
+                if (newPos > scroll) {
+                    //scrolling down, hide menu
+                    if (!isRunning) {
+                        //var pos = 0;
+                        function slideUp() {
+                            if (toggle.offsetTop > -toggle.offsetHeight && isRunning) {
+                                //pos--;
+                                toggle.style.top = toggle.offsetTop - 2 + 'px';
+                                window.requestAnimationFrame(slideUp);
+                            }else{
+                                //toggle.style.top = -toggle.offsetHeight + 'px';
+                                isRunning = false;
+                            }
+                        }
+                        if (toggle.offsetTop >= -toggle.offsetHeight) {
+                            isRunning = true;
+                            slideUp();
+                        }
+                    }
+                }else{
+                    if (!isRunning) {
+                        isRunning = true;
+                        function slideDown() {
+                            if (toggle.offsetTop < 0) {
+                                toggle.style.top = toggle.offsetTop + 2 + 'px';
+                                window.requestAnimationFrame(slideDown);
+                            }else{
+                                //toggle.style.top = toggle.offsetHeight + 'px';
+                                isRunning = false;
+                            }
+                        }
+                        slideDown();
+                    }
+                }
+                scroll = newPos;
+            }
+
+        }
+    })();
+
     if (window.getComputedStyle(toggle).display === 'block')
         document.addEventListener('scroll', menuScrollHandler, false);
-    
+
     //switch between mobile and regular stopgap
     window.addEventListener('resize', function() {
         if (window.getComputedStyle(toggle).display === 'block')
@@ -21,36 +102,7 @@ window.addEventListener('load', function() {
             document.removeEventListener('scroll', menuScrollHandler, false);
         }
     }, false);
-    
-    function menuScrollHandler() {
-        var bb = toggle.getBoundingClientRect();
-        //check direction of scroll
-        var newPos = window.scrollY;
-        
-        if (newPos > scroll && toggle.style.position !== 'absolute') {
-            //scrolling down, make elements AP
-            var navTop = bb.bottom - nav.parentElement.offsetTop - toggle.offsetHeight + window.scrollY;
-            var toggleTop = bb.top - nav.parentElement.offsetTop - toggle.offsetHeight + window.scrollY;
-            
-            nav.style.position = 'absolute';
-            nav.style.top = navTop + 'px';
-            toggle.style.position = 'absolute';
-            toggle.style.top = toggleTop + 'px';
-        }else if(newPos <= scroll && nav.style.position === 'absolute') {
-            //scrolling up
-            //allow elements to catch up, then make fixed
-            if (bb.top >= 0) {
-                nav.style.position = 'fixed';
-                toggle.style.position = 'fixed';
-                nav.style.top = toggle.offsetHeight + 'px';
-                toggle.style.top = '0px';
-            }else if (window.scrollY - toggle.offsetTop > 230) {
-                nav.style.position = 'absolute';
-                nav.style.top = window.scrollY - nav.parentElement.offsetTop - toggle.offsetHeight + 'px';
-                toggle.style.position = 'absolute';
-                toggle.style.top = window.scrollY - nav.parentElement.offsetTop - toggle.offsetHeight*2 + 'px';
-            }
-        }
-        scroll = newPos;
-    }
+
+
+
 });

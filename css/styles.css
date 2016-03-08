@@ -192,7 +192,7 @@ a {
     background-position: center center;
     background-attachment: fixed;
     background-size: cover;
-    color: white;
+    color: #fff8ed;
 }
 .splashWide {
     height: 600px;
@@ -201,7 +201,8 @@ a {
 .splashWide h1, .splashNarrow h1 {
     font-size: 4em;
     height: 600px;
-    text-shadow: 3px 0px 5px rgba(0, 0, 0, 0.5), -3px 0px 5px rgba(0, 0, 0, 0.5);
+    text-shadow: -1px -1px 10px rgba(0, 0, 0, 1), -1px -1px 10px rgba(0, 0, 0, 1);
+    /*text-shadow: 3px 0px 5px rgba(0, 0, 0, 0.5), -3px 0px 5px rgba(0, 0, 0, 0.5);*/
 }
 .splashNarrow {
     display: none;
@@ -359,6 +360,12 @@ a {
     -webkit-flex-wrap: wrap;*/
     position: relative;
     margin: 11px auto;
+}
+#menuToggleWrapper {
+    position: fixed;
+    width: 100%;
+    z-index: 900;
+    top: 0px;
 }
 #menuToggle {
     display: none;
@@ -717,6 +724,9 @@ textarea {
         padding-right: 10px;
         height: 200px;
         padding-top: 20px;
+        background-size: cover;
+        background-position: 50% 50% !important;
+        background-attachment: scroll;
     }
     .nav {
         position: fixed;
@@ -736,7 +746,7 @@ textarea {
     #menuToggle {
         z-index: 100;
         background-color: #000;
-        position: fixed;
+        position: relative;
         top: 0;
         width: 100%;
         height: 40px;
@@ -748,6 +758,11 @@ textarea {
     }
     .menuVisibility {
         display: none !important;
+    }
+    .calHeader {
+        background-size: cover;
+        background-position: 50% 50% !important;
+        background-attachment: scroll;
     }
     #calendarDiv {
         display: none;
