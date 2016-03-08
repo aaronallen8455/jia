@@ -52,18 +52,22 @@ window.addEventListener('load', function() {
                         venue.value = res.venue;
                         //set time values
                         var hour = res.start.slice(0,2);
-                        if (parseInt(hour) > 12) {
+                        if (parseInt(hour) >= 12) {
                             hour -= 12;
+                            if (hour === 0) hour = 12;
                             startPeriod.value = 'pm';
                         }else startPeriod.value = 'am';
+                        if (hour === '00') hour = '12';
                         startHour.value = hour;
                         startMin.value = res.start.slice(-2);
 
                         var hour = res.end.slice(0,2);
-                        if (parseInt(hour) > 12) {
+                        if (parseInt(hour) >= 12) {
                             hour -= 12;
+                            if (hour === 0) hour = 12;
                             endPeriod.value = 'pm';
                         }else endPeriod.value = 'am';
+                        if (hour === '00') hour = '12';
                         endHour.value = hour;
                         endMin.value = res.end.slice(-2);
 

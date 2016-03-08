@@ -43,7 +43,8 @@
             } 
             $min = substr($row['start_time'], -2);
             echo $hour . ':' . $min . $period;
-            ?></li> <?php if (!empty($row['end_time'])): //end time is optional?>
+            ?></li> 
+        <?php if (!empty($row['end_time'])): //end time is optional?>
         <li>Ends at <?php 
             $hour = (int)substr($row['end_time'], 0 ,2);
             if ($hour >= 12) {
