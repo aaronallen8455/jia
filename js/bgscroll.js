@@ -1,7 +1,7 @@
 window.addEventListener('load', function() {
     //get the elements with bg images
     var header = document.querySelector('.splashWide');
-    var headerNarrow = document.querySelector('.splashNarrow');
+    //var headerNarrow = document.querySelector('.splashNarrow');
     var calHeader = document.querySelector('.calHeader');
     
     function scrollHandler(element) {
@@ -14,13 +14,18 @@ window.addEventListener('load', function() {
     
     scrollHandler(header);
     scrollHandler(calHeader);
-    scrollHandler(headerNarrow);
+    //scrollHandler(headerNarrow);
     
     window.onscroll = function() {
         window.requestAnimationFrame(function() {
             scrollHandler(header);
             scrollHandler(calHeader);
-            scrollHandler(headerNarrow);
+            //scrollHandler(headerNarrow);
         });
-    }
+    };
+    //allow window size to change without weird behavior
+    window.addEventListener('resize', function() {
+        scrollHandler(header);
+        scrollHandler(calHeader);
+    }, false);
 });

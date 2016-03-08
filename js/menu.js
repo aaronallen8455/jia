@@ -42,8 +42,10 @@ window.addEventListener('load', function() {
         var isRunning = false;
         return function() {
             var newPos = window.scrollY;
+            //initialize scroll here so that menu does not scroll up when we visit the #cal anchor
             if (scroll === undefined) scroll = newPos;
             if (newPos <= toggle.offsetHeight*3) {
+                //we need to prevent slideUp from executing when we are at the top of the page
                 toggle.style.top = '0px';
                 scroll = undefined;
                 isRunning = false;
@@ -52,15 +54,12 @@ window.addEventListener('load', function() {
             if (Math.abs(scroll - newPos) >= toggle.offsetHeight) {
                 if (newPos > scroll) {
                     //scrolling down, hide menu
-                    if (!isRunning) {
-                        //var pos = 0;
+                    if (!isRunning && nav.classList.contains('menuVisibility')) {
                         function slideUp() {
                             if (toggle.offsetTop > -toggle.offsetHeight && isRunning) {
-                                //pos--;
                                 toggle.style.top = toggle.offsetTop - 2 + 'px';
                                 window.requestAnimationFrame(slideUp);
                             }else{
-                                //toggle.style.top = -toggle.offsetHeight + 'px';
                                 isRunning = false;
                             }
                         }
@@ -70,6 +69,8 @@ window.addEventListener('load', function() {
                         }
                     }
                 }else{
+                    //scrolling up, show menu
+                    //dont scroll up if menu is open
                     if (!isRunning) {
                         isRunning = true;
                         function slideDown() {
@@ -77,7 +78,6 @@ window.addEventListener('load', function() {
                                 toggle.style.top = toggle.offsetTop + 2 + 'px';
                                 window.requestAnimationFrame(slideDown);
                             }else{
-                                //toggle.style.top = toggle.offsetHeight + 'px';
                                 isRunning = false;
                             }
                         }

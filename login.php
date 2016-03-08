@@ -7,7 +7,8 @@ if (isset($_SESSION['id'])) {
     header('Location: http://'. $_SERVER['HTTP_HOST'] . dirname($_SERVER['PHP_SELF']) . '/myaccount.php');
 }
 
-
+$pageTitle = 'Login';
+$noLogin = true;
 include './includes/header.html';
 //show a login form if user isn't logged in.
     if (empty($_SESSION['id'])) { 

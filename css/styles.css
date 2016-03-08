@@ -131,6 +131,9 @@ a {
 .memberControls a:hover {
     color: yellow;
 }
+.memberControls {
+    color: white;
+}
 /************************************************Main Nav************************************************/
 .navbar-container {
     background-color: #000;

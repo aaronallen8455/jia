@@ -1,5 +1,11 @@
 		</div>
 	</div>
+    <?php
+    //the 'bodyDiv' element if this page has it
+    if (!in_array($pageTitle, $noBodyDiv)) {
+        echo '</div>';
+    }
+    ?>
 	<div class="footerDiv">
         <div class="footerLinks">
             <a href="index.php#cal">Calendar</a>

@@ -104,9 +104,13 @@
                 </ul>
             </div>
         <?php
-        if (basename($_SERVER['PHP_SELF']) != "login.php" && $pageTitle != "Calendar") {
+        //these pages do not contain the 'bodyDiv' element
+        $noBodyDiv = array(
+            'Login',
+            'Calendar',
+        );
+        if (!in_array($pageTitle, $noBodyDiv)) {
             echo '<div class="bodyDiv">';
         }
         ?>
     <!--CONTENT-->
-</body>
