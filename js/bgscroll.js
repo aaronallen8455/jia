@@ -27,10 +27,12 @@ window.addEventListener('load', function() {
         var url = css.slice(5,-2);
         var image = new Image();
         image.src = url;
-        ele.imgHeight = image.height/image.width * ele.offsetWidth / 2;
+        ele.imgHeight = (image.height - ele.offsetHeight)/2;
         image = null;
         //get document coord for top
         ele._top = getTop(ele);
+        //half of height
+        ele.halfHeight = ele.offsetHeight/2;
     }
 
     function getTop(ele) {
@@ -43,11 +45,17 @@ window.addEventListener('load', function() {
 
     function scrollHandler(element, halfWay) {
         var top = element._top - window.scrollY;
-        if (top > halfWay*2 || top < -halfWay*2) return;
-        var eleCenter = element.offsetHeight/2 + top;
-
-        element.style.backgroundPosition = '50% ' + (eleCenter-element.imgHeight + (halfWay-eleCenter) *.25) + 'px';
+        //console.log(top);
+        if (top > halfWay*2) return;
+        var eleCenter = element.halfHeight + top;
+        //image is centered when at top - height/4
+        //var center = (element.imgHeight - element.offsetHeight)/2;
+        //element.style.backgroundPosition = '50% ' + (eleCenter-element.imgHeight + (halfWay-eleCenter) *rate) + 'px';
+        var offset = top - element.imgHeight + (halfWay-eleCenter)*rate;
+        return (element.style.backgroundPosition = '50% ' + offset + 'px');
     }
+//1050 * x = .25& 500 * x = .9
+    var rate = -1.25/450 * screen.availHeight + 3.1667;//screen.availHeight/4200;
     
     scrollHandler(header, halfWay);
     scrollHandler(calHeader, halfWay);

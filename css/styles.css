@@ -194,7 +194,6 @@ a {
     background: black url("../images/congress-ave-webres.jpg") no-repeat;
     background-position: center center;
     background-attachment: fixed;
-    background-size: cover;
     color: #fff8ed;
 }
 .splashWide {
@@ -242,7 +241,6 @@ a {
     background: black url("../images/paramount-webres.jpg") no-repeat;
     background-position: center center;
     background-attachment: fixed;
-    background-size: cover;
     color: whitesmoke;
     -webkit-font-smoothing: antialiased;
     font-smoothing: antialiased;
