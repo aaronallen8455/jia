@@ -191,10 +191,12 @@ a {
     text-align: center;
 }
 .splashWide, .splashNarrow {
-    background: black url("../images/congress-ave-webres.jpg") no-repeat;
+    /*background: black url("../images/congress-ave-webres.jpg") no-repeat;*/
+    background: black;
     background-position: center center;
     background-attachment: fixed;
     color: #fff8ed;
+    overflow: hidden;
 }
 .splashWide {
     height: 600px;
@@ -206,6 +208,21 @@ a {
     text-shadow: -1px -1px 10px rgba(0, 0, 0, 1), -1px -1px 10px rgba(0, 0, 0, 1);
     /*text-shadow: 3px 0px 5px rgba(0, 0, 0, 0.5), -3px 0px 5px rgba(0, 0, 0, 0.5);*/
 }
+#bgSlideWide, #bgSlideNarrow {
+    background: black url("../images/congress-ave-webres.jpg") no-repeat;
+}
+#bgSlideCal {
+    background: black url("../images/paramount-webres.jpg") no-repeat;
+}
+#bgSlideWide, #bgSlideNarrow, #bgSlideCal {
+    background-position: 50% 50%;
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+}
+
 .splashNarrow {
     display: none;
     height: 500px;
@@ -238,7 +255,8 @@ a {
     text-align: center;
     font-size: 2em;
     padding: 2em 0;
-    background: black url("../images/paramount-webres.jpg") no-repeat;
+    overflow: hidden;
+    background: black;
     background-position: center center;
     background-attachment: fixed;
     color: whitesmoke;
@@ -728,9 +746,13 @@ textarea {
         padding-right: 10px;
         height: 200px;
         padding-top: 20px;
-        background-size: cover;
+        background: black url("../images/congress-ave-webres.jpg") no-repeat;
+        background-size: 170%;
         background-position: 50% 50% !important;
         background-attachment: scroll;
+    }
+    #bgSlideNarrow {
+        display: none;
     }
     .nav {
         position: fixed;
@@ -764,9 +786,14 @@ textarea {
         display: none !important;
     }
     .calHeader {
-        background-size: cover;
-        background-position: 50% 50% !important;
+        background: black url("../images/paramount-webres.jpg") no-repeat;
+        background-size: 150%;
+        background-position: 50% 65% !important;
         background-attachment: scroll;
+        padding: 0px;
+    }
+    #bgSlideCal {
+        display: none;
     }
     #calendarDiv {
         display: none;
