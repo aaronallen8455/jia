@@ -23,7 +23,7 @@ if (isset($_SESSION['isAdmin']) && $_SESSION['isAdmin'] === true) {
         ?>
     <form action="./removevenue.php?id=<?php echo $_GET['id']; ?>" method="post">
         <input type="hidden" value="true" name="delete" />
-        <input type="submit" value="Yes" />
+        <button type="submit">Yes</button>
         <button type="button" id="cancelButton">Cancel</button>
     </form>
     </div>

@@ -27,7 +27,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && filter_var($_GET['id'], FILTER_VALID
     ?>
 <form action="./removeevent.php?id=<?php echo $_GET['id']; ?>" method="post">
     <input type="hidden" value="true" name="delete" />
-    <input type="submit" value="Yes" />
+    <button type="submit">Yes</button>
     <button type="button" id="cancelButton">Cancel</button>
 </form>
 </div>

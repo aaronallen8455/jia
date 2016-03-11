@@ -178,6 +178,9 @@ a {
 .footerDiv a {
     color: cornflowerblue;
 }
+.photoCredit {
+    font-size: smaller;
+}
 
 /************************************************Welcome************************************************/
 .welcome {
