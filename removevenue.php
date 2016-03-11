@@ -10,7 +10,7 @@ if (isset($_SESSION['isAdmin']) && $_SESSION['isAdmin'] === true) {
         //remove database row
         if ($dbc->exec('DELETE FROM venues WHERE id='.$_GET['id'])) {
             //success
-            echo '<div class="centeredDiv"><h2>The event was successfully removed!</h2></div>';
+            echo '<div class="centeredDiv"><h2>The venue was successfully removed!</h2></div>';
         }else{
             trigger_error('The event was not deleted due to a system error. We apologize for the inconvenience.');
         }

@@ -10,7 +10,7 @@ if (isset($_SESSION['id']) && $_SESSION['isAdmin'] === true) {
         $stmt = $dbc->query($q);
         $existingDates = array();
         while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
-            $existingDates[$row[0]] = $row[1]; 
+            $existingDates[$row[0]] = $row[1];
         }
 
         //get all user names to allow for proper ownership.
@@ -21,7 +21,7 @@ if (isset($_SESSION['id']) && $_SESSION['isAdmin'] === true) {
             $userNames[$row[0]] = $row[1];
         }
         //prepare query
-        $sql = 'CALL mass_insert(?,?,?,?,?,?)';
+        $sql = 'CALL mass_insert(?,?,?,?,?,?,?,?)';
         $stmt = $dbc->prepare($sql);
         //loop through shows
         foreach ($_POST['shows'] as $show) {
@@ -32,23 +32,26 @@ if (isset($_SESSION['id']) && $_SESSION['isAdmin'] === true) {
             }
             //check for authorship
             $uid = 3; //the admin user acct
+            $band = null;
             foreach ($userNames as $name=>$id) {
                 if (stristr($show->summary, $name)) {
                     $uid = $id;
+                    //add this user to band
+                    $band = $name;
                     break;
                 }
             }
             //add show to DB
-            $data = array('Brass House', $show->date, $show->startTime, $show->endTime, $show->summary, $uid);
+            $data = array('Brass House', $show->date, $show->startTime, $show->endTime, $show->summary, $uid, $name, '');
             if ($stmt->execute($data)) {
                 echo "$show->summary was added.<br>";
             }else print_r($dbc->errorInfo());
         }
     }
-    
+
     //calendar URL
     $url = 'https://calendar.google.com/calendar/htmlembed?title=Brass%20House%20Austin%20Calendar%20of%20Events&src=mc7n5ov8c9i4s047liqp9j07ls%40group.calendar.google.com';
-    
+
     //imports the given month format:'20160201'
     $curDate = date('Y').date('m').'01';
     function importMonth($date) {
@@ -87,9 +90,9 @@ if (isset($_SESSION['id']) && $_SESSION['isAdmin'] === true) {
         $r = -1; //keeps track of row number
         //$ir = -1; //inner row number
         $shows = array(); //$shows[date] = array(array(startTime=>t, endTime=>t, summary=>s))
-        
+
         for ($i=0; $i<count($rows[1]); $i++) {
-            
+
             //determine position
             //if ($i%7 === 0) $ir++;
             if ($i%5 === 0) {
@@ -97,15 +100,15 @@ if (isset($_SESSION['id']) && $_SESSION['isAdmin'] === true) {
                 //reset rowSpan at the top of each row
                 $rowSpan = array(); //keeps track of row numbers that are getting spanned (skipped)
             }
-            
+
             //isolate cells
             $row = $rows[1][$i];
-            
+
             preg_match_all('/<td.*?.(?=(<td|<\/td))/', $row, $cells, PREG_PATTERN_ORDER);
             //echo count($cells[0]);
-            
+
             for ($c=0,$v=0; $c<7; $c++) {
-                
+
                 //check for row spanning
                 if (in_array($c, $rowSpan)) {
                     continue;
@@ -125,7 +128,7 @@ if (isset($_SESSION['id']) && $_SESSION['isAdmin'] === true) {
                     //convert time
                     $period = substr($time[1], -2);
                     $time = (int)substr($time[1], 0, -2);
-                    
+
                     if ($period === 'pm' && $time !== 12) {
                         $time += 12;
                     }
@@ -143,26 +146,26 @@ if (isset($_SESSION['id']) && $_SESSION['isAdmin'] === true) {
         }
         return $shows;
     }
-    
+
     $shows = importMonth($curDate);
-    
+
     //draw multiselect form
     ?>
-<form action="bhimport.php" method="post">
-    <select name="shows[]" size="30" multiple>
-    
-        <?php
-    foreach ($shows as $date=>$showArray) {
-        foreach ($showArray as $show) {
-            $show['date'] = $date;
-            echo '<option value="'.htmlspecialchars(json_encode($show)).'" selected>' . $show['summary'] . '</option>';
-        }
-    }
-    ?>
-        
-    </select>
-    <input type="submit" value="Submit" />
-</form>
-<?php
+    <form action="bhimport.php" method="post">
+        <select name="shows[]" size="30" multiple>
+
+            <?php
+            foreach ($shows as $date=>$showArray) {
+                foreach ($showArray as $show) {
+                    $show['date'] = $date;
+                    echo '<option value="'.htmlspecialchars(json_encode($show)).'" selected>' . $show['summary'] . '</option>';
+                }
+            }
+            ?>
+
+        </select>
+        <input type="submit" value="Submit" />
+    </form>
+    <?php
 }else echo 'Access Denied.';
 ?>
