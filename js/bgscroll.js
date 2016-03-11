@@ -16,7 +16,7 @@ window.addEventListener('load', function() {
         //get element center
         if (ele._top > halfWay*2+scrollY) return;
         var winCenter = scrollY + halfWay;
-        ele.style.top = ((winCenter - ele.center)* .2 - ele.heightDiff)  + 'px';
+        ele.style.top = ((winCenter - ele.center)* .25 - ele.heightDiff)  + 'px';
     }
     window.addEventListener('scroll', function() {
         window.requestAnimationFrame(function(){
@@ -50,6 +50,7 @@ window.addEventListener('load', function() {
         ele.style.height = image.height + 'px';
         image = null;
         //get document coord for top
+        ele.style.top = '0px';
         ele._top = getTop(ele);
         //half of height
         ele.halfHeight = ele.offsetHeight/2;
@@ -105,6 +106,8 @@ window.addEventListener('load', function() {
         //defineImgHeight(header);
         //defineImgHeight(calHeader);
         //defineImgHeight(headerNarrow);
+        halfWay = window.innerHeight/2;
+        useNarrow = window.getComputedStyle(headerNarrow).display !== 'none';
         defineImgHeight(bgSlideWide);
         defineImgHeight(bgSlideNarrow);
         defineImgHeight(bgSlideCal);
@@ -114,9 +117,9 @@ window.addEventListener('load', function() {
         bgSlideHandler(bgSlideCal, scrollY);
 
         //re-calc window height
-        halfWay = window.innerHeight/2;
+
         //see if narrow is being used
-        useNarrow = window.getComputedStyle(headerNarrow).display !== 'none';
+
     }, false);
 
     bgSlideHandler(bgSlideWide, scrollY);

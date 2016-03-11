@@ -46,18 +46,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') { //otherwise check if form was submi
                             //create row in rm_token table
                             $s = bin2hex(openssl_random_pseudo_bytes(6));
                             $v = bin2hex(openssl_random_pseudo_bytes(6));
-                            $q = 'REPLACE INTO rm_tokens (user_id, token, selector, expires) VALUES (?, ?, ?, DATE_ADD(NOW(), INTERVAL 31 DAY))';
+                            $q = 'REPLACE INTO rm_tokens (user_id, token, selector, expires) VALUES (?, ?, ?, DATE_ADD(NOW(), INTERVAL 93 DAY))';
                             $stmt = $dbc->prepare($q);
                             $stmt->execute(array($_SESSION['id'], hash('sha256', $v), $s));
                             //create the cookie
                             if ($stmt->rowCount() === 1) {
-                                setcookie('rm', $s.'-'.$v, time()+60*60*60*24*31*3); //expires in 3 months
+                                setcookie('rm', $s.'-'.$v, time()+60*60*24*31*3); //expires in 3 months
                             }
-                        }else if (isset($_COOKIE['email'], $_COOKIE['pass']) && isset($_POST['login'])) {
+                        }else if (isset($_COOKIE['rm']) && isset($_POST['login'])) {
                             //if the box was not checked, we delete existing cookie.
+                            $s = strtok($_COOKIE['rm'], '-'); //selector
                             setcookie('rm', '', time()-3600);
                             //and remove row from rm_token
-                            $q = 'DELETE FROM rm_tokens WHERE user_id=' . $_SESSION['id'];
+                            $q = 'DELETE FROM rm_tokens WHERE selector=' . $s . ' AND user_id=' . $_SESSION['id'];
                             $dbc->query($q);
                         }
                         $loginError = false;
@@ -103,8 +104,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') { //otherwise check if form was submi
                 //log their ip address
                 $dbc->exec("UPDATE users SET ip='{$_SERVER['REMOTE_ADDR']}' WHERE id=$uid");
                 //renew cookie and expiration in DB
-                setcookie('rm', $s . '-' . $v, time()+60*60*60*24*31*3); //expire in 3 months
-                $q = 'UPDATE rm_tokens SET expires = DATE_ADD(NOW(), INTERVAL 31 DAY) WHERE user_id='.$uid;
+                setcookie('rm', $s . '-' . $v, time()+60*60*24*31*3); //expire in 3 months
+                $q = 'UPDATE rm_tokens SET expires = DATE_ADD(NOW(), INTERVAL 93 DAY) WHERE selector='. $s .' AND user_id='.$uid;
                 $dbc->query($q);
             }
         }
