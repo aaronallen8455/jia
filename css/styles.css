@@ -46,6 +46,9 @@ a {
 .opaqueBG {
     background-color: white;
 }
+button, input, optgroup, select, textarea {
+    color: #000;
+}
 /************************************************Header************************************************/
 .outerBorder, .footerDiv {
     width: 100%;

@@ -215,7 +215,7 @@ window.addEventListener('load', function() {
         prev.onclick = function(e) {
             e.preventDefault();
             travCal(-1);
-        }
+        };
         
         var calendarHeading = document.createElement('span');
         calendarHeading.innerHTML = monthName(month) + ' ' + year;
@@ -227,7 +227,7 @@ window.addEventListener('load', function() {
         next.onclick = function(e) {
             e.preventDefault();
             travCal(1);
-        }
+        };
         next.innerHTML = '&#10095;';
         
         //don't allow prev to go into the past
@@ -244,7 +244,7 @@ window.addEventListener('load', function() {
         calendarTable.appendChild(dowHeading);
         for (var i=0; i<7; i++) {
             var heading = document.createElement('td');
-            var day = dayName(i)
+            var day = dayName(i);
             heading.innerHTML = day;
             dowHeading.appendChild(heading);
         }
@@ -331,8 +331,7 @@ window.addEventListener('load', function() {
         else //match anywhere in string
             reg = new RegExp(this.value, 'i');
         matches = nameList.filter(function(e) {
-            if (e.match(reg)) return true;
-            else return false;
+            return e.match(reg);
         });
 
         //create the div if doesn't exist.
@@ -369,15 +368,15 @@ window.addEventListener('load', function() {
             //click
             this.ele.onmousedown = function() {
                 _this.value = this.innerHTML;
-            }
+            };
             //mouse over
             this.ele.onmouseover = function() {
                 nameSpan.sel(this);
-            }
+            };
             this.ele.onmouseout = function() {
                 this.classList.remove('autoNameSpanSel')
                 if (nameSpan.selected === this) nameSpan.selected = null;
-            }
+            };
             var el = this.ele;
             //down and up arrow and enter
             _this.addEventListener('keydown', function(e) {
@@ -422,7 +421,7 @@ window.addEventListener('load', function() {
             //select this element
             nameSpan.selected = e;
             e.classList.add('autoNameSpanSel');
-        }
+        };
         //append the name options
         for (var i=0; i<matches.length; i++) {
             /*
@@ -438,16 +437,26 @@ window.addEventListener('load', function() {
             autoNameDiv.appendChild(span);*/
             new nameSpan(matches[i], autoNameDiv);
         }
+        //get the desired coords
+        var top = this;
+        var y = 0;
+        var x = 0;
+        do {
+            if (top.tagName === 'FORM') continue;
+            y += top.offsetTop;
+            x += top.offsetLeft;
+        }while (top = top.parentElement);
+
         //position the div horizontally
-        var bb = this.getBoundingClientRect();
-        autoNameDiv.style.left = bb.left + window.scrollX + 'px';
+        //var bb = this.getBoundingClientRect();
+        autoNameDiv.style.left = x + 'px';
         //vertical
-        if (bb.bottom + autoNameDiv.offsetHeight > document.documentElement.clientHeight) {
+        if (y + this.offsetHeight - window.scrollY + autoNameDiv.offsetHeight > document.documentElement.clientHeight) {
             //put div above the input if would go below the viewport
-            autoNameDiv.style.top = bb.top - autoNameDiv.offsetHeight + window.scrollY + 'px';
+            autoNameDiv.style.top = y - autoNameDiv.offsetHeight + 'px';
         }else{
             //otherwise put it below
-            autoNameDiv.style.top = bb.bottom + window.scrollY + 'px';
+            autoNameDiv.style.top = y + this.offsetHeight + 'px';
         }
     }
     

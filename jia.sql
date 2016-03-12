@@ -46,7 +46,7 @@ CREATE TABLE `events` (
     `venue` VARCHAR(80) NOT NULL,
     `date` DATE NOT NULL,
     `start_time` CHAR(4) NOT NULL,
-    `end_time` CHAR(4) NOT NULL,
+    `end_time` CHAR(4) NULL,
     `desc` TEXT NULL,
     `title` VARCHAR(80) NOT NULL,
     `user_id` SMALLINT UNSIGNED NOT NULL,
@@ -169,4 +169,26 @@ IF _pid>=1 THEN
 END IF;
 END $$
 DELIMITER ;
-
+-- Create new event and associated event_venue if applicable
+DELIMITER $$
+CREATE PROCEDURE create_event (club VARCHAR(60), _date DATE, _start CHAR(4), _end CHAR(4), _title VARCHAR(80), _band TEXT, _id SMALLINT UNSIGNED, _desc TEXT, OUT eid SMALLINT)
+BEGIN
+DECLARE _vid SMALLINT;
+SELECT venues.id INTO _vid FROM venues WHERE club LIKE CONCAT('%', CONCAT(venues.name, '%')) LIMIT 1;
+INSERT INTO `events` (venue, date, start_time, end_time, title, user_id, band, `desc`) VALUES (club, _date, _start, _end, _title, _id, _band, _desc);
+SET eid=LAST_INSERT_ID();
+IF _vid>=1 THEN
+INSERT INTO events_venues (venue_id, events_venues.event_id) VALUES (_vid, eid);
+END IF;
+END $$
+DELIMITER ;
+-- Get event info for profile associated with given ID
+DELIMITER $$
+CREATE PROCEDURE get_profile_events (uid SMALLINT UNSIGNED)
+BEGIN
+SELECT `events`.id AS id, DATE_FORMAT(`date`, '%M %D, %Y') AS edate, start_time, end_time, title, venue
+FROM `events` JOIN events_profiles ON `events`.id=event_id
+WHERE profile_id=uid AND `date` >= CURDATE()
+ORDER BY `date` ASC, start_time ASC;
+END $$
+DELIMITER ;
