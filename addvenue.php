@@ -21,7 +21,7 @@ if (isset($_SESSION['isAdmin']) && $_SESSION['isAdmin'] === true) {
             if (strlen($_POST['desc'])>65535) {
                 $profile_errors['desc'] = "Description must be less than 65535 characters, currently ".strlen($_POST['desc']);
             }
-        }else $desc = null;
+        }else $venue_errors['desc'] = 'Please enter a description';
         //validate links
         if (!empty($_POST['links'][0])) {
             $links = '';

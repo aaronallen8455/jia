@@ -359,9 +359,9 @@ window.addEventListener('load', function() {
         document.body.appendChild(autoNameDiv);
         
         //class for name spans
-        function nameSpan(name, parent) {
+        function NameSpan(name, parent) {
             this.ele = document.createElement('span');
-            nameSpan.stack.push(this.ele);
+            NameSpan.stack.push(this.ele);
             parent.appendChild(this.ele);
             this.ele.innerHTML = name;
             this.ele.className = 'autoNameSpan';
@@ -371,11 +371,11 @@ window.addEventListener('load', function() {
             };
             //mouse over
             this.ele.onmouseover = function() {
-                nameSpan.sel(this);
+                NameSpan.sel(this);
             };
             this.ele.onmouseout = function() {
                 this.classList.remove('autoNameSpanSel')
-                if (nameSpan.selected === this) nameSpan.selected = null;
+                if (NameSpan.selected === this) NameSpan.selected = null;
             };
             var el = this.ele;
             //down and up arrow and enter
@@ -383,43 +383,43 @@ window.addEventListener('load', function() {
                 //down
                 if (e.keyCode === 40) {
                     //if nothing selected and this is first ele, select it
-                    if (nameSpan.selected === null && nameSpan.stack[0] === el) {
-                        nameSpan.sel(el);
+                    if (NameSpan.selected === null && NameSpan.stack[0] === el) {
+                        NameSpan.sel(el);
                         return;
                     }
-                    if (nameSpan.selected !== el) return;
+                    if (NameSpan.selected !== el) return;
                     //if this is the selected element, go down the chain
-                    if (nameSpan.stack[nameSpan.stack.length-1] !== el) {
-                        nameSpan.sel(nameSpan.stack[nameSpan.stack.indexOf(el)+1]);
+                    if (NameSpan.stack[NameSpan.stack.length-1] !== el) {
+                        NameSpan.sel(NameSpan.stack[NameSpan.stack.indexOf(el)+1]);
                     }
                     //up
                 }else if(e.keyCode === 38) {
                     //if nothing selected and this is first ele, select it
-                    if (nameSpan.selected === null && nameSpan.stack[nameSpan.stack.length-1] === el) {
-                        nameSpan.sel(el);
+                    if (NameSpan.selected === null && NameSpan.stack[NameSpan.stack.length-1] === el) {
+                        NameSpan.sel(el);
                         return;
                     }
-                    if (nameSpan.selected !== el) return;
+                    if (NameSpan.selected !== el) return;
                     //if this is the selected element, go up the chain
-                    if (nameSpan.stack[0] !== el) {
-                        nameSpan.sel(nameSpan.stack[nameSpan.stack.indexOf(el)-1]);
+                    if (NameSpan.stack[0] !== el) {
+                        NameSpan.sel(NameSpan.stack[NameSpan.stack.indexOf(el)-1]);
                     }
                 }else if (e.keyCode === 13) {
                     //on enter, set the input value and remove the list
-                    if (nameSpan.selected !== el) return;
+                    if (NameSpan.selected !== el) return;
                     _this.value = el.innerHTML;
                     el.parentElement.remove();
                     e.preventDefault();
                 }
             }, false);
         }
-        nameSpan.stack = [];
-        nameSpan.selected = null;
-        nameSpan.sel = function(e) {
+        NameSpan.stack = [];
+        NameSpan.selected = null;
+        NameSpan.sel = function(e) {
             //deselect old element
-            if (nameSpan.selected) nameSpan.selected.classList.remove('autoNameSpanSel');
+            if (NameSpan.selected) NameSpan.selected.classList.remove('autoNameSpanSel');
             //select this element
-            nameSpan.selected = e;
+            NameSpan.selected = e;
             e.classList.add('autoNameSpanSel');
         };
         //append the name options
@@ -435,7 +435,7 @@ window.addEventListener('load', function() {
                 
             }
             autoNameDiv.appendChild(span);*/
-            new nameSpan(matches[i], autoNameDiv);
+            new NameSpan(matches[i], autoNameDiv);
         }
         //get the desired coords
         var top = this;
