@@ -28,6 +28,8 @@ if (isset($_SESSION['id']) && $_SESSION['isAdmin'] === true) {
             $this->content = array_key_exists(2, $d)?$d[2]:''; //extract content
             if (!empty($this->content)) {
                 $this->content = str_replace(array('<br>', '<br />'), ' ', $this->content);
+                //remove consecutive spaces
+                $this->content = preg_replace('/ +/', ' ', $this->content);
             }
         }
     }
@@ -79,7 +81,7 @@ if (isset($_SESSION['id']) && $_SESSION['isAdmin'] === true) {
             //check for user name
             $uid = 3; //default creator account
             foreach ($userNames as $name=>$id) {
-                if (stristr($cell->content, $name)) {
+                if (stristr(strip_tags($cell->content), trim($name))) {
                     //match found, use their id
                     $uid = $id;
                 }
