@@ -156,7 +156,7 @@ DECLARE _pid SMALLINT;
 DECLARE dupe SMALLINT;
 SELECT `events`.id INTO dupe FROM `events` WHERE LOWER(`events`.venue)=LOWER(club) AND `events`.start_time=_start AND `events`.date=_date;
 IF dupe IS NULL THEN
-    SELECT venues.id INTO _vid FROM venues WHERE venues.name=club;
+    SELECT venues.id INTO _vid FROM venues WHERE club LIKE CONCAT('%', CONCAT(venues.name, '%')) LIMIT 1;
     INSERT INTO `events` (venue, date, start_time, end_time, title, user_id, band, `desc`) VALUES (club, _date, _start, _end, _title, _id, _band, _desc);
     SET _eid=LAST_INSERT_ID();
     IF _vid>=1 THEN

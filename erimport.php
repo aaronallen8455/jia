@@ -29,7 +29,7 @@ if (isset($_SESSION['id']) && $_SESSION['isAdmin'] === true) {
             if (!empty($this->content)) {
                 $this->content = str_replace(array('<br>', '<br />'), ' ', $this->content);
                 //remove consecutive spaces
-                $this->content = preg_replace('/ +/', ' ', $this->content);
+                $this->content = preg_replace('/ {2,}/', ' ', $this->content);
             }
         }
     }

@@ -183,6 +183,7 @@ button, input, optgroup, select, textarea {
 }
 .photoCredit {
     font-size: smaller;
+    line-height: normal;
 }
 
 /************************************************Welcome************************************************/

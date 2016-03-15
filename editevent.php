@@ -110,7 +110,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && filter_var($_GET['id'], FILTER_VALI
     if (empty($event_errors)) {
         require_once MYSQL;
         //make sure that user is creator of event or is admin
-        $q = $dbc->query("SELECT user_id, band, venue FROM events WHERE id={$_GET['id']}");
+        $q = $dbc->query("SELECT user_id, band, venue, start_time, `date` FROM events WHERE id={$_GET['id']}");
         if ($row = $q->fetch(PDO::FETCH_ASSOC)) {
             if (!$_SESSION['isAdmin']) {
                 if ($row['user_id'] !== $_SESSION['id']) {
@@ -126,51 +126,61 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && filter_var($_GET['id'], FILTER_VALI
             include './includes/footer.html';
             exit();
         }
-        //update event
-        $q = 'UPDATE events SET title=?, venue=?, start_time=?, end_time=?, `date`=?, `desc`=?, band=? WHERE id='.$_GET['id'];
-        $stmt = $dbc->prepare($q);
-        if ($stmt->execute(array($title, $venue, $start, $end, $date, $desc, $band))) {
-            $eid = $_GET['id'];
-            //show success message
-            include './views/editevent_success.html';
-            $event_errors['success'] = true;
-            //include './includes/footer.html';
-            //if the band was changed, redo the events_profiles entries.
-            if ($band != $row['band']) {
-                //clear existing entries
-                $q = 'DELETE FROM events_profiles WHERE event_id=' . $eid;
-                $dbc->exec($q);
-                //if ($dbc->exec($q)) {
+        //if time, date, or venue was changed, make sure it is not a duplicate
+        if ($row['start_time'] !== $start || $row['venue'] !== $venue || $row['date'] !== $date) {
+            //check for duplicate at this venue and time
+            $q = $dbc->query("SELECT id FROM events WHERE start_time=$start AND `date`=$date AND venue=$venue");
+            if ($q->fetchColumn()) {
+                $event_errors['venue'] = 'An event already exists at this time and place';
+            }
+        }
+        if (empty($event_errors)) {
+            //update event
+            $q = 'UPDATE events SET title=?, venue=?, start_time=?, end_time=?, `date`=?, `desc`=?, band=? WHERE id=' . $_GET['id'];
+            $stmt = $dbc->prepare($q);
+            if ($stmt->execute(array($title, $venue, $start, $end, $date, $desc, $band))) {
+                $eid = $_GET['id'];
+                //show success message
+                include './views/editevent_success.html';
+                $event_errors['success'] = true;
+                //include './includes/footer.html';
+                //if the band was changed, redo the events_profiles entries.
+                if ($band != $row['band']) {
+                    //clear existing entries
+                    $q = 'DELETE FROM events_profiles WHERE event_id=' . $eid;
+                    $dbc->exec($q);
+                    //if ($dbc->exec($q)) {
                     //create new entries
-                $q = 'SELECT u.id AS id FROM users AS u INNER JOIN profiles AS p ON p.user_id=u.id WHERE CONCAT_WS(\' \', LOWER(u.first_name), LOWER(u.last_name))=LOWER(?)';
-                $stmt = $dbc->prepare($q);
-                for ($i=0; $i<count($_POST['band']); $i++) {
-                    $stmt->execute(array(($_POST['band'][$i])));
-                    $uid = $stmt->fetchColumn();
-                    if ($uid) {
-                        $dbc->exec('INSERT INTO events_profiles (profile_id, event_id) VALUES ('.$uid.', '.$eid.')');
+                    $q = 'SELECT u.id AS id FROM users AS u INNER JOIN profiles AS p ON p.user_id=u.id WHERE CONCAT_WS(\' \', LOWER(u.first_name), LOWER(u.last_name))=LOWER(?)';
+                    $stmt = $dbc->prepare($q);
+                    for ($i = 0; $i < count($_POST['band']); $i++) {
+                        $stmt->execute(array(($_POST['band'][$i])));
+                        $uid = $stmt->fetchColumn();
+                        if ($uid) {
+                            $dbc->exec('INSERT INTO events_profiles (profile_id, event_id) VALUES (' . $uid . ', ' . $eid . ')');
+                        }
                     }
+                    //}
                 }
-                //}
-            }
-            //if venue was changed, redo events_venues entry.
-            if ($venue !== $row['venue']) {
-                //delete existing entry
-                $q = 'DELETE FROM events_venues WHERE event_id=' . $eid;
-                $dbc->exec($q);
-                //create new entry
-                $q = "SELECT id FROM venues WHERE name LIKE '%$venue%'";
-                $stmt = $dbc->query($q);
-                $vid = $stmt->fetchColumn();
-                if ($vid) {
-                    //create row
-                    $dbc->exec("INSERT INTO events_venues (venue_id, event_id) VALUES ($vid, $eid)");
+                //if venue was changed, redo events_venues entry.
+                if ($venue !== $row['venue']) {
+                    //delete existing entry
+                    $q = 'DELETE FROM events_venues WHERE event_id=' . $eid;
+                    $dbc->exec($q);
+                    //create new entry
+                    $q = "SELECT id FROM venues WHERE name LIKE '%$venue%'";
+                    $stmt = $dbc->query($q);
+                    $vid = $stmt->fetchColumn();
+                    if ($vid) {
+                        //create row
+                        $dbc->exec("INSERT INTO events_venues (venue_id, event_id) VALUES ($vid, $eid)");
+                    }
+
                 }
-                
+                //exit();
+            } else {
+                trigger_error('A system error has occured, your event was not updated. We apologize for the inconvenience.');
             }
-            //exit();
-        }else{
-            trigger_error('A system error has occured, your event was not updated. We apologize for the inconvenience.');
         }
     }
 }

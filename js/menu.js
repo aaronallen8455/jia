@@ -4,8 +4,17 @@ window.addEventListener('load', function() {
     toggle.onclick = function() {
         if (nav.classList.contains('menuVisibility')) {
             nav.classList.remove('menuVisibility');
+
         }else nav.classList.add('menuVisibility');
     };
+    //clicking outside the menu closes it
+    document.addEventListener('click', function(e) {
+        if (e.target === toggle || e.target === nav || e.target.parentNode.parentNode === nav) return;
+        if (!nav.classList.contains('menuVisibility')) {
+            nav.classList.add('menuVisibility');
+        }
+    }, false);
+
     
     //in mobile, menu is fixed when scrolling up but rolls up when scrolling down.
 
