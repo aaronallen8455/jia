@@ -30,7 +30,7 @@ window.addEventListener('load', function() {
                 desc.innerHTML = '';
                 copySelect.value = 'none';
             }
-        }
+        };
     
         //when selected, send event id to ajax
         copySelect.onchange = function() {
@@ -38,7 +38,7 @@ window.addEventListener('load', function() {
                 var data = {id: this.value};
                 data = JSON.stringify(data);
                 var req = new XMLHttpRequest();
-                req.open('POST','./ajax/addevent.ajax.php',true);
+                req.open('POST','/ajax/addevent.ajax.php',true);
                 req.setRequestHeader('Content-type', 'application/json');
                 req.onreadystatechange = function() {
                     if(req.readyState === 4) {
@@ -172,7 +172,7 @@ window.addEventListener('load', function() {
         if (isNaN(i)) continue;
         //attach the calendar icon
         var image = document.createElement('img');
-        image.setAttribute('src', './images/calendar.gif');
+        image.setAttribute('src', '/images/calendar.gif');
         image.width = 25;
         image.height = 25;
         cals[i].appendChild(image);

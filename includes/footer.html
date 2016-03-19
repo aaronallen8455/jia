@@ -8,13 +8,13 @@
     ?>
 	<div class="footerDiv">
         <div class="footerLinks">
-            <a href="./#cal">Calendar</a>
+            <a href="http://<?php echo BASE_URL; ?>#cal">Calendar</a>
             |
-            <a href="profiles.php">Musician Profiles</a>
+            <a href="http://<?php echo BASE_URL; ?>profiles/">Musician Profiles</a>
             |
-            <a href="venues.php">Venues</a>
+            <a href="http://<?php echo BASE_URL; ?>venues/">Venues</a>
             |
-            <a href="booking.php">Booking</a>
+            <a href="http://<?php echo BASE_URL; ?>booking/">Booking</a>
         </div>
         Questions or Comments? <a href="mailto:admin@jazzinaustin.com">Email Us</a>
         <p>
@@ -27,8 +27,13 @@
             Site Design by <b>Aaron Allen</b> and <b>Art Carvajal</b>
 		</p>
         <br />
+        <?php
+        //show photo credit if on calendar page
+        if (isset($pageTitle) && $pageTitle === 'Calendar'):
+        ?>
         <p class="photoCredit">Paramount Theater photo courtesy of AustinPixels Photography (<a href="http://www.austinpixels.com/" target="_blank">http://www.austinpixels.com/</a>)
         </p>
+        <?php endif; ?>
 	</div>
 </body>
 </html>

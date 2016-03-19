@@ -89,7 +89,7 @@ window.onload = function() {
         msg = JSON.stringify(msg); //the object sent to the ajax script
         //query the database
         var req = new XMLHttpRequest();
-        req.open('POST','./ajax/calendar.ajax.php',true);
+        req.open('POST','/ajax/calendar.ajax.php',true);
         req.setRequestHeader('Content-type', 'application/json');
         req.onreadystatechange = function() {
             if(req.readyState === 4) {
@@ -169,7 +169,7 @@ window.onload = function() {
                 var item = document.createElement('li');
                 
                 var link = document.createElement('a');
-                link.setAttribute('href', './events.php?id='+ele.id);
+                link.setAttribute('href', '/events/'+ele.id+'/');
                 
                 //get start time values
                 var startPeriod = 'a';

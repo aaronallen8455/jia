@@ -21,13 +21,13 @@ if (isset($_SESSION['isAdmin']) && $_SESSION['isAdmin'] === true) {
         $name = $name->fetchColumn();
         echo "<div class=\"centeredDiv\"><h2>Are you sure you want to remove the venue '$name?'";
         ?>
-    <form action="./removevenue.php?id=<?php echo $_GET['id']; ?>" method="post">
+    <form action="http://<?php echo BASE_URL; ?>removevenue/<?php echo $_GET['id']; ?>/" method="post">
         <input type="hidden" value="true" name="delete" />
         <button type="submit">Yes</button>
         <button type="button" id="cancelButton">Cancel</button>
     </form>
     </div>
-    <script type="application/javascript" src="js/cancel.js"></script>
+    <script type="application/javascript" src="http://<?php echo BASE_URL; ?>js/cancel.js"></script>
     <?php
     }
     

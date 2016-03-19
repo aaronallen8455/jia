@@ -3,7 +3,7 @@ Edit any of the fields below then click 'Save'.<br>Don't select a new picture to
 <br /><br />
 
 <div id="eventForm">
-<form action="./editvenue.php?id=<?php echo $_GET['id']; ?>" method="post" enctype="multipart/form-data">
+<form action="http://<?php echo BASE_URL; ?>editvenue/<?php echo $_GET['id']; ?>/" method="post" enctype="multipart/form-data">
     <?php
     //name input
     createInput('name', 'text', $venue_errors, 'Name: ', 'EDIT');
@@ -54,5 +54,5 @@ Edit any of the fields below then click 'Save'.<br>Don't select a new picture to
     ?>
     </form>
 </div>
-<script type="application/javascript" src="./js/addprofile.js"></script>
-<script type="application/javascript" src="./js/cancel.js"></script>
+<script type="application/javascript" src="http://<?php echo BASE_URL; ?>js/addprofile.js"></script>
+<script type="application/javascript" src="http://<?php echo BASE_URL; ?>js/cancel.js"></script>

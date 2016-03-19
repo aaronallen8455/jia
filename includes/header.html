@@ -20,9 +20,9 @@
     ?>
     </title>
     <link href='https://fonts.googleapis.com/css?family=Raleway:400,800' rel='stylesheet' type='text/css' />
-    <link rel="stylesheet" type="text/css" href="./css/normalize.css" media="all"/>
-    <link rel="stylesheet" type="text/css" href="./css/styles.css?<?php echo filemtime('./css/styles.css');?>" media="all" />
-    <script type="application/javascript" src="./js/menu.js"></script>
+    <link rel="stylesheet" type="text/css" href="http://<?php echo BASE_URL; ?>css/normalize.css" media="all"/>
+    <link rel="stylesheet" type="text/css" href="http://<?php echo BASE_URL; ?>css/styles.css?<?php echo filemtime('./css/styles.css');?>" media="all" />
+    <script type="application/javascript" src="http://<?php echo BASE_URL; ?>js/menu.js"></script>
 
 </head> 
 <body>
@@ -31,7 +31,7 @@
             <div class="header padToView">
                 <div class="titleDiv">
                     <div class="logo">
-                        <a href="./">
+                        <a href="http://<?php echo BASE_URL; ?>">
                             <h1>JIA</h1>
                             <p>Jazz In Austin</p>
                         </a>
@@ -56,7 +56,7 @@
                             ?>
                         </div>
                         <div class="utilities">
-                            <a href="./password_reset.php" title="Forgot your password?">Forgot?</a>
+                            <a href="http://<?php echo BASE_URL; ?>password_reset" title="Forgot your password?">Forgot?</a>
                             |
                             <label for="remember">Remember Me</label>
                             <input type="checkbox" name="login[remember]"/>
@@ -70,9 +70,9 @@
                         echo '<span class="userWelcome">Welcome, ' . $_SESSION['name'] . '!</span>'; 
                     ?>
                     <div class="memberControls">
-                        <a href="myaccount.php">My Account</a> | 
-                        <a href="addevent.php">Add Event</a> | 
-                        <a href="logout.php">Log Out</a>
+                        <a href="http://<?php echo BASE_URL; ?>myaccount/">My Account</a> |
+                        <a href="http://<?php echo BASE_URL; ?>addevent/">Add Event</a> |
+                        <a href="http://<?php echo BASE_URL; ?>logout/">Log Out</a>
                     </div>
                     <?php
                         } 
@@ -83,24 +83,24 @@
             <div class="navbar-container userAction padToView">
                 <div id="menuToggleWrapper"><span id="menuToggle">&#8801; Menu</span></div>
                 <ul class="nav menuVisibility">
-                    <li><a href="./#cal">Calendar / About</a></li>
-                    <li><a href="profiles.php">Musician Profiles</a></li>
-                    <li><a href="venues.php">Venues</a></li>
-                    <li><a href="booking.php">Booking</a></li>
+                    <li><a href="http://<?php echo BASE_URL; ?>#cal">Calendar / About</a></li>
+                    <li><a href="http://<?php echo BASE_URL; ?>profiles/">Musician Profiles</a></li>
+                    <li><a href="http://<?php echo BASE_URL; ?>venues/">Venues</a></li>
+                    <li><a href="http://<?php echo BASE_URL; ?>booking/">Booking</a></li>
                     <?php
                     //check if user is logged in
                     if (isset($_SESSION['id']) && filter_var($_SESSION['id'], FILTER_VALIDATE_INT, array('min_range'=>1))) {
                         ?>
-                    <li class="nav-login"><a href="myaccount.php">My Account</a></li>
-                    <li class="nav-login"><a href="logout.php">Log Out</a></li>
+                    <li class="nav-login"><a href="http://<?php echo BASE_URL; ?>myaccount/">My Account</a></li>
+                    <li class="nav-login"><a href="http://<?php echo BASE_URL; ?>logout/">Log Out</a></li>
                     <?php
                     }else{ ?>
-                    <li class="nav-login"><a href="login.php">Login</a></li>
-                    <li><a href="register.php">Register</a></li>
+                    <li class="nav-login"><a href="http://<?php echo BASE_URL; ?>login/">Login</a></li>
+                    <li><a href="http://<?php echo BASE_URL; ?>register/">Register</a></li>
                     <?php }
                     if (isset($_SESSION['id']) && filter_var($_SESSION['id'], FILTER_VALIDATE_INT, array('min_range'=>1))) {
                     ?>
-                    <li><a href="addevent.php">Add Event</a></li>
+                    <li><a href="http://<?php echo BASE_URL; ?>addevent/">Add Event</a></li>
                     <?php } ?>
                 </ul>
             </div>

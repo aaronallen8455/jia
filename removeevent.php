@@ -25,13 +25,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && filter_var($_GET['id'], FILTER_VALID
     }
     echo "<div class=\"centeredDiv\"><h2>Are you sure you want to remove the event '$r[1]?'";
     ?>
-<form action="./removeevent.php?id=<?php echo $_GET['id']; ?>" method="post">
+<form action="http://<?php echo BASE_URL; ?>removeevent/<?php echo $_GET['id']; ?>/" method="post">
     <input type="hidden" value="true" name="delete" />
     <button type="submit">Yes</button>
     <button type="button" id="cancelButton">Cancel</button>
 </form>
 </div>
-<script type="application/javascript" src="js/cancel.js"></script>
+<script type="application/javascript" src="http://<?php echo BASE_URL; ?>js/cancel.js"></script>
 <?php
     //check for form submission
 }else if ($_SERVER['REQUEST_METHOD'] === 'POST' && $_POST['delete'] === 'true') {

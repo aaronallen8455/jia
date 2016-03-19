@@ -9,8 +9,8 @@
     <?php 
     if (isset($_SESSION['id']) && ($row['user_id'] === $_SESSION['id'] || $_SESSION['isAdmin'])) { //if user is the creator of 
                                                                                                    //this page or is admin
-        echo '<a href="./editevent.php?id='.$_GET['id'].'">Click here to edit this event</a><br />'; //link to page editor
-        echo '<a href="./removeevent.php?id='.$_GET['id'].'">Click here to remove this event</a>'; //link to delete event
+        echo '<a href="http://'.BASE_URL.'editevent/'.$_GET['id'].'/">Click here to edit this event</a><br />'; //link to page editor
+        echo '<a href="http://'.BASE_URL.'removeevent/'.$_GET['id'].'/">Click here to remove this event</a>'; //link to delete event
     } 
     ?>
     <div class="event">
@@ -24,7 +24,7 @@
 
         <span class="eventDetails">Added by <?php 
             //if theres a profile associated with this creator, link to that profile page
-            if (!empty($row['profile'])) echo '<a href="./profiles.php?id='.$row['profile'].'">';
+            if (!empty($row['profile'])) echo '<a href="http://'.BASE_URL.'profiles/'.$row['profile'].'/">';
             echo $row['name'];
             if (!empty($row['profile'])) echo '</a>';
             echo ' on ' . $row['date_created']; ?>
@@ -32,7 +32,7 @@
         <div class="eventViewDiv">
             <ul class="eventViewList">
                 <li>Venue: <?php 
-                    if (!empty($row['venue_id'])) echo '<a href="./venues.php?id=' . $row['venue_id'] . '">';
+                    if (!empty($row['venue_id'])) echo '<a href="http://'.BASE_URL.'venues/' . $row['venue_id'] . '/">';
                     echo $row['venue'];
                     if (!empty($row['venue_id'])) echo '</a>';
                     ?></li>
@@ -77,7 +77,7 @@
                     for ($i=0; $i<count($band); $i++) {
                         $pair = explode(',', $band[$i]);
                         echo '<li>';
-                        if (array_key_exists($pair[0], $profiles)) echo '<a href="./profiles.php?id=' . $profiles[$pair[0]] . '">';
+                        if (array_key_exists($pair[0], $profiles)) echo '<a href="http://'.BASE_URL.'profiles/' . $profiles[$pair[0]] . '/">';
                         echo $pair[0];
                         if (!empty($pair[1])) echo ', <i>' . $pair[1] . '</i>';
                         if (array_key_exists($pair[0], $profiles)) echo '</a>';

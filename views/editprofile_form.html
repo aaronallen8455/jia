@@ -1,11 +1,11 @@
-<script type="application/javascript" src="./js/addprofile.js"></script>
-<script type="application/javascript" src="./js/cancel.js"></script>
+<script type="application/javascript" src="http://<?php echo BASE_URL; ?>js/addprofile.js"></script>
+<script type="application/javascript" src="http://<?php echo BASE_URL; ?>js/cancel.js"></script>
 <h2>Edit Profile</h2>
 Edit any of the fields below then click 'Save'.<br>Don't select a new picture to keep the current one, or check 'No Picture' to delete it.
 <br /><br />
 
 <div id="eventForm">
-<form action="./editprofile.php?id=<?php echo $_GET['id']; ?>" method="post" enctype="multipart/form-data">
+<form action="http://<?php echo BASE_URL; ?>editprofile/<?php echo $_GET['id']; ?>/" method="post" enctype="multipart/form-data">
     <?php
     createInput('bio', 'textarea', $profile_errors, 'Bio (Optional): ', 'EDIT');
     echo '<br />';

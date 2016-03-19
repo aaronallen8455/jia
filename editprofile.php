@@ -1,6 +1,6 @@
 <?php
 require './includes/config.inc.php';
-$pagetitle = 'Edit Profile';
+$pageTitle = 'Edit Profile';
 include './includes/header.html';
 //validate form submission
 $profile_errors = array();

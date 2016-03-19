@@ -1,10 +1,10 @@
     <h2>Musician Profiles</h2>
     <?php
     if (!empty($_SESSION['hasProfile'])) {
-        echo '<a href="./editprofile.php?id='.$_SESSION['id'].'">Click here to edit your profile</a><br/>';
-        echo '<a href="./removeprofile.php?id='.$_SESSION['id'].'">Click here to delete your profile</a><br/><br/>';
+        echo '<a href="http://'.BASE_URL.'editprofile/'.$_SESSION['id'].'/">Click here to edit your profile</a><br/>';
+        echo '<a href="http://'.BASE_URL.'removeprofile/'.$_SESSION['id'].'/">Click here to delete your profile</a><br/><br/>';
     }else if (isset($_SESSION['id'])) {
-        echo '<a href="./addprofile.php">Click here to create your profile page!</a><br /><br />';
+        echo '<a href="http://'.BASE_URL.'addprofile/">Click here to create your profile page!</a><br /><br />';
     }
     ?>
     Click on a name to view that person's profile page and see their upcoming shows.
@@ -17,7 +17,7 @@
             echo '<ul class="instrList">';
             foreach ($row as $r) {
                 echo '<li>';
-                echo '<a href="./profiles.php?name='.urlencode($r['name']).'">';
+                echo '<a href="http://'.BASE_URL.'profiles/'.str_replace('+','-', urlencode($r['name'])).'/">';
                 echo ucwords($r['name']);
                 echo '</a>';
                 echo '</li>';
@@ -28,4 +28,3 @@
         }
         ?>
     </div>
-</div>

@@ -1,11 +1,11 @@
-<script type="application/javascript" src="./js/addevent.js"></script>
-<script type="application/javascript" src="./js/cancel.js"></script>
+<script type="application/javascript" src="http://<?php echo BASE_URL; ?>js/addevent.js"></script>
+<script type="application/javascript" src="http://<?php echo BASE_URL; ?>js/cancel.js"></script>
 <span id="nameListJSON" style="display:none;"><?php echo isset($nameList)?$nameList:''; ?></span><h2>Edit Event</h2>
 Edit any of the fields below then click 'Save'.
 <br /><br />
 
 <div id="eventForm">
-<form action="./editevent.php?id=<?php echo $_GET['id']; ?>" method="post">
+<form action="http://<?php echo BASE_URL; ?>editevent/<?php echo $_GET['id']; ?>/" method="post">
     <?php
 
     createInput('title', 'text', $event_errors, 'Title: ', 'EDIT');

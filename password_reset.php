@@ -28,7 +28,7 @@ if (!isset($_SESSION['id'])) {
                     //Send email with instructions and token link
                     $from = "admin@jazzinaustin.com";
                     $headers = "From: JazzInAustin <$from>";
-                    $url = 'http://' . BASE_URL . 'password.php?t=' . $token;
+                    $url = 'http://' . BASE_URL . 'password/' . $token . '/';
                     $body = <<<EOT
 This email is in response to a forgotten password reset request at 'Jazz in Austin'. If you did make this request, click the following link to be able to access your account:
 $url
