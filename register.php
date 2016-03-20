@@ -78,7 +78,7 @@ Hello $first,
 
 Thank you for registering with Jazz in Austin. To activate your account, please follow the link below:
 
-http://www.jazzinaustin.com/register.php?vc=$vc
+http://jazzinaustin.com/register/$vc
 
 Have a nice day!
 EOT;
