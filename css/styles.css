@@ -624,8 +624,12 @@ textarea {
 .venueViewDesc {
     margin-top: 10px;
 }
+
 .venueViewEventsDiv > ul > li {
     padding: 5px;
+}
+.venueViewEventsDiv > ul > li > ul > li {
+    padding-left: 20px;
 }
 .venueViewEventsDiv > ul > li:nth-of-type(2n){
     background-color: #C7D0ED;
