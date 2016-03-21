@@ -39,8 +39,9 @@ if (isset($_SESSION['id']) && $_SESSION['isAdmin'] === true) {
                     //add this user to band
                     $band = $name;
                     break;
-                }
+                }else $name = null;
             }
+
             //add show to DB
             $data = array('Brass House', $show->date, $show->startTime, $show->endTime, $show->summary, $uid, $name, '');
             if ($stmt->execute($data)) {

@@ -834,6 +834,9 @@ textarea {
     .profileViewList dd {
         display: block;
     }
+    .profileDiv {
+        margin: 0 2px 0 2px;
+    }
     .accountEventsDiv, .accountProfileDiv {
         margin-bottom: 5px;
         width: 100%;

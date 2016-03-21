@@ -153,11 +153,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && filter_var($_GET['id'], FILTER_VALI
                     //create new entries
                     $q = 'SELECT u.id AS id FROM users AS u INNER JOIN profiles AS p ON p.user_id=u.id WHERE CONCAT_WS(\' \', LOWER(u.first_name), LOWER(u.last_name))=LOWER(?)';
                     $stmt = $dbc->prepare($q);
-                    for ($i = 0; $i < count($_POST['band']); $i++) {
-                        $stmt->execute(array(($_POST['band'][$i])));
-                        $uid = $stmt->fetchColumn();
-                        if ($uid) {
-                            $dbc->exec('INSERT INTO events_profiles (profile_id, event_id) VALUES (' . $uid . ', ' . $eid . ')');
+                    if (!empty($_POST['band'])) {
+                        for ($i = 0; $i < count($_POST['band']); $i++) {
+                            $stmt->execute(array(($_POST['band'][$i])));
+                            $uid = $stmt->fetchColumn();
+                            if ($uid) {
+                                $dbc->exec('INSERT INTO events_profiles (profile_id, event_id) VALUES (' . $uid . ', ' . $eid . ')');
+                            }
                         }
                     }
                     //}

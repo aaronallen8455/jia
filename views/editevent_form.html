@@ -48,10 +48,14 @@ Edit any of the fields below then click 'Save'.
         }*/
         if (!empty($bands[0])) {
             for ($i=0; $i<count($bands); $i++) {
-
-                list($b, $in) = (explode(',', $bands[$i]));
-                $band[$i] = $b;
-                $instr[$i] = $in;
+                //if its just a name, we can't run the list function
+                if (strstr($bands[$i], ',')) {
+                    list($b, $in) = (explode(',', $bands[$i]));
+                    $band[$i] = $b;
+                    $instr[$i] = $in;
+                }else{
+                    $band[$i] = $bands[$i];
+                }
             }
         }
     }else{
@@ -62,7 +66,7 @@ Edit any of the fields below then click 'Save'.
     for ($i=0; $i<count($band); $i++) {
         echo '<div class="memberDiv">';
         createInput("band[$i]", 'text', $event_errors, 'Name: ', null, array('value'=>$band[$i]));
-        createInput("instr[$i]", 'text', $event_errors, 'Instrument: ', null, array('value'=>$instr[$i]));
+        createInput("instr[$i]", 'text', $event_errors, 'Instrument: ', null, array('value'=>(isset($instr[$i])?$instr[$i]:null)));
         echo '<button class="memberDel" type="button">Remove</button>';
         echo '</div>';
     }

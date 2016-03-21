@@ -12,7 +12,9 @@ if (isset($_SESSION['id']) && ($_SESSION['id'] === $row['user_id'] || $_SESSION[
     echo '<a href="http://'.BASE_URL.'editprofile/'.$row['user_id'].'/">Click here to edit profile</a><br/>';
     echo '<a href="http://'.BASE_URL.'removeprofile/'.$row['user_id'].'/">Click here to remove profile</a><br/><br/>';
 }
-echo '<div class="profileViewDiv">';
+?>
+<div class="profileViewDiv">
+    <?php
  //display the picture
 if (!empty($row['pic'])) {
     echo '<img src="http://' . BASE_URL . $row['pic'].'" alt="" class="profilePic" />';
@@ -65,3 +67,4 @@ if (!empty($row['pic'])) {
         
 </div>
 <div class="fb-share-button" data-href="https://jazzinaustin.com<?php echo $_SERVER['REQUEST_URI']; ?>" data-layout="button"></div>
+</div>

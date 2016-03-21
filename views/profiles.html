@@ -12,7 +12,7 @@
         <?php
         foreach ($rows as $instr=>$row) {
             echo '<div class="eventDivWrapper">';
-            echo '<div class="eventDiv">';
+            echo '<div class="eventDiv profileDiv">';
             echo '<h3>'.ucwords($instr).'</h3>';
             echo '<ul class="instrList">';
             foreach ($row as $r) {
@@ -28,3 +28,5 @@
         }
         ?>
     </div>
+
+    <script type="application/javascript" src="http://<?php echo BASE_URL; ?>js/profile.js"></script>
