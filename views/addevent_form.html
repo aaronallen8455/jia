@@ -61,7 +61,7 @@
             for ($i=0; $i<count($_POST['band']); $i++) {
                 echo '<div class="memberDiv">';
                 createInput('band['.$i.']', 'text', $event_errors, 'Name: ', null, array('value'=>$_POST['band'][$i]));
-                createInput('instr['.$i.']', 'text', $event_errors, 'Instrument: ', null, array('value'=>$_POST['instr'][$i]));
+                createInput('instr['.$i.']', 'text', $event_errors, 'Instrument: ', null, array('value'=>(isset($_POST['instr'][$i])?$_POST['instr'][$i]:null)));
                 echo '<button class="memberDel" type="button">Remove</button>';
                 echo '</div>';
             }
