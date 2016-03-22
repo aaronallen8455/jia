@@ -176,7 +176,7 @@ if (isset($_SESSION['id']) && filter_var($_SESSION['id'], FILTER_VALIDATE_INT, a
         $instr = ucwords($r->fetchColumn());
     }
     //get the names of all this user's events
-    $r = $dbc->query("SELECT title, id FROM events WHERE user_id={$_SESSION['id']}");
+    $r = $dbc->query("SELECT title, id, DATE_FORMAT(`date`, '%c/%e/%y') AS edate FROM events WHERE user_id={$_SESSION['id']} ORDER BY `date` DESC");
     include './includes/form_functions.inc.php';
     //show the form
     include './views/addevent_form.html';

@@ -9,7 +9,7 @@
     <?php
     //print an option for each event title.
     foreach ($r as $row) {
-        echo '<option value="'.$row['id'].'">'.$row['title'].'</option>';
+        echo '<option value="'.$row['id'].'">'.substr($row['title'],0,20).' - '.$row['edate'].'</option>';
     }
     ?>
     </select></p>

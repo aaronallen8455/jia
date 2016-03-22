@@ -21,6 +21,8 @@ if (isset($_GET['vc']) && (strlen($_GET['vc']) === 12)) {
     if ($stmt->execute(array($vc))) {
         //show success message
         include './views/register_success.html';
+        //show login form
+        include './views/login_form.html';
         include './includes/footer.html';
         exit();
     }else{
