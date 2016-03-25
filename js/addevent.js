@@ -160,6 +160,8 @@ window.addEventListener('load', function() {
     }
     function minCap(ele) {
         if (parseInt(ele.value)>59) ele.value = 59;
+        //pad if a single digit
+        if (ele.value.length < 2) ele.value = (ele.value + '00').slice(0,2);
     }
     document.getElementById('startHour').onchange = function(){hourCap(this);};
     document.getElementById('endHour').onchange = function(){hourCap(this);};

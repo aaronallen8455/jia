@@ -1,7 +1,10 @@
 RewriteEngine On
 RewriteBase /
 
-RewriteRule ^test/?$ index.php
+#force non-www version
+RewriteCond %{HTTP_HOST} ^www\.(.*)$ [NC]
+RewriteRule ^(.*)$ http://%1/$1 [R=301,L]
+#particulars
 RewriteRule ^profiles/(\w+)-(\w+)/?$ profiles.php?name=$1+$2
 RewriteRule ^profiles/(\d+)/?$ profiles.php?id=$1
 RewriteRule ^events/(\d+)/?$ events.php?id=$1
