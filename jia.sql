@@ -174,9 +174,13 @@ DELIMITER $$
 CREATE PROCEDURE create_event (club VARCHAR(60), _date DATE, _start CHAR(4), _end CHAR(4), _title VARCHAR(80), _band TEXT, _id SMALLINT UNSIGNED, _desc TEXT, OUT eid SMALLINT)
 BEGIN
 DECLARE _vid SMALLINT;
-SELECT venues.id INTO _vid FROM venues WHERE club LIKE CONCAT('%', CONCAT(venues.name, '%')) LIMIT 1;
-INSERT INTO `events` (venue, date, start_time, end_time, title, user_id, band, `desc`) VALUES (club, _date, _start, _end, _title, _id, _band, _desc);
-SET eid=LAST_INSERT_ID();
+DECLARE dupe SMALLINT;
+SELECT `events`.id INTO dupe FROM `events` WHERE LOWER(`events`.venue)=LOWER(club) AND `events`.start_time=_start AND `events`.date=_date;
+IF dupe IS NULL THEN
+  SELECT venues.id INTO _vid FROM venues WHERE club LIKE CONCAT('%', CONCAT(venues.name, '%')) LIMIT 1;
+  INSERT INTO `events` (venue, date, start_time, end_time, title, user_id, band, `desc`) VALUES (club, _date, _start, _end, _title, _id, _band, _desc);
+  SET eid=LAST_INSERT_ID();
+END IF;
 IF _vid>=1 THEN
 INSERT INTO events_venues (venue_id, events_venues.event_id) VALUES (_vid, eid);
 END IF;

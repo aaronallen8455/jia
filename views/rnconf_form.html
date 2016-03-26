@@ -1,0 +1,41 @@
+<h2>Import Events From Reverbnation CSV File</h2>
+<p>Un-check any events that you do not want to import. You can also enter a specific title for each event.</p>
+<div class="eventForm">
+    <form action="" method="post">
+        <table class="rnImportTable" border="1">
+            <tr>
+                <th><input id="checkHeader" type="checkbox" checked /></th>
+                <th>Date and Venue</th>
+                <th><input id="titleHeader" placeholder="Title..." type="text"/></th>
+            </tr>
+        <?php
+        //create row for each event
+        $i = 0;
+        foreach (Event::$events as $event) {
+            echo '<tr>';
+            //checkbox
+            echo '<td>';
+            echo '<input type="checkbox" name="check['.$i.']" class="rnCheckbox" value="'.htmlentities(json_encode($event)).'" checked />';
+            echo '</td>';
+            //date and venue
+            echo '<td class="rnImportDV">';
+            $date = new DateTime($event->date);
+            echo $date->format('M jS, Y');
+            echo ' at ' . $event->venue;
+            echo '</td>';
+            //title
+            echo '<td>';
+            echo '<input type="text" name="title['.$i.']" value="'.$_SESSION['name'].'" />';
+            echo '</td>';
+
+            echo '</tr>';
+
+            $i++;
+        }
+        ?>
+        </table>
+        <br />
+        <input type="submit" name="submit2" value="Submit" />
+    </form>
+</div>
+<script type="application/javascript" src="http://<?php echo BASE_URL ?>js/rnimport.js"></script>

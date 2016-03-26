@@ -1,0 +1,13 @@
+<h2>Import Events From Reverbnation CSV File</h2>
+<p>Export your Reverbnation shows in CSV format and import them here.</p>
+<div class="eventForm">
+    <form action="" method="post" enctype="multipart/form-data">
+        <label for="rnCsv">Select CSV File: </label>
+        <?php if (array_key_exists('csv', $import_errors)) {
+            echo '<span class="error">' . $import_errors['csv'] . '</span><br>';
+        }
+        ?>
+        <input type="file" name="csv" id="rnCsv" />
+        <input type="submit" name="submit1" value="Submit" />
+    </form>
+</div>

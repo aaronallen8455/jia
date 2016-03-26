@@ -703,6 +703,17 @@ textarea {
     font-family: inherit;
     background-color: inherit;
 }
+.rnImportTable th, td{
+    min-width: 30px;
+    height: 30px;
+    padding: 2px;
+    text-align: center;
+}
+.rnImportTable input.error {
+    border: solid 1px red;
+}
+.rnImportDV {
+}
 /************************************************Media Queries************************************************/
 @media all and (max-width: 1130px) {
     .padToView {
