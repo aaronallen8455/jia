@@ -647,6 +647,7 @@ textarea {
     display: inline-block;
     vertical-align: top;
     margin-right: 5px;
+    margin-bottom: 10px;
 }
 .accountEventsDiv td {
     padding: 5px;
@@ -712,7 +713,12 @@ textarea {
 .rnImportTable input.error {
     border: solid 1px red;
 }
+.rnImportTable input[type=text] {
+    width: 200px;
+}
 .rnImportDV {
+    padding-left: 10px;
+    padding-right: 10px;
 }
 /************************************************Media Queries************************************************/
 @media all and (max-width: 1130px) {

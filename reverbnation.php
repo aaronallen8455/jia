@@ -1,6 +1,6 @@
 <?php
 require './includes/config.inc.php';
-$pageTitle = 'Import from Reverbnation';
+$pageTitle = 'Import from ReverbNation';
 include './includes/header.html';
 
 //ensure that user is logged in
@@ -52,11 +52,16 @@ if (isset($_SESSION['id']) && filter_var($_SESSION['id'], FILTER_VALIDATE_INT, a
                 include './includes/footer.html';
                 exit();
             }
-            //show the Confirmation form
-            include './views/rnconf_form.html';
-            include './includes/footer.html';
-            unlink($file['tmp_name']);
-            exit();
+            //check if events were found
+            if (!empty(Event::$events)) {
+                //show the Confirmation form
+                include './views/rnconf_form.html';
+                include './includes/footer.html';
+                unlink($file['tmp_name']);
+                exit();
+            }else{
+                echo '<div class="centeredDiv"><h2>No usable events were found in \''.$file['name'].'\'.</h2></div>';
+            }
         }
         //confirm list of events to import if second stage post.
     }elseif ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit2'])) {
@@ -73,9 +78,9 @@ if (isset($_SESSION['id']) && filter_var($_SESSION['id'], FILTER_VALIDATE_INT, a
                 $date = $event->date;
                 $venue = $event->venue;
                 $band = $event->band;
-                $desc = $event->desc;
+                $desc = strip_tags($event->desc);
                 $start = $event->startTime;
-                $title = $_POST['title'][$i];
+                $title = strip_tags($_POST['title'][$i]);
                 //insert into DB
                 $stmt->execute(array($venue, $date, $start, null, $title, $band, $_SESSION['id'], $desc));
                 //get event id
@@ -99,8 +104,8 @@ if (isset($_SESSION['id']) && filter_var($_SESSION['id'], FILTER_VALIDATE_INT, a
                 else echo 'The event "' . $title . '" was not imported because it already exists in our database.<br/>';
             }
             //display success message.
-            echo '<div class="centeredDiv">Import Completed!</div>';
-        }else echo '<div class="centeredDiv">No events found.</div>';
+            echo '<div class="centeredDiv"><h2>Import Completed!</h2></div>';
+        }else echo '<div class="centeredDiv"><h2>No events found.</h2></div>';
 
         include './includes/footer.html';
         exit();

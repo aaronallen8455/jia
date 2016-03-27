@@ -2,6 +2,7 @@
 <a href="http://<?php echo BASE_URL; ?>password/" class="changePassword">Click Here to change your password</a>
 <div class="accountEventsDiv">
     <h3>Your Events</h3>
+    <a href="http://<?php echo BASE_URL; ?>reverbnation/">Import Events From ReverbNation</a>
     <table>
         <?php
         if ($events && $row = $events->fetch(PDO::FETCH_ASSOC)) {
@@ -9,17 +10,49 @@
             do {
                 echo '<tr>';
                 echo '<td>'.$row['edate'].'</td>';
-                echo '<td><a href="http://'.BASE_URL.'events/'.$row['id'].'/">'.$row['title'].' @ '.$row['venue'].'</a></td>';
+                //shorten title if longer than 25 chars
+                $title = $row['title'];
+                if (strlen($title) > 25) {
+                    $title = substr($title, 0, 25);
+                    $title .= '...';
+                }
+                echo '<td><a href="http://'.BASE_URL.'events/'.$row['id'].'/">'.$title.' @ '.$row['venue'].'</a></td>';
                 echo '<td><a href="http://'.BASE_URL.'editevent/'.$row['id'].'/">Edit</a></td>';
                 echo '<td><a href="http://'.BASE_URL.'removeevent/'.$row['id'].'/">Remove</a></td>';
             }while ($row = $events->fetch(PDO::FETCH_ASSOC));
+            $events->closeCursor();
         }else{
-            echo '<tr><i>You don\'t have any events</i></tr>';
+            echo '<tr><td><i>You don\'t have any events</i></td></tr>';
         }
         ?>
     </table>
     <a href="http://<?php echo BASE_URL; ?>addevent/">Add a New Event</a>
 </div>
+
+<?php if ($taggedEvents): ?>
+<div class="accountEventsDiv">
+    <h3>Events You Are Tagged In</h3>
+    <table>
+        <?php
+        if ($row = $taggedEvents->fetch(PDO::FETCH_ASSOC)) {
+            echo '<th>Date</th><th>Title</th>';
+            do {
+                echo '<tr>';
+                echo '<td>'.$row['edate'].'</td>';
+                //shorten title if longer than 25 chars
+                $title = $row['title'];
+                if (strlen($title) > 25) {
+                    $title = substr($title, 0, 25);
+                    $title .= '...';
+                }
+                echo '<td><a href="http://'.BASE_URL.'events/'.$row['id'].'/">'.$title.' @ '.$row['venue'].'</a></td>';
+                echo '</tr>';
+            }while ($row = $taggedEvents->fetch(PDO::FETCH_ASSOC));
+        }
+        ?>
+    </table>
+</div>
+<?php endif; ?>
 <div class="accountProfileDiv">
     <h3>Musician Profile</h3>
     <ul>

@@ -1,12 +1,13 @@
-<h2>Import Events From Reverbnation CSV File</h2>
-<p>Un-check any events that you do not want to import. You can also enter a specific title for each event.</p>
+<h2>Import Events From ReverbNation CSV File</h2>
+<p>Un-check any events that you do not want to import. You can also enter a specific title or band name for each event.</p>
+<br />
 <div class="eventForm">
     <form action="" method="post">
         <table class="rnImportTable" border="1">
             <tr>
                 <th><input id="checkHeader" type="checkbox" checked /></th>
                 <th>Date and Venue</th>
-                <th><input id="titleHeader" placeholder="Title..." type="text"/></th>
+                <th><input id="titleHeader" placeholder="Event Title / Band Name" type="text"/></th>
             </tr>
         <?php
         //create row for each event
