@@ -190,7 +190,7 @@ DELIMITER ;
 DELIMITER $$
 CREATE PROCEDURE get_profile_events (uid SMALLINT UNSIGNED)
 BEGIN
-SELECT `events`.id AS id, DATE_FORMAT(`date`, '%M %D, %Y') AS edate, start_time, end_time, title, venue
+SELECT `events`.id AS id, DATE_FORMAT(`date`, '%a. %M %D, %Y') AS edate, start_time, end_time, title, venue
 FROM `events` JOIN events_profiles ON `events`.id=event_id
 WHERE profile_id=uid AND `date` >= CURDATE()
 ORDER BY `date` ASC, start_time ASC;

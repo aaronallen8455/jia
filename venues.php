@@ -21,7 +21,7 @@ if (!empty($_GET)) {
     $row = $r->fetch(PDO::FETCH_ASSOC);
     $r->closeCursor();
     //get associated event info
-    if ($r = $dbc->query("SELECT title, events.id, DATE_FORMAT(`date`, '%M %D, %Y') AS edate, start_time, end_time
+    if ($r = $dbc->query("SELECT title, events.id, DATE_FORMAT(`date`, '%a. %M %D, %Y') AS edate, start_time, end_time
     FROM venues JOIN events_venues ON venues.id=venue_id JOIN events ON events.id=event_id
     WHERE venues.id={$row['id']} AND `date` >= CURDATE()
     ORDER BY `date` ASC")) {
