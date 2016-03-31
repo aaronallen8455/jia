@@ -127,6 +127,7 @@ window.onload = function() {
         //holds the date: Sat, Dec 8th
         this.header = document.createElement('h2');
         var dater = new Date();
+        dater.setDate(1); //to keep the month from changing.
         dater.setFullYear(year);
         dater.setMonth(month);
         dater.setDate(date);
@@ -247,6 +248,17 @@ window.onload = function() {
         next.addEventListener('click', function(e) {
             //adjust the last selected values
             lastSelected[2] += daysSelected;
+            var nextDate = new Date();
+            nextDate.setDate(1);
+            nextDate.setFullYear(lastSelected[0]);
+            nextDate.setMonth(lastSelected[1]);
+            nextDate.setDate(lastSelected[2]);
+
+            lastSelected[2] = nextDate.getDate();
+            lastDrawn[1] = lastSelected[1] = nextDate.getMonth();
+            lastDrawn[0] = lastSelected[0] = nextDate.getFullYear();
+
+            /*
             if (lastSelected[2]-numDays(lastSelected[0],lastSelected[1]) > 0) { //if it goes to the next month
                 lastSelected[2] -= numDays(lastSelected[0],lastSelected[1]);
                 lastSelected[1]++;
@@ -256,24 +268,34 @@ window.onload = function() {
                     lastSelected[0]++;
                     lastDrawn[0] = lastSelected[0];
                 }
-            }
-            daySelectHandler(e, lastSelected[0], lastSelected[1], lastSelected[2]);
+            }*/
+            daySelectHandler(e, nextDate.getFullYear(), nextDate.getMonth(), nextDate.getDate());
         });
         
         pre.addEventListener('click', function(e) {
             //adjust the last selected values
             
             lastSelected[2] -= daysSelected;
-            
+            var prevDate = new Date();
+            prevDate.setDate(1);
+            prevDate.setFullYear(lastSelected[0]);
+            prevDate.setMonth(lastSelected[1]);
+            prevDate.setDate(lastSelected[2]);
+
+            lastSelected[2] = prevDate.getDate();
+            lastSelected[1] = prevDate.getMonth();
+            lastSelected[0] = prevDate.getFullYear();
+
+            /*
             if (lastSelected[2] < 1) {
                 if (lastSelected[1] === 0) {
                     lastSelected[1] = 11;
                     lastSelected[0]--;
                 }else lastSelected[1]--;
                 lastSelected[2] += numDays(lastSelected[0], lastSelected[1]);
-            }
+            }*/
             
-            daySelectHandler(e, lastSelected[0], lastSelected[1], lastSelected[2]);
+            daySelectHandler(e, prevDate.getFullYear(), prevDate.getMonth(), prevDate.getDate());
             
         });
     }
