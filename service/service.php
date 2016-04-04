@@ -75,7 +75,7 @@ if (isset($_GET['id']) && filter_var($_GET['id'], FILTER_VALIDATE_INT, array('mi
     //build the calendar list
     if (!empty($name)) {
         //print the header
-        echo "<h2>My Upcoming Shows</h2>";
+        echo "<h2>Upcoming Shows</h2>";
         //create the list
         if (empty(Event::$events)) {
             echo '<i>There are currently no upcoming events.</i><br />';

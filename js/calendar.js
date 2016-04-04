@@ -111,7 +111,9 @@ window.onload = function() {
         }
         req.send(msg);
         //create the day display elements
-        
+
+        //create history state entry
+        pushState();
     }
     //a class for creating day display elements
     function DayDisplay(year, month, date, odd, data) {
@@ -434,7 +436,34 @@ window.onload = function() {
         }
         return day;
     }
+
+    var pushState = (function () {
+        var isFirst = true;
+
+        return function () {
+            if (!isFirst) {
+                //build the query string
+                var m = ('0' + lastSelected[1]).slice(-2);
+                var d = ('0' + lastSelected[2]).slice(-2);
+                var ds = ('0' + daysSelected).slice(-2);
+                window.history.replaceState({}, '', '/?' + lastSelected[0] + m + d + ds);
+            }
+            if (isFirst) isFirst = false;
+        };
+    })();
+
     //draw initial calendar
-    //drawCalendar(date.getFullYear(), date.getMonth(), date.getDate(), lastSelected, daysSelected);
-    daySelectHandler(false, currentYear, currentMonth, currentDate);
-}
+    //if no query data exists, use current date and numDays. Otherwise, use saved state
+    if (location.search && location.search.match(/^\?\d{10}$/)) {
+        //parse out the date and numDays info
+        var year = parseInt(location.search.slice(1,5));
+        var month = parseInt(location.search.slice(5,7));
+        var day = parseInt(location.search.slice(7,9));
+        daysSelected = parseInt(location.search.slice(9));
+        numDaysSelect.value = daysSelected;
+        daySelectHandler(false, year, month, day);
+    }else{
+        daySelectHandler(false, currentYear, currentMonth, currentDate);
+    }
+
+};

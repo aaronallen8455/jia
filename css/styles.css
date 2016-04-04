@@ -704,7 +704,7 @@ textarea {
     font-family: inherit;
     background-color: inherit;
 }
-.rnImportTable th, td{
+.rnImportTable th, .rnImportTable td{
     min-width: 30px;
     height: 30px;
     padding: 2px;
@@ -873,5 +873,11 @@ textarea {
     }
     .splashNarrow {
         font-size: 0.65em;
+    }
+    .profilePic {
+        border: none;
+    }
+    .venueViewPic {
+        border: none;
     }
 }

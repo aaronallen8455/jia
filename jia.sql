@@ -142,7 +142,7 @@ CREATE PROCEDURE get_venues ()
 BEGIN
 SELECT name, pic, venues.id, `desc`
 FROM venues
-LEFT OUTER JOIN ( SELECT venue_id, COUNT(*) AS cnt FROM `events_venues` JOIN venues ON venue_id=venues.id GROUP BY venue_id) c ON c.venue_id=venues.id
+LEFT OUTER JOIN ( SELECT venue_id, COUNT(*) AS cnt FROM `events_venues` JOIN venues ON venue_id=venues.id JOIN events ON event_id=events.id WHERE events.date >= CURDATE() GROUP BY venue_id) c ON c.venue_id=venues.id
 ORDER BY c.cnt DESC, name ASC;
 END $$
 DELIMITER ;

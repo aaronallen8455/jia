@@ -91,16 +91,16 @@ To display your Jazz in Austin events on your personal website, follow these ste
         }
     </style>
     <div id="preview">
-        <h2>My Upcoming Shows</h2>
+        <h2>Upcoming Shows</h2>
         <ul>
-            <li class="date"><u><?php echo date('F jS, Y'); ?></u>
+            <li class="date"><u><?php echo date('D. F jS, Y'); ?></u>
                 <ul>
                     <li class="event">
                         6:00pm - 8:00pm: <span class="previewLink">Event Name @ Venue</span>
                     </li>
                 </ul>
             </li>
-            <li class="date"><u><?php echo date('F jS, Y', strtotime('+1 week')); ?></u>
+            <li class="date"><u><?php echo date('D. F jS, Y', strtotime('+1 week')); ?></u>
                 <ul>
                     <li class="event">
                         2:00pm - 5:00pm: <span class="previewLink">Event Name @ Venue</span>
@@ -110,7 +110,7 @@ To display your Jazz in Austin events on your personal website, follow these ste
                     </li>
                 </ul>
             </li>
-            <li class="date"><u><?php echo date('F jS, Y', strtotime('+12 day')); ?></u>
+            <li class="date"><u><?php echo date('D. F jS, Y', strtotime('+12 day')); ?></u>
                 <ul>
                     <li class="event">
                         6:00pm - 8:00pm: <span class="previewLink">Event Name @ Venue</span>
