@@ -46,8 +46,12 @@
                     $title .= '...';
                 }
                 echo '<td><a href="http://'.BASE_URL.'events/'.$row['id'].'/">'.$title.' @ '.$row['venue'].'</a></td>';
+                //untag
+                echo '<td><a href="http://'.BASE_URL.'removetag/'.$row['id'].'/">Un-Tag</a></td>';
                 echo '</tr>';
             }while ($row = $taggedEvents->fetch(PDO::FETCH_ASSOC));
+        }else{
+            echo '<tr><td><i>You have\'nt been tagged in any events.</i></td></tr>';
         }
         ?>
     </table>
