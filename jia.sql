@@ -103,6 +103,14 @@ CREATE TABLE `events_venues` (
     CONSTRAINT `fk_vevent_id` FOREIGN KEY (`event_id`) REFERENCES `events` (`id`) ON DELETE CASCADE
 ) ENGINE = InnoDB  DEFAULT CHARSET=utf8;
 
+CREATE TABLE `venue_owner` (
+    `venue_id` SMALLINT UNSIGNED NOT NULL,
+    `user_id` SMALLINT UNSIGNED NOT NULL,
+    PRIMARY KEY (`venue_id`, `user_id`),
+    CONSTRAINT `fk_ovenue_id` FOREIGN KEY (`venue_id`) REFERENCES `venues` (`id`) ON DELETE CASCADE,
+    CONSTRAINT `fk_vuser_id` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
+) ENGINE = InnoDB  DEFAULT CHARSET=utf8;
+
 -- stored procedures
 
 DELIMITER $$
@@ -195,4 +203,28 @@ FROM `events` JOIN events_profiles ON `events`.id=event_id
 WHERE profile_id=uid AND `date` >= CURDATE()
 ORDER BY `date` ASC, start_time ASC;
 END $$
+DELIMITER ;
+-- get Log in info. also check for profile and venue ownership
+DELIMITER $$
+CREATE PROCEDURE log_in (user_email VARCHAR(80), OUT hasProfile SMALLINT, OUT numVenues SMALLINT, OUT venueId SMALLINT UNSIGNED)
+BEGIN
+    SELECT COUNT(*) INTO hasProfile FROM profiles JOIN users ON user_id=users.id WHERE email=user_email;
+    SELECT COUNT(*) INTO numVenues FROM venue_owner JOIN users ON user_id=users.id WHERE email=user_email;
+    IF numVenues=1 THEN
+        SELECT venues.id INTO venueId FROM venues JOIN venue_owner ON venues.id = venue_owner.venue_id JOIN users ON venue_owner.user_id = users.id WHERE email=user_email;
+    END IF;
+    SELECT hasProfile, numVenues, venueId, pass, id, CONCAT_WS(' ', first_name, last_name) AS name, type FROM users WHERE email=user_email;
+END $$
+DELIMITER ;
+-- get Log in info using user_id (instead of email) from RememberMe cookie
+DELIMITER $$
+CREATE PROCEDURE log_in_rm (uid SMALLINT UNSIGNED, OUT hasProfile SMALLINT, OUT numVenues SMALLINT, OUT venueId SMALLINT UNSIGNED)
+    BEGIN
+        SELECT COUNT(*) INTO hasProfile FROM profiles JOIN users ON user_id=users.id WHERE users.id=uid;
+        SELECT COUNT(*) INTO numVenues FROM venue_owner JOIN users ON user_id=users.id WHERE users.id=uid;
+        IF numVenues=1 THEN
+            SELECT venues.id INTO venueId FROM venues JOIN venue_owner ON venues.id = venue_owner.venue_id JOIN users ON venue_owner.user_id = users.id WHERE users.id=uid;
+        END IF;
+        SELECT hasProfile, numVenues, venueId, pass, id, CONCAT_WS(' ', first_name, last_name) AS name, type FROM users WHERE users.id=uid;
+    END $$
 DELIMITER ;

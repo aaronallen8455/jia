@@ -15,7 +15,10 @@
         if (isset($_SESSION['isAdmin']) && $_SESSION['isAdmin'] === true) {
             echo '<a href="http://'.BASE_URL.'editvenue/'.$row['id'].'/">Click here to edit this venue page.</a><br />';
             echo '<a href="http://'.BASE_URL.'removevenue/'.$row['id'].'/">Click here to delete this venue page.</a><br /><br />';
-        } 
+        }else if (isset($_SESSION['venuesOwned']) && in_array($row['id'], $_SESSION['venuesOwned'])) {
+            echo '<a href="http://'.BASE_URL.'editvenue/'.$row['id'].'/">Click here to edit this venue page.</a><br />';
+            echo '<a href="http://'.BASE_URL.'removevenue/'.$row['id'].'/">Click here to delete this venue page.</a><br /><br />';
+        }
         //show image if exists
         if (!empty($row['pic'])) {
             echo '<img src="http://'.BASE_URL .$row['pic'].'" class="venueViewPic" />';

@@ -58,7 +58,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_SESSION['id'])) {
             }
             //remove rm_token if exists
             if ($dbc->exec('DELETE FROM rm_tokens WHERE user_id='.$_SESSION['id'])) {
-                setcookie('rm', '', time()-3600); //remove cookie
+                setcookie('rm', '', time()-3600, '/'); //remove cookie
             }
             exit();
         }else{
@@ -66,7 +66,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_SESSION['id'])) {
         }
     }
 }
-//determin which version of the PW change form to display.
+//determine which version of the PW change form to display.
 if (isset($_SESSION['id']) && !isset($_GET['t'])) {//logged in
     //show the change password form.
     require './includes/form_functions.inc.php';
@@ -78,18 +78,45 @@ if (isset($_SESSION['id']) && !isset($_GET['t'])) {//logged in
         include './views/resetpw_form.html';
     }else{
         require MYSQL;
-        $q = "SELECT user_id, type, CONCAT_WS(' ', first_name, last_name) AS name
+        /*$q = "SELECT user_id, type, CONCAT_WS(' ', first_name, last_name) AS name
         FROM auth_tokens JOIN users ON user_id=id
+        WHERE token=? AND expires > NOW()";*/
+        //get user id to feed into log_in_rm()
+        $q = "SELECT user_id FROM auth_tokens JOIN users ON user_id=id
         WHERE token=? AND expires > NOW()";
         $stmt = $dbc->prepare($q);
-        if ($stmt->execute(array($_GET['t'])) && $row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+        if ($stmt->execute(array($_GET['t'])) && $uid = $stmt->fetchColumn()) {
+            $stmt->closeCursor();
+            $q = 'CALL log_in_rm(?, @hasProfile, @numVenues, @venueId)';
+            $stmt = $dbc->prepare($q);
+            $stmt->execute(array($uid));
+            $row = $stmt->fetch(PDO::FETCH_ASSOC);
+            $stmt->closeCursor();
             if (!empty($row['type'])) { //user acct is active
                 //regen session id
                 session_regenerate_id(true);
                 //set session atts
                 $_SESSION['id'] = $row['user_id'];
-                $_SESSION['isAdmin'] = ($row['type'] === 'a')?true:false;
+                if ($row['type'] === 'a')
+                    $_SESSION['isAdmin'] = true;
                 $_SESSION['name'] = $row['name'];
+                if ($row['hasProfile'] == 1)
+                    $_SESSION['hasProfile'] = true;
+                //check for venue ownership
+                if ((int)$row['numVenues'] !== 0) {
+                    $_SESSION['venuesOwned'] = array();
+                    if ((int)$row['numVenues'] > 1) {
+                        //get all venue names
+                        $q = 'SELECT venues.id FROM venues JOIN venue_owner ON venue_id=id WHERE user_id='.$_SESSION['id'];
+                        $stmt = $dbc->query($q);
+                        while ($vid = $stmt->fetchColumn()) {
+                            $_SESSION['venuesOwned'][] = $vid;
+                        }
+                    }else{
+                        //one venue owned
+                        $_SESSION['venuesOwned'][] = $row['venueId'];
+                    }
+                }
                 //show pw reset form
                 require './includes/form_functions.inc.php';
                 include './views/resetpw_form.html';

@@ -9,9 +9,30 @@ if (!isset($_SESSION['id'])) {
     include './includes/footer.html';
     exit();
 }
+
+require MYSQL;
+//check that user is creator of event, an admin, or has ownership of the event's venue.
+if (filter_var($_GET['id'], FILTER_VALIDATE_INT, array('min_range'=>1))) {
+    if (empty($_SESSION['isAdmin'])) {
+        $q = 'SELECT venues.user_id AS uidc, venue_owner.user_id AS uido FROM venues
+LEFT OUTER JOIN venue_owner ON venue_owner.venue_id=venues.id WHERE venues.id='.$_GET['id'];
+        $row = $dbc->query($q)->fetch(PDO::FETCH_NUM);
+        //check for id match
+        if (!in_array($_SESSION['id'], $row)) {
+            echo '<div class="centeredDiv"><h2>You\'re not authorized to edit this event.</h2></div>';
+            include './includes/footer.html';
+            exit();
+        }
+    }
+}else{
+    echo '<div class="centeredDiv"><h2>Invalid Event.</h2></div>';
+    include './includes/footer.html';
+    exit();
+}
+
 //check for submitted form
 $event_errors = array();
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && filter_var($_GET['id'], FILTER_VALIDATE_INT, array('min_range'=>1))) {
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     //fields: Title, Venue, Date, Start time, end time, description
     //validate title
     if (isset($_POST['title']) && strlen($_POST['title']) <= 80 && strlen($_POST['title']) >= 3) {
@@ -108,7 +129,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && filter_var($_GET['id'], FILTER_VALI
     }
     //if no errors, update event
     if (empty($event_errors)) {
-        require_once MYSQL;
+        //require_once MYSQL;
         //make sure that user is creator of event or is admin
         $q = $dbc->query("SELECT user_id, band, venue, start_time, `date` FROM events WHERE id={$_GET['id']}");
         if ($row = $q->fetch(PDO::FETCH_ASSOC)) {
@@ -129,8 +150,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && filter_var($_GET['id'], FILTER_VALI
         //if time, date, or venue was changed, make sure it is not a duplicate
         if ($row['start_time'] !== $start || $row['venue'] !== $venue || $row['date'] !== $date) {
             //check for duplicate at this venue and time
-            $q = $dbc->query("SELECT id FROM events WHERE start_time=$start AND `date`=$date AND venue=$venue");
-            if ($q->fetchColumn()) {
+            $q = $dbc->query("SELECT id FROM events WHERE start_time='$start' AND `date`='$date' AND venue='$venue'");
+            if ($q && $q->fetchColumn()) {
                 $event_errors['venue'] = 'An event already exists at this time and place';
             }
         }
@@ -188,9 +209,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && filter_var($_GET['id'], FILTER_VALI
 }
 
 //validate event id
-if (($_SERVER['REQUEST_METHOD'] === 'GET' || !empty($event_errors)) && filter_var($_GET['id'], FILTER_VALIDATE_INT, array('min_range'=>1))) {
+if ($_SERVER['REQUEST_METHOD'] === 'GET' || !empty($event_errors)) {
     //check user id against event user id or if user is admin
-    require_once MYSQL;
+    //require_once MYSQL;
     //get all the details for the event
     $event = $dbc->query('SELECT user_id, title, venue, DATE_FORMAT(`date`, \'%c/%e/%y\') AS date, start_time, end_time, `desc`, band FROM events WHERE id=' . $_GET['id']);
     if ($event) {

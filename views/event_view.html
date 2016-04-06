@@ -7,11 +7,11 @@
   fjs.parentNode.insertBefore(js, fjs);
 }(document, 'script', 'facebook-jssdk'));</script>
     <?php 
-    if (isset($_SESSION['id']) && ($row['user_id'] === $_SESSION['id'] || $_SESSION['isAdmin'])) { //if user is the creator of 
-                                                                                                   //this page or is admin
+    if (isset($_SESSION['id']) && ($row['user_id'] === $_SESSION['id'] || $_SESSION['isAdmin']) || (isset($_SESSION['venuesOwned']) && in_array($row['venue_id'], $_SESSION['venuesOwned']))) { //if user is the creator of 
+                                                                                                   //this page or is admin or owns the venue
         echo '<a href="http://'.BASE_URL.'editevent/'.$_GET['id'].'/">Click here to edit this event</a><br />'; //link to page editor
         echo '<a href="http://'.BASE_URL.'removeevent/'.$_GET['id'].'/">Click here to remove this event</a>'; //link to delete event
-    } 
+    }
     ?>
     <div class="event">
         <h2><?php echo $row['title']; ?>
