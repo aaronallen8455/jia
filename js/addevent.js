@@ -1,3 +1,9 @@
+//is local? get base url
+var BASEURL;
+if (window.location.pathname.slice(0,5) === '/jia/') {
+    BASEURL = window.location.origin + '/jia';
+}else BASEURL = window.location.origin;
+
 window.addEventListener('load', function() {
     var copyCheck = document.getElementById('copyCheck');
     var copySelect = document.getElementById('copySelect');
@@ -38,7 +44,7 @@ window.addEventListener('load', function() {
                 var data = {id: this.value};
                 data = JSON.stringify(data);
                 var req = new XMLHttpRequest();
-                req.open('POST','/ajax/addevent.ajax.php',true);
+                req.open('POST', BASEURL + '/ajax/addevent.ajax.php',true);
                 req.setRequestHeader('Content-type', 'application/json');
                 req.onreadystatechange = function() {
                     if(req.readyState === 4) {
@@ -178,7 +184,7 @@ window.addEventListener('load', function() {
         if (isNaN(i)) continue;
         //attach the calendar icon
         var image = document.createElement('img');
-        image.setAttribute('src', '/images/calendar.gif');
+        image.setAttribute('src', BASEURL + '/images/calendar.gif');
         image.width = 25;
         image.height = 25;
         cals[i].appendChild(image);

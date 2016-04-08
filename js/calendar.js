@@ -1,3 +1,9 @@
+//is local? get base url
+var BASEURL;
+if (window.location.pathname.slice(0,5) === '/jia/') {
+    BASEURL = window.location.origin + '/jia';
+}else BASEURL = window.location.origin;
+
 window.onload = function() {
     var date = new Date();
     var currentDate = date.getDate(); //date number 1-31
@@ -22,7 +28,7 @@ window.onload = function() {
         calendarTable.appendChild(dowHeading);
         for (var i=0; i<7; i++) {
             var heading = document.createElement('td');
-            var day = dayName(i)
+            var day = dayName(i);
             heading.innerHTML = day;
             dowHeading.appendChild(heading);
         }
@@ -89,7 +95,7 @@ window.onload = function() {
         msg = JSON.stringify(msg); //the object sent to the ajax script
         //query the database
         var req = new XMLHttpRequest();
-        req.open('POST','/ajax/calendar.ajax.php',true);
+        req.open('POST', BASEURL + '/ajax/calendar.ajax.php',true);
         req.setRequestHeader('Content-type', 'application/json');
         req.onreadystatechange = function() {
             if(req.readyState === 4) {
@@ -108,7 +114,7 @@ window.onload = function() {
                 }
                 resizeEventElements();
             }
-        }
+        };
         req.send(msg);
         //create the day display elements
 
@@ -222,7 +228,7 @@ window.onload = function() {
             lastDrawn[0]--;
         }
         drawCalendar(lastDrawn[0], lastDrawn[1], currentDate, lastSelected, daysSelected);
-    }
+    };
     //go forward one month
     document.getElementById('calendarRight').onclick = function(e) {
         e.preventDefault();
@@ -232,7 +238,7 @@ window.onload = function() {
             lastDrawn[0]++;
         }
         drawCalendar(lastDrawn[0], lastDrawn[1], currentDate, lastSelected, daysSelected);
-    }
+    };
     //create the next and previous links
     for (var i=0; i<displayControl.length; i++) {
         

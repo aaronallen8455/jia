@@ -720,6 +720,18 @@ textarea {
     padding-left: 10px;
     padding-right: 10px;
 }
+.feedburnerFeedBlock {
+    margin: auto;
+    padding: inherit;
+
+}
+.feedburnerFeedBlock ul, .feedburnerFeedBlock p {
+    padding-left: 40px;
+    margin-top: 16px;
+    margin-bottom: 16px;
+}
+.feedburnerFeedBlock li {
+}
 /************************************************Media Queries************************************************/
 @media all and (max-width: 1130px) {
     .padToView {
