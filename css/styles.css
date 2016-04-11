@@ -870,6 +870,9 @@ textarea {
         margin-bottom: 5px;
         width: 100%;
     }
+    .feedburnerFeedBlock ul, .feedburnerFeedBlock p {
+        padding-left: 0px;
+    }
 }
 @media all and (max-width: 480px) {
     p {
@@ -892,4 +895,5 @@ textarea {
     .venueViewPic {
         border: none;
     }
+
 }

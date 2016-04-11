@@ -1,3 +1,46 @@
+<style>
+    .feedTitle, .headline {
+        font-size: 1.17em;
+        font-weight: bold;
+    }
+    .userAuthor {
+        margin-top: 40px;
+        padding-left: 10px;
+        font-style: italic;
+    }
+    .eventSubArticle {
+        position: relative;
+        margin-top: 40px;
+        margin-bottom: 40px;
+        padding-left: 10px;
+        padding-right: 10px;
+        font-size: 95%;
+        text-align: justify;
+    }
+    .eventSubArticle::before, .eventSubArticle::after {
+        display: block;
+        position: absolute;
+        width: 40px;
+        height: 40px;
+        font-size: 4em;
+        color: rgba(255, 255, 255, 0.2);
+    }
+    .eventSubArticle::before {
+        content: "\201c";
+        top: 0;
+        left: 0;
+    }
+    .eventSubArticle::after{
+        content: "\201d";
+        bottom: 0;
+        right: 0;
+    }
+    .additionalNotes {
+        font-size: 90%;
+        font-style: italic;
+    }
+</style>
+
 <h2>JIA Weekly: The Jazz in Austin Blog</h2>
 
 <script src="http://feeds.feedburner.com/jiaweekly?format=sigpro" type="text/javascript" ></script>
