@@ -53,7 +53,7 @@ if (isset($_GET['id']) || isset($_GET['name'])) {
         $q = $dbc->query("SELECT id, DATE_FORMAT(`date`, '%a. %M %D, %Y') AS edate, start_time, end_time, title, venue
         FROM events_profiles JOIN events ON event_id=id
         WHERE profile_id={$row['user_id']} AND `date` >= CURDATE()
-        ORDER BY `date` ASC");
+        ORDER BY `date` ASC, start_time ASC");
         while ($r = $q->fetch(PDO::FETCH_ASSOC)) {
             $r['time'] = parseTime($r['start_time']).'-'.parseTime($r['end_time']);
             $events[$r['edate']][] = $r;
