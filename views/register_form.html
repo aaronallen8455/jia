@@ -6,6 +6,7 @@ Fill out the form below to create an account. You'll need to enter a valid email
         
         createInput('first', 'text', $reg_errors, 'First Name: ');
         createInput('last', 'text', $reg_errors, 'Last Name: ');
+        echo '<span class="passwordHint">Artists should enter the name they perform under.</span>';
         createInput('email', 'text', $reg_errors, 'Email Address: ');
         createInput('pass1', 'password', $reg_errors, 'Password: ');
         createInput('pass2', 'password', $reg_errors, 'Confirm Password: ');
