@@ -29,8 +29,8 @@ if (isset($_SESSION['id']) && $_SESSION['isAdmin'] === true) {
                     //match found, use their id
                     $uid = $id;
                     //if band empty, make band be the leader
-                    if (empty($this->band)) {
-                        $this->band = $name;
+                    if (empty($show->band)) {
+                        $show->band = $name;
                     }
                     break;
                 }
