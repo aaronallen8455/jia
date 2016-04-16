@@ -12,6 +12,43 @@ Edit any of the fields below then click 'Save'.<br>Don't select a new picture to
     //instr input
     createInput('instr', 'select', $profile_errors, 'Primary Instrument: ', 'EDIT');
     echo '<br /><br />';
+    //secondary instr input
+    //store current database values
+    echo '<input type="hidden" name="secinstrcur" value="' . (($_SERVER['REQUEST_METHOD'] === 'POST' && array_key_exists('secinstrcur', $_POST))?$_POST['secinstrcur']:htmlentities(json_encode($secInstr))) .'" />';
+    echo 'Secondary Instrument(s) (Optional): ';
+    if (array_key_exists('secinstr', $profile_errors)) {
+        echo '<span class="error">' . $profile_errors['secinstr'] . '</span><br>';
+    }
+    echo '<div id="secInstrDiv">';
+    //check for posted data
+    if (!empty($_POST['secinstr']) || !empty($secInstr)) {
+        $instr_array = array(
+            'Bass', 'Trumpet', 'Piano', 'Saxophone', 'Drums', 'Trombone', 'Guitar', 'Vocal'
+        );
+        if (!empty($_POST['secinstr'])) $secInstr = $_POST['secinstr'];
+        //$posted = isset($_POST['secinstr']); //true if values are present in post.
+        for ($i = 0; $i < count($secInstr); $i++) {
+            //create the secondary instr selectors
+            echo '<div class="memberDiv">';
+            //if in instr array, set the value directly
+            if (in_array(ucwords($secInstr[$i]), $instr_array))
+                createInput('secinstr[]', 'select', $profile_errors, '', null, ['value' => ucwords($secInstr[$i])]);
+            else {
+                //create the selector plus 'other' option
+                createInput('secinstr[]', 'select', $profile_errors, '', null, ['value' => 'other']);
+                createInput('secInstrSelOther['.$i.']', 'text', $profile_errors, '', null, [
+                    'value'=>$_POST['secInstrSelOther'][$i], 'placeholder'=>'Please specify...', 'class'=>'instrSelOther'
+                ]);
+                echo '</span>';
+            }
+            echo '<button class="linkDel" type="button">Remove</button>';
+            echo '</div>';
+        }
+    }
+
+    echo '</div>';
+    echo '<button type="button" id="addInstr">Add Secondary Instrument</button>';
+    echo '<br /><br />';
     //create pic input
     echo '<label for="pic">Choose a New Picture (Optional): </label>';
     if (array_key_exists('pic', $profile_errors)) {

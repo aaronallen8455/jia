@@ -522,11 +522,14 @@ textarea {
 #bandDiv button {
     margin: 5px;
 }
-#linksDiv {
+#linksDiv, #secInstrDiv {
     border: 1px solid silver;
     padding: 5px;
     margin: 5px;
     display: table;
+}
+.instrSelOther, .instrSelector {
+    margin: 6px 5px 6px 0 !important;
 }
 .eventDetails {
     font-style: italic;

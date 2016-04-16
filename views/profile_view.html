@@ -24,6 +24,17 @@ if (!empty($row['pic'])) {
     <dl class="profileViewList">
         <dt>Primary Instrument:</dt>
         <dd><?php echo ucwords($row['instr_name']); ?></dd>
+        <?php if (!empty($secInstr)) {?>
+        <?php if (count($secInstr) === 1) { ?>
+        <dt>Secondary Instrument:</dt>
+        <?php }else{ ?>
+        <dt>Secondary Instruments:</dt>
+        <?php }
+            echo '<dd>';
+            echo implode(', ', $secInstr);
+            echo '</dd>';
+        }
+        ?>
         <?php if (!empty($row['bio'])) { ?>
         <dt>Bio:</dt>
         <dd><?php echo nl2br($row['bio']); ?></dd>

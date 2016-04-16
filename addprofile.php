@@ -48,6 +48,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }else{
         $profile_errors['instr'] = 'Please choose your primary instrument!';
     }
+    //validate secondary instruments
+    $secinstr = array();
+    if (!empty($_POST['secinstr']) && count($_POST['secinstr']) <= 7) {
+        for ($i=0; $i<count($_POST['secinstr']); $i++) {
+            $instrName = $_POST['secinstr'][$i];
+            //get 'other' value
+            if ($instrName === 'other')
+                $instrName = $_POST['secInstrSelOther'][$i];
+            //validate
+            if (preg_match('/^[ \w\-.]{2,}$/', $instrName) && $instrName !== 'none') {
+                //check if is same as primary instr
+                if (strcasecmp($instrName, $_POST['instr']) || ($_POST['instr'] === 'other' && strcasecmp($_POST['instrSelOther'], $instrName))) {
+                    $secinstr[] = strtolower($instrName);
+                }else{
+                    $profile_errors['secinstr'] = 'Secondary instrument cannot match primary instrument!';
+                }
+            }else{
+                $profile_errors['secinstr'] = 'You entered an invalid instrument name!';
+            }
+        }
+    }
     //validate bio
     if (isset($_POST['bio'])) {
         $bio = strip_tags($_POST['bio']);
@@ -192,6 +213,36 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $stmt = $dbc->prepare($q);
                 foreach ($eids as $eid) {
                     $stmt->execute(array($eid, $_SESSION['id'])); //insert into table
+                }
+            }
+            //create the secondary istrument associations
+            if (!empty($secinstr)) {
+                $q = 'SELECT id FROM instr WHERE `name`=? LIMIT 1';
+                $stmt = $dbc->prepare($q);
+                $queries = array(); //holds queries to be exec'd after IDs are gathered
+                $newInstr = array(); //instr names that need to be created
+                foreach ($secinstr as $instrName) {
+                    //get instr ID value if exists
+                    $stmt->execute(array($instrName));
+                    if ($instrId = $stmt->fetchColumn()) {
+                        //instr exists, insert profiles_secondaryinstr entry
+                        $queries[] = "INSERT INTO profiles_secondaryinstr (profile_id, instr_id) VALUES ({$_SESSION['id']}, $instrId)";
+                    }else{
+                        //need to create a new instr entry
+                        $newInstr[] = $instrName;
+                    }
+                }
+                //exec queries
+                foreach ($queries as $query) {
+                    $dbc->exec($query);
+                }
+                //create new instr's
+                foreach ($newInstr as $n) {
+                    $stmt = $dbc->prepare('INSERT INTO instr (`name`) VALUES (?)');
+                    $stmt->execute(array($n));
+                    $id = $dbc->lastInsertId();
+                    //create linking entry
+                    $dbc->exec("INSERT INTO profiles_secondaryinstr (profile_id, instr_id) VALUES ({$_SESSION['id']}, $id)");
                 }
             }
             

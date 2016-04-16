@@ -61,6 +61,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && filter_var($_GET['id'], FILTER_VALID
             if ($pic) {
                 unlink($pic);
             }
+            //remove secondary instr links
+            $dbc->exec('DELETE FROM profiles_secondaryinstr WHERE profile_id=' . $_GET['id']);
             $_SESSION['hasProfile'] = false;
         }else{
             trigger_error('The profile was not deleted due to a system error. We apologize for the inconvenience.');

@@ -8,7 +8,34 @@ Fill out the form below to create your musician profile.<br><br>
     createInput('bio', 'textarea', $profile_errors, 'Bio (Optional): ');
     echo '<br />';
     createInput('instr', 'select', $profile_errors, 'Primary Instrument: ');
-    echo '<br />';
+    echo '<br /><br />';
+    echo 'Secondary Instrument(s) (Optional): ';
+    if (array_key_exists('secinstr', $profile_errors)) {
+        echo '<span class="error">' . $profile_errors['secinstr'] . '</span><br>';
+    }
+    echo '<div id="secInstrDiv">';
+    //check for posted data
+    if (!empty($_POST['secinstr'])) {
+        //$posted = isset($_POST['secinstr']); //true if values are present in post.
+        for ($i = 0; $i < count($_POST['secinstr']); $i++) {
+            //create the secondary instr selectors
+            echo '<div class="memberDiv">';
+            createInput('secinstr[]', 'select', $profile_errors, '', null, ['value' => $_POST['secinstr'][$i]]);
+            //check if 'other'
+            if ($_POST['secinstr'][$i] === 'other') {
+                createInput('secInstrSelOther['.$i.']', 'text', $profile_errors, '', null, [
+                    'value'=>$_POST['secInstrSelOther'][$i], 'placeholder'=>'Please specify...', 'class'=>'instrSelOther'
+                ]);
+                echo '</span>';
+            }
+            echo '<button class="linkDel" type="button">Remove</button>';
+            echo '</div>';
+        }
+    }
+
+    echo '</div>';
+    echo '<button type="button" id="addInstr">Add Secondary Instrument</button>';
+    echo '<br /><br />';
     //create pic input
     echo '<label for="pic">Upload Your Photo (Optional): </label>';
     if (array_key_exists('pic', $profile_errors)) {
@@ -19,7 +46,7 @@ Fill out the form below to create your musician profile.<br><br>
     if (isset($_SESSION['profpicname'])) {
         echo "<br />Currently '{$_SESSION['profpicname']}'";
     }
-    echo '<br />';
+    echo '<br /><br />';
     //create links input
     echo 'Additional Links (Optional): ';
     echo '<div id="linksDiv">';

@@ -73,10 +73,21 @@ function createInput($name, $type, $errors = array(), $label, $values = 'POST', 
         
     }else if ($type === 'select') { //select input
         
-        $ele = '<label for="'.$name.'">'.$label.'</label><span class="instrSelectSpan"><select id="'.$name.'" name="'.$name.'" >';
+        $ele = '<label for="'.$name.'">'.$label.'</label><span class="instrSelectSpan"><select id="'.$name.'" name="'.$name.'" class="instrSelector" ';
+
+        $valueSubmitted = false; //true if value was passed in options array
+        if (!empty($options)) { //append options
+            foreach ($options as $k=>$v) {
+                if ($k === 'value') {
+                    $value = $v;
+                    $valueSubmitted = true;
+                }else
+                    $ele .= $k . '="'.$v.'" ';
+            }
+        }
+        $ele .= '>';
         //sticky value
-        
-        $ele .= '<option value="none" style="font-style:italic;">Select One:</option>';
+        $ele .= '<option value="none" style="font-style:italic;" '.(($value==='none')?'selected':'').'>Select One:</option>';
         
         $instruments = array(
             'Bass', 'Trumpet', 'Piano', 'Saxophone', 'Drums', 'Trombone', 'Guitar', 'Vocal'
@@ -92,14 +103,18 @@ function createInput($name, $type, $errors = array(), $label, $values = 'POST', 
             $ele .= '>'.$v.'</option>';
         }
         //'other' option
-        $ele .= '<option value="other" '. ($value?'selected':'') .'>Other...</option></select>';
+        $ele .= '<option value="other" '. (($value==='other')?'selected':'') .'>Other...</option></select>';
         
         //show other input if value or error
-        if ($value) {
+        if ($value === 'other' && !$valueSubmitted) {
             $ele .= '<input type="text" id="instrSelOther" name="instrSelOther" value="'. (isset($_POST['instrSelOther'])?$_POST['instrSelOther']:$value) .'" ';
             if (array_key_exists($name, $errors)) {
-                $ele .= 'class="error"><span class="error">'. $errors[$name] . '</span>';
+                $ele .= 'class="error">';
             }else $ele .= '>';
+        }
+        if (array_key_exists($name, $errors)) {
+            $ele .= '</span>';
+            $ele .= '<span class="error">'. $errors[$name] . '</span>';
         }
         echo $ele;
     }

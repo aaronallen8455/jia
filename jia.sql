@@ -41,6 +41,14 @@ CREATE TABLE `profiles` (
         ON UPDATE CASCADE
 ) ENGINE = InnoDB  DEFAULT CHARSET=utf8;
 
+CREATE TABLE `profiles_secondaryinstr` (
+    `profile_id` SMALLINT UNSIGNED NOT NULL,
+    `instr_id` TINYINT UNSIGNED NOT NULL,
+    PRIMARY KEY (`profile_id`, `instr_id`),
+    CONSTRAINT `fk_secinstrprofile_id` FOREIGN KEY (`profile_id`) REFERENCES `users` (`id`) ON DELETE CASCADE,
+    CONSTRAINT `fk_secinstr_id` FOREIGN KEY (`instr_id`) REFERENCES `instr` (`id`) ON DELETE CASCADE
+) ENGINE = InnoDB  DEFAULT CHARSET=utf8;
+
 CREATE TABLE `events` (
     `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
     `venue` VARCHAR(80) NOT NULL,

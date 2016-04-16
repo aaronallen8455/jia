@@ -62,6 +62,13 @@ if (isset($_GET['id']) || isset($_GET['name'])) {
                 $r['time'] = parseTime($r['start_time']);
             $events[$r['edate']][] = $r;
         }
+        //get associated secondary instruments
+        $secInstr = array();
+        $q = 'SELECT instr.name FROM instr JOIN profiles_secondaryinstr ON instr.id=instr_id WHERE profile_id='.$row['user_id'];
+        $stmt = $dbc->query($q);
+        while ($instrName = $stmt->fetchColumn()) {
+            $secInstr[] = ucwords($instrName);
+        }
         //display the profile view
         $pageTitle = $row['name'];
         include './includes/header.html';
