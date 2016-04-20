@@ -1,0 +1,10 @@
+<h2>Search</h2>
+<p>Use this page to search the entire site for keywords.</p>
+<div id="eventForm">
+    <form action="" method="get">
+        <?php
+        createInput('q', 'text', $search_errors, '', 'GET', !empty($search_str)?['value'=>$search_str]:null);
+        ?>
+        <button type="submit">Search</button>
+    </form>
+</div>

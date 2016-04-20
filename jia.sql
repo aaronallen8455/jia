@@ -29,6 +29,7 @@ CREATE TABLE `profiles` (
     `pic` VARCHAR(100) NULL,
     `links` TINYTEXT NULL,
     PRIMARY KEY (`user_id`),
+    FULLTEXT (`bio`),
     CONSTRAINT `fk_user_id`
         FOREIGN KEY (`user_id`)
         REFERENCES `users` (`id`)
@@ -61,6 +62,7 @@ CREATE TABLE `events` (
     `date_created` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     `band` TEXT NULL,
     PRIMARY KEY (`id`),
+    FULLTEXT (`title`, `desc`, `band`, `venue`),
     CONSTRAINT `fk_euser_id`
         FOREIGN KEY (`user_id`)
         REFERENCES `users` (`id`)
@@ -73,7 +75,8 @@ CREATE TABLE `venues` (
     `desc` TEXT NOT NULL,
     `pic` VARCHAR(100) NULL,
     `links` TINYTEXT NULL,
-    PRIMARY KEY (`id`)
+    PRIMARY KEY (`id`),
+    FULLTEXT (`name`, `desc`)
 ) ENGINE = InnoDB  DEFAULT CHARSET=utf8;
 
 CREATE TABLE `rm_tokens` (
@@ -234,5 +237,28 @@ CREATE PROCEDURE log_in_rm (uid SMALLINT UNSIGNED, OUT hasProfile SMALLINT, OUT 
             SELECT venues.id INTO venueId FROM venues JOIN venue_owner ON venues.id = venue_owner.venue_id JOIN users ON venue_owner.user_id = users.id WHERE users.id=uid;
         END IF;
         SELECT hasProfile, numVenues, venueId, pass, id, CONCAT_WS(' ', first_name, last_name) AS name, type FROM users WHERE users.id=uid;
+    END $$
+DELIMITER ;
+-- Search function
+DELIMITER $$
+CREATE PROCEDURE search (search VARCHAR(39))
+    BEGIN
+        (SELECT MATCH(events.title, events.`desc`, events.band, events.venue) AGAINST(search) AS score, 'event' AS type,
+        events.id AS id, events.title AS title, events.`desc` AS `desc`, events.venue AS venue, DATE_FORMAT(events.date, '%a. %M %D, %Y') AS `date`, events.start_time AS start, events.end_time AS `end`
+        FROM events WHERE MATCH(events.title, events.`desc`, events.band, events.venue) AGAINST(search))
+        UNION
+        (SELECT MATCH(venues.name, venues.`desc`) AGAINST(search) AS score, 'venue',
+        venues.id, venues.name, venues.`desc`, NULL, NULL, NULL, NULL
+        FROM venues WHERE MATCH(venues.name, venues.`desc`) AGAINST(search))
+        UNION
+        (SELECT MATCH(profiles.bio) AGAINST(search) AS score, 'profile',
+        users.id, CONCAT_WS(' ', users.first_name, users.last_name), profiles.bio, NULL, NULL, NULL, NULL
+        FROM users JOIN profiles ON users.id = profiles.user_id
+        WHERE MATCH(profiles.bio) AGAINST(search))
+        UNION
+        (SELECT .5, 'profile', users.id, CONCAT_WS(' ', users.first_name, users.last_name), profiles.bio, NULL, NULL, NULL, NULL
+        FROM users JOIN profiles ON users.id = profiles.user_id
+        WHERE search LIKE CONCAT(CONCAT('%', users.first_name), '%') OR search LIKE CONCAT(CONCAT('%', users.last_name), '%'))
+        ORDER BY score DESC, `date` DESC LIMIT 30;
     END $$
 DELIMITER ;

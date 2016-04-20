@@ -1,0 +1,52 @@
+<h3>Results:</h3>
+<ol>
+    <?php
+    if ($stmt) {
+        $numResults = 0;
+        //display each search result
+        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+            $numResults++;
+            echo '<li class="searchResults">';
+            //handle type
+            switch($row['type']) {
+                case 'event':
+                    $url = 'http://' . BASE_URL . 'events/' . $row['id'] . '/';
+                    $time = parseTime($row['start']) . (is_null($row['end'])?'':(' - ' . parseTime($row['end'])));
+                    //Title
+                    echo "<span class='searchResultTitle'>Event: <a href='$url'>{$row['title']}</a> {$row['date']} $time @ {$row['venue']} </span>";
+                    //Desc
+                    parseDesc($row['desc']);
+                    break;
+                case 'venue':
+                    $url = 'http://' . BASE_URL . 'venues/' . $row['id'] . '/';
+                    //Title
+                    echo "<span class='searchResultTitle'>Venue: <a href='$url'>{$row['title']}</a></span>";
+                    //Desc
+                    parseDesc($row['desc']);
+                    break;
+                case 'profile':
+                    $url = 'http://' . BASE_URL . 'profiles/' . $row['id'] . '/';
+                    echo "<span class='searchResultTitle'>Profile: <a href='$url'>{$row['title']}</a></span>";
+                    parseDesc($row['desc']);
+            }
+
+            echo '</li>';
+        }
+        if ($numResults === 0) {
+            echo '<span>No results...</span>';
+        }
+    }
+
+    function parseDesc($str) {
+        if (!empty($str)) {
+            //trim if too long
+            if (strlen($str) > 250) {
+                $desc = substr($str, 0, 247) . '...';
+            }else
+                $desc = $str;
+            echo "<p class='searchResultDetails'>$desc</p>";
+        }
+        return;
+    }
+    ?>
+</ol>

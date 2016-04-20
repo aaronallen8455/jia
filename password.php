@@ -96,7 +96,7 @@ if (isset($_SESSION['id']) && !isset($_GET['t'])) {//logged in
                 //regen session id
                 session_regenerate_id(true);
                 //set session atts
-                $_SESSION['id'] = $row['user_id'];
+                $_SESSION['id'] = $row['id'];
                 if ($row['type'] === 'a')
                     $_SESSION['isAdmin'] = true;
                 $_SESSION['name'] = $row['name'];

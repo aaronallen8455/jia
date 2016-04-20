@@ -8,6 +8,8 @@ function createInput($name, $type, $errors = array(), $label, $values = 'POST', 
         if (isset($_SESSION[$name])) $value = htmlspecialchars($_SESSION[$name], ENT_QUOTES, 'UTF-8');
     }else if ($values === 'POST') {
         if (isset($_POST[$name])) $value = htmlspecialchars($_POST[$name], ENT_QUOTES, 'UTF-8');
+    }else if ($values === 'GET') {
+        if (isset($_GET[$name])) $value = htmlspecialchars($_GET[$name], ENT_QUOTES, 'UTF-8');
     }else if ($values === 'EDIT') {
         if (empty($_POST[$name])) {
             $value = htmlspecialchars((isset($event[$name])?$event[$name]:''), ENT_QUOTES, 'UTF-8');
