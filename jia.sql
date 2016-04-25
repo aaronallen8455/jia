@@ -41,6 +41,12 @@ CREATE TABLE `profiles` (
         ON DELETE SET NULL
         ON UPDATE CASCADE
 ) ENGINE = InnoDB  DEFAULT CHARSET=utf8;
+-- make a MyIsam dupe for searching in mysql 5.5
+CREATE TABLE `profiles_isam` (
+    `user_id` SMALLINT UNSIGNED NOT NULL,
+    `bio` TEXT NULL,
+    FULLTEXT (`bio`)
+) ENGINE = MyISAM;
 
 CREATE TABLE `profiles_secondaryinstr` (
     `profile_id` SMALLINT UNSIGNED NOT NULL,
@@ -62,12 +68,21 @@ CREATE TABLE `events` (
     `date_created` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     `band` TEXT NULL,
     PRIMARY KEY (`id`),
-    FULLTEXT (`title`, `desc`, `band`, `venue`),
+    -- FULLTEXT (`title`, `desc`, `band`, `venue`),
     CONSTRAINT `fk_euser_id`
         FOREIGN KEY (`user_id`)
         REFERENCES `users` (`id`)
         ON DELETE CASCADE
 ) ENGINE = InnoDB  DEFAULT CHARSET=utf8;
+-- make a MyIsam dupe for searching in mysql 5.5
+CREATE TABLE `events_isam` (
+    `id` INT UNSIGNED NOT NULL,
+    `venue` VARCHAR(80) NOT NULL,
+    `desc` TEXT NULL,
+    `title` VARCHAR(80) NOT NULL,
+    `band` TEXT NULL,
+    FULLTEXT (`title`, `desc`, `band`, `venue`)
+) ENGINE = MyISAM;
 
 CREATE TABLE `venues` (
     `id` SMALLINT UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -76,8 +91,15 @@ CREATE TABLE `venues` (
     `pic` VARCHAR(100) NULL,
     `links` TINYTEXT NULL,
     PRIMARY KEY (`id`),
-    FULLTEXT (`name`, `desc`)
+    -- FULLTEXT (`name`, `desc`)
 ) ENGINE = InnoDB  DEFAULT CHARSET=utf8;
+-- make a MyIsam dupe for searching in mysql 5.5
+CREATE TABLE `venues_isam` (
+    `id` SMALLINT UNSIGNED NOT NULL,
+    `name` VARCHAR(80) NOT NULL,
+    `desc` TEXT NOT NULL,
+    FULLTEXT (`name`, `desc`)
+) ENGINE = MyISAM;
 
 CREATE TABLE `rm_tokens` (
     `id` SMALLINT UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -121,6 +143,29 @@ CREATE TABLE `venue_owner` (
     CONSTRAINT `fk_ovenue_id` FOREIGN KEY (`venue_id`) REFERENCES `venues` (`id`) ON DELETE CASCADE,
     CONSTRAINT `fk_vuser_id` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
 ) ENGINE = InnoDB  DEFAULT CHARSET=utf8;
+
+-- triggers
+
+CREATE TRIGGER ins_event AFTER INSERT ON `events`
+    FOR EACH ROW INSERT INTO events_isam (id, venue, `desc`, title, band) VALUES (new.id, new.venue, new.`desc`, new.title, new.band);
+CREATE TRIGGER del_event AFTER DELETE ON `events`
+    FOR EACH ROW DELETE FROM events_isam WHERE id=old.id;
+CREATE TRIGGER upd_event AFTER UPDATE ON `events`
+    FOR EACH ROW UPDATE events_isam SET venue=new.venue, `desc`=new.`desc`, title=new.title, band=new.band WHERE id=new.id;
+
+CREATE TRIGGER ins_profile AFTER INSERT ON profiles
+    FOR EACH ROW INSERT INTO profiles_isam (user_id, bio) VALUES (new.user_id, new.bio);
+CREATE TRIGGER del_profile AFTER DELETE ON profiles
+    FOR EACH ROW DELETE FROM profiles_isam WHERE user_id=old.user_id;
+CREATE TRIGGER upd_profile AFTER UPDATE ON profiles
+    FOR EACH ROW UPDATE profiles_isam SET bio=new.bio WHERE user_id=new.user_id;
+
+CREATE TRIGGER ins_venue AFTER INSERT ON venues
+    FOR EACH ROW INSERT INTO venues_isam (id, name, `desc`) VALUES (new.id, new.name, new.`desc`);
+CREATE TRIGGER del_venue AFTER DELETE ON venues
+    FOR EACH ROW DELETE FROM venues_isam WHERE id=old.id;
+CREATE TRIGGER upd_venue AFTER UPDATE ON venues
+    FOR EACH ROW UPDATE venues_isam SET name=new.name, `desc`=new.`desc` WHERE id=new.id;
 
 -- stored procedures
 
@@ -243,18 +288,18 @@ DELIMITER ;
 DELIMITER $$
 CREATE PROCEDURE search (search VARCHAR(39))
     BEGIN
-        (SELECT MATCH(events.title, events.`desc`, events.band, events.venue) AGAINST(search) AS score, 'event' AS type,
-        events.id AS id, events.title AS title, events.`desc` AS `desc`, events.venue AS venue, DATE_FORMAT(events.date, '%a. %M %D, %Y') AS `date`, events.start_time AS start, events.end_time AS `end`
-        FROM events WHERE MATCH(events.title, events.`desc`, events.band, events.venue) AGAINST(search))
+        (SELECT MATCH(events_isam.title, events_isam.`desc`, events_isam.band, events_isam.venue) AGAINST(search) AS score, 'event' AS type,
+        events_isam.id AS id, events_isam.title AS title, events_isam.`desc` AS `desc`, events_isam.venue AS venue, DATE_FORMAT(events.date, '%a. %M %D, %Y') AS `date`, events.start_time AS start, events.end_time AS `end`
+        FROM events_isam JOIN events ON events_isam.id=events.id WHERE MATCH(events_isam.title, events_isam.`desc`, events_isam.band, events_isam.venue) AGAINST(search))
         UNION
-        (SELECT MATCH(venues.name, venues.`desc`) AGAINST(search) AS score, 'venue',
-        venues.id, venues.name, venues.`desc`, NULL, NULL, NULL, NULL
-        FROM venues WHERE MATCH(venues.name, venues.`desc`) AGAINST(search))
+        (SELECT MATCH(venues_isam.name, venues_isam.`desc`) AGAINST(search) AS score, 'venue',
+        venues_isam.id, venues_isam.name, venues_isam.`desc`, NULL, NULL, NULL, NULL
+        FROM venues_isam WHERE MATCH(venues_isam.name, venues_isam.`desc`) AGAINST(search))
         UNION
-        (SELECT MATCH(profiles.bio) AGAINST(search) AS score, 'profile',
-        users.id, CONCAT_WS(' ', users.first_name, users.last_name), profiles.bio, NULL, NULL, NULL, NULL
-        FROM users JOIN profiles ON users.id = profiles.user_id
-        WHERE MATCH(profiles.bio) AGAINST(search))
+        (SELECT MATCH(profiles_isam.bio) AGAINST(search) AS score, 'profile',
+        users.id, CONCAT_WS(' ', users.first_name, users.last_name), profiles_isam.bio, NULL, NULL, NULL, NULL
+        FROM users JOIN profiles_isam ON users.id = profiles_isam.user_id
+        WHERE MATCH(profiles_isam.bio) AGAINST(search))
         UNION
         (SELECT .5, 'profile', users.id, CONCAT_WS(' ', users.first_name, users.last_name), profiles.bio, NULL, NULL, NULL, NULL
         FROM users JOIN profiles ON users.id = profiles.user_id
