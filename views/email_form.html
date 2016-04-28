@@ -1,0 +1,60 @@
+
+<form action="" method="post">
+
+    <label for="emailTop">Top Content:</label>
+    <textarea class="email-form-text" name="emailTop" id="emailTop"></textarea>
+    <br/>
+    <span>Event Manager:</span>
+    <table border="1" class="rnImportTable">
+        <tr>
+            <th>Date</th>
+            <th>Title</th>
+            <th>Venue</th>
+            <th>Time</th>
+            <th>Star</th>
+            <th>Add</th>
+            <th>Omit</th>
+        </tr>
+
+        <?php
+        $counter = 0;
+        $html = '';
+        foreach ($events as $event) {
+            $html .= '<tr>';
+            $html .= "<td>{$event['date']}</td>";
+            $html .= "<td>{$event['title']}</td>";
+            $html .= "<td>{$event['venue']}</td>";
+            $html .= "<td>{$event['time']}</td>";
+            //create radio inputs
+            $value = htmlentities(json_encode($event));
+            $html .= "<td><input type='radio' name='event[$counter]' value='* $value'/></td>";
+            $html .= "<td><input type='radio' name='event[$counter]' value='+ $value' CHECKED/></td>";
+            $html .= "<td><input type='radio' name='event[$counter]' value='- $value'/></td>";
+            $html .= '</tr>';
+            $counter++;
+        }
+        echo $html;
+        ?>
+    </table>
+    <br/>
+    <label for="emailBottom">Bottom Content:</label>
+    <textarea class="email-form-text" name="emailBottom" id="emailBottom"></textarea>
+    <br/>
+    <button type="submit">Done</button>
+</form>
+<p>Instructions: After you click done and are taken to the result page, use Ctrl-A to select all, then Ctrl-C to copy all content.
+Open gmail or whatever emailer you use and create a new message. Ctrl-V in the content field to paste in the template.</p>
+<script src="//cdn.tinymce.com/4/tinymce.min.js"></script>
+<script type="application/ecmascript">
+    tinymce.init({
+        selector: '.email-form-text',
+        width : 800,
+        height : 400,
+        browser_spellcheck : true,
+
+        plugins: "textcolor,paste,searchreplace,fullscreen,hr,link,anchor,image,charmap,media,autoresize,autosave,contextmenu,wordcount",
+
+        toolbar1: "cut,copy,paste,|,undo,redo,removeformat,|hr,|,link,unlink,anchor,image,|,charmap,media,|,search,replace,|,fullscreen",
+        toolbar2:	"bold,italic,underline,strikethrough,forecolor,backcolor,|,alignleft,aligncenter,alignright,alignjustify,|,formatselect,|,bullist,numlist,|,outdent,indent,blockquote,"
+    });
+</script>

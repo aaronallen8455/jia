@@ -6,5 +6,10 @@
         createInput('q', 'text', $search_errors, '', 'GET', !empty($search_str)?['value'=>$search_str]:null);
         ?>
         <button type="submit">Search</button>
+        <div>
+            <label for="e">Events:</label><input type="checkbox" id="e" name="e" <?php echo $checked['e']?'CHECKED':'' ?>/>
+            <label for="p">Profiles:</label><input type="checkbox" id="p" name="p" <?php echo $checked['p']?'CHECKED':'' ?>/>
+            <label for="v">Venues:</label><input type="checkbox" id="v" name="v" <?php echo $checked['v']?'CHECKED':'' ?>/>
+        </div>
     </form>
 </div>

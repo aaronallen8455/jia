@@ -7,6 +7,7 @@
  */
 
 require './includes/config.inc.php';
+include './includes/login.inc.php';
 $pageTitle = 'JIA Weekly';
 include './includes/header.html';
 

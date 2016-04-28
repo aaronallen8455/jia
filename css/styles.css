@@ -719,6 +719,12 @@ textarea {
 .rnImportTable input[type=text] {
     width: 200px;
 }
+.rnImportTable tr {
+    background-color: #f1f8ff;
+}
+.rnImportTable tr:nth-child(even) {
+    background-color: #e0f3ff;
+}
 .rnImportDV {
     padding-left: 10px;
     padding-right: 10px;

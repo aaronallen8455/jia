@@ -7,6 +7,7 @@
  */
 
 require 'includes/config.inc.php';
+include './includes/login.inc.php';
 $pageTitle = 'Search';
 include 'includes/header.html';
 
@@ -22,17 +23,28 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && key_exists('q', $_GET)) {
     }else $search_errors['q'] = 'Must be less than 40 characters';
 }
 
+//determine checkbox statuses
+$checked = [
+    'e' => false,
+    'p' => false,
+    'v' => false
+];
+if (isset($_GET['e']) || empty($_GET)) $checked['e'] = true;
+if (isset($_GET['p']) || empty($_GET)) $checked['p'] = true;
+if (isset($_GET['v']) || empty($_GET)) $checked['v'] = true;
+
 //display the form
 require 'includes/form_functions.inc.php';
 include 'views/search_form.html';
 
 //display search results
 if ($_SERVER['REQUEST_METHOD'] === 'GET' && !empty($search_str) && empty($search_errors)) {
-    require MYSQL;
+    require_once MYSQL;
     //search the DB
-    $q = 'CALL search(?)';
+    $q = 'CALL search(?,?,?,?)';
     $stmt = $dbc->prepare($q);
-    $stmt->execute([$search_str]);
+    $stmt->execute([$search_str, isset($_GET['e'])?1:0, isset($_GET['p'])?1:0, isset($_GET['v'])?1:0]);
+    
     //show results
     include 'views/search_results.html';
 }

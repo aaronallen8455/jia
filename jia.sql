@@ -286,24 +286,28 @@ CREATE PROCEDURE log_in_rm (uid SMALLINT UNSIGNED, OUT hasProfile SMALLINT, OUT 
 DELIMITER ;
 -- Search function
 DELIMITER $$
-CREATE PROCEDURE search (search VARCHAR(39))
+CREATE PROCEDURE search (search VARCHAR(39), showEvents TINYINT(1) UNSIGNED, showProfiles TINYINT(1) UNSIGNED, showVenues TINYINT(1) UNSIGNED)
     BEGIN
         (SELECT MATCH(events_isam.title, events_isam.`desc`, events_isam.band, events_isam.venue) AGAINST(search) AS score, 'event' AS type,
         events_isam.id AS id, events_isam.title AS title, events_isam.`desc` AS `desc`, events_isam.venue AS venue, DATE_FORMAT(events.date, '%a. %M %D, %Y') AS `date`, events.start_time AS start, events.end_time AS `end`
-        FROM events_isam JOIN events ON events_isam.id=events.id WHERE MATCH(events_isam.title, events_isam.`desc`, events_isam.band, events_isam.venue) AGAINST(search))
+        FROM events_isam JOIN events ON events_isam.id=events.id WHERE showEvents=1 AND MATCH(events_isam.title, events_isam.`desc`, events_isam.band, events_isam.venue) AGAINST(search))
         UNION
         (SELECT MATCH(venues_isam.name, venues_isam.`desc`) AGAINST(search) AS score, 'venue',
         venues_isam.id, venues_isam.name, venues_isam.`desc`, NULL, NULL, NULL, NULL
-        FROM venues_isam WHERE MATCH(venues_isam.name, venues_isam.`desc`) AGAINST(search))
+        FROM venues_isam WHERE showVenues=1 AND MATCH(venues_isam.name, venues_isam.`desc`) AGAINST(search))
         UNION
         (SELECT MATCH(profiles_isam.bio) AGAINST(search) AS score, 'profile',
         users.id, CONCAT_WS(' ', users.first_name, users.last_name), profiles_isam.bio, NULL, NULL, NULL, NULL
         FROM users JOIN profiles_isam ON users.id = profiles_isam.user_id
-        WHERE MATCH(profiles_isam.bio) AGAINST(search))
+        WHERE showProfiles=1 AND MATCH(profiles_isam.bio) AGAINST(search))
         UNION
-        (SELECT .5, 'profile', users.id, CONCAT_WS(' ', users.first_name, users.last_name), profiles.bio, NULL, NULL, NULL, NULL
+        (SELECT 4.5, 'profile', users.id, CONCAT_WS(' ', users.first_name, users.last_name), profiles.bio, NULL, NULL, NULL, NULL
         FROM users JOIN profiles ON users.id = profiles.user_id
-        WHERE search LIKE CONCAT(CONCAT('%', users.first_name), '%') OR search LIKE CONCAT(CONCAT('%', users.last_name), '%'))
+        WHERE showProfiles=1 AND (search LIKE CONCAT(CONCAT('%', users.first_name), '%') OR search LIKE CONCAT(CONCAT('%', users.last_name), '%')))
+        UNION
+        (SELECT 2.5, 'profile', users.id, CONCAT_WS(' ', users.first_name, users.last_name), profiles.bio, NULL, NULL, NULL, NULL
+        FROM users JOIN profiles ON users.id = profiles.user_id JOIN instr ON profiles.instr_id = instr.id
+        WHERE showProfiles=1 AND search LIKE CONCAT(CONCAT('%', instr.name), '%'))
         ORDER BY score DESC, `date` DESC LIMIT 30;
     END $$
 DELIMITER ;
