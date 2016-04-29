@@ -146,10 +146,11 @@ if (isset($_SESSION['isAdmin']) && $_SESSION['isAdmin'] === true) {
                 include './views/addvenue_success.html';
                 //find any events that reference this venue and add to events_venues table.
                 $name = str_ireplace('the ', '', $name); //remove 'The' prefix
-                $q = "SELECT id FROM events WHERE venue LIKE '%$name%'";
-                if ($r = $dbc->query($q)) {
+                $q = "SELECT id FROM events WHERE venue LIKE CONCAT('%', CONCAT(?, '%'))";
+                $stmt = $dbc->prepare($q);
+                if ($stmt->execute([$name])) {
                     $eids = array();
-                    while ($eid = $r->fetchColumn()) {
+                    while ($eid = $stmt->fetchColumn()) {
                         $eids[] = $eid;
                     }
                     $q = 'INSERT INTO events_venues (event_id, venue_id) VALUES (?, ?)';

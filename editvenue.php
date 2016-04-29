@@ -173,10 +173,12 @@ if ((isset($_SESSION['isAdmin']) && $_SESSION['isAdmin'] === true) || (isset($_S
                     //delete old entries
                     $dbc->exec('DELETE FROM events_venues WHERE venue_id=' . $_GET['id']);
                     //find events associated with the new name and create rows for them in the table
-                    $q = "SELECT id FROM events WHERE venue LIKE '%$name%'";
-                    if ($r = $dbc->query($q)) {
+                    //$q = "SELECT id FROM events WHERE venue LIKE '%$name%'";
+                    $q = "SELECT id FROM events WHERE venue LIKE CONCAT('%', CONCAT(?, '%'))";
+                    $stmt = $dbc->prepare($q);
+                    if ($stmt->execute([$name])) {
                         $eids = array();
-                        while ($eid = $r->fetchColumn()) {
+                        while ($eid = $stmt->fetchColumn()) {
                             $eids[] = $eid;
                         }
                         $q = 'INSERT INTO events_venues (event_id, venue_id) VALUES (?, ?)';

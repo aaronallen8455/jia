@@ -1,11 +1,16 @@
 <h3>Results:</h3>
-<ol>
+<ol start="<?php echo ($pageNumber-1)*30 + 1 ?>">
     <?php
     if ($stmt) {
         $numResults = 0;
+        $names = []; //keep track of names to prevent duplicate profile listing
         //display each search result
         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
             $numResults++;
+            //don't display the 31st result, used to display next link
+            if ($numResults === 31) break;
+            //skip if profile is dupe
+            if ($row['type'] === 'profile' && in_array($row['title'], $names)) continue;
             echo '<li class="searchResults">';
             //handle type
             switch($row['type']) {
@@ -28,6 +33,7 @@
                     $url = 'http://' . BASE_URL . 'profiles/' . $row['id'] . '/';
                     echo "<span class='searchResultTitle'>Profile: <a href='$url'>{$row['title']}</a></span>";
                     parseDesc($row['desc']);
+                    $names[] = $row['title'];
             }
 
             echo '</li>';
@@ -50,3 +56,17 @@
     }
     ?>
 </ol>
+
+<?php
+//logic for displaying the pagination links
+if ($pageNumber > 1) {
+    echo '<a href="'.$prevUrl.'">Prev</a>';
+    if ($numResults === 31) {
+        echo '<span> | </span>';
+        echo "<a href='$nextUrl'>Next</a>";
+    }
+}else if ($numResults === 31) {
+    echo "<a href='$nextUrl'>Next</a>";
+}
+?>
+

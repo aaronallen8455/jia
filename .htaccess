@@ -9,7 +9,7 @@ RewriteRule ^profiles/(\w+)-(\w+)/?$ profiles.php?name=$1+$2
 RewriteRule ^profiles/(\d+)/?$ profiles.php?id=$1
 RewriteRule ^events/(\d+)/?$ events.php?id=$1
 RewriteRule ^venues/(\d+)/?$ venues.php?id=$1
-RewriteRule ^venues/([\w\d+]+)/?$ venues.php?name=$1
+RewriteRule ^venues/([\w\d+'\-]+)/?$ venues.php?name=$1
 RewriteRule ^password/([\w\d]{64})/?$ password.php?t=$1
 RewriteRule ^register/([\w\d]{12})/?$ register.php?vc=$1
 #catch-all for id queries

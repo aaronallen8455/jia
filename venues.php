@@ -19,6 +19,14 @@ if (!empty($_GET)) {
         exit();
     }
     $row = $r->fetch(PDO::FETCH_ASSOC);
+    //exit if venue doesn't exist
+    if (!$row) {
+        $pageTitle = 'Error';
+        include './includes/header.html';
+        echo '<div class="centeredDiv"><h2>This page has been accessed in error</h2></div>';
+        include './includes/footer.html';
+        exit();
+    }
     $r->closeCursor();
     //get associated event info
     if ($r = $dbc->query("SELECT title, events.id, DATE_FORMAT(`date`, '%a. %M %D, %Y') AS edate, start_time, end_time

@@ -2,7 +2,7 @@
 require './includes/config.inc.php';
 //assert admin
 if (!isset($_SESSION['isAdmin'])) {
-    header('Location: '.BASE_URL);
+    header('Location: http://'.BASE_URL);
     exit();
 }
 
@@ -50,7 +50,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     //generate the HTML
     $html = "<body style='min-width: 400px; max-width: 900px;'>
-    <div style='width: 100%; padding: 10px; text-align: center; background: rgba(0, 0, 0, 0) linear-gradient(to bottom, #0b113b, #14206c 50%) repeat scroll 0 0;'><img src='http://".BASE_URL."images/logo.png'/></div>
+    <span style='display:block; width: 100%; padding: 10px; text-align: center; background: rgba(0, 0, 0, 0) linear-gradient(to bottom, #0b113b, #14206c 50%) repeat scroll 0 0;'><img src='http://".BASE_URL."images/logo.png'/></span>
     $top
     <span><h2>Upcoming Shows</h2></span>
     $eventTable

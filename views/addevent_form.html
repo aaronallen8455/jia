@@ -65,7 +65,7 @@
                 echo '<button class="memberDel" type="button">Remove</button>';
                 echo '</div>';
             }
-        }else{
+        }else if (!isset($band)){
             echo '<div class="memberDiv">';
             createInput('band[0]', 'text', $event_errors, 'Name: ', null, array('value'=>$_SESSION['name']));
             createInput('instr[0]', 'text', $event_errors, 'Instrument: ', null, array('value'=>$instr));
