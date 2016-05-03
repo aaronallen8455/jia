@@ -191,8 +191,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $q = 'DELETE FROM events_venues WHERE event_id=' . $eid;
                     $dbc->exec($q);
                     //create new entry
-                    $q = "SELECT id FROM venues WHERE name LIKE '%$venue%'";
-                    $stmt = $dbc->query($q);
+                    //$q = "SELECT id FROM venues WHERE name LIKE '%$venue%'";
+                    $q = "SELECT id FROM venues WHERE `name` LIKE CONCAT('%', CONCAT(?, '%'))";
+                    //$stmt = $dbc->query($q);
+                    $stmt = $dbc->prepare($q);
+                    $stmt->execute([$venue]);
                     $vid = $stmt->fetchColumn();
                     if ($vid) {
                         //create row

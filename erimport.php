@@ -25,12 +25,14 @@ if (isset($_SESSION['id']) && $_SESSION['isAdmin'] === true) {
             preg_match('/(\d+)?.*?([A-Z].*)/', $c, $d);
             $this->day = array_key_exists(1, $d)?$d[1]:''; //extract the date
             if (!empty($this->day)) $this->day = substr('0'.$this->day,-2);
-            $this->content = array_key_exists(2, $d)?$d[2]:''; //extract content
-            if (!empty($this->content)) {
-                $this->content = str_replace(array('<br>', '<br />'), ' ', $this->content);
+            $content = array_key_exists(2, $d)?$d[2]:''; //extract content
+            if (!empty($content)) {
+                $content = str_replace(array('<br>', '<br />', '&nbsp;'), ' ', $content);
                 //remove consecutive spaces
-                $this->content = preg_replace('/ {2,}/', ' ', $this->content);
+                $content = preg_replace('/ {2,}/', ' ', $content);
+                $content = trim($content);
             }
+            $this->content = $content;
         }
     }
 

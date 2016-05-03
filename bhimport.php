@@ -43,7 +43,7 @@ if (isset($_SESSION['id']) && $_SESSION['isAdmin'] === true) {
             }
 
             //add show to DB
-            $data = array('Brass House', $show->date, $show->startTime, $show->endTime, $show->summary, $uid, $name, '');
+            $data = array('Brass House', $show->date, $show->startTime, null/*$show->endTime*/, $show->summary, $uid, $name, '');
             if ($stmt->execute($data)) {
                 echo "$show->summary was added.<br>";
             }else print_r($dbc->errorInfo());
@@ -71,8 +71,8 @@ if (isset($_SESSION['id']) && $_SESSION['isAdmin'] === true) {
         $bh = file_get_contents($url);
         $bh = preg_replace('/\v/', '', $bh);
         //get date of top left cell
-        preg_match('/<td class="date-marker date-(month|not-month)">(\d+)<\/td>/', $bh, $match);
-        $startDate = $match[2];
+        preg_match('/<td class="date-marker date-(month|not-month) (date-today)?"( style="")?>(\d+)<\/td>/', $bh, $match);
+        $startDate = $match[4];
         //if its from the previous month, how many days in that month?
         if ($startDate !== '1') {
             $prevMonth = date('n') -1;
