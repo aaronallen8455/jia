@@ -140,34 +140,60 @@ button, input, optgroup, select, textarea {
 /************************************************Main Nav************************************************/
 .navbar-container {
     background-color: #000;
-}
-.navbar-container ul {
     width: 100%;
-    border-collapse: collapse;
+    position: relative;
 }
 .nav {
-    width: 100%;
-    display: table;
-    table-layout: fixed;
-    text-align: center;
 }
 .nav li {
     list-style-type: none;
-    display: table-cell;
-    width: 20%;
-    border-right: thin solid silver;
-    border-left: thin solid silver;
     vertical-align: middle;
+    display: table-cell;
+}
+.search p, .search form, .search input {
+    display: inline-block;
+}
+.search, .nav a {
+    padding: 15px 2px;
 }
 .nav a {
     display: block;
-    padding: 15px 5px;
+    text-decoration: none;
+    border-color: #004167;
+}
+.nav a span {
+    border-radius: 10px 10px 0px 0px;
+    padding: 5px;
+    border: solid 2px;
+    border-color: inherit;
 }
 .nav a:hover {
-    color: yellow;
+    color: #008ec2;
+    border-color: #008ec2;
 }
 .nav .nav-login {
     display: none;
+}
+.search {
+    position: absolute;
+    right: 200px;
+    top: 0px;
+}
+.search p {
+    color: #d1d1d1;
+}
+.search input {
+    background-color: #d1d1d1;
+    border-radius: 10px;
+    border: 0 none;
+    padding-left: 10px;
+    min-width: 1.5em;
+    width: 30px;
+    transition: 0.25s ease-in-out width;
+}
+.search input:focus {
+    width: 100px;
+    transition: 0.25s ease-in-out width;
 }
 /************************************************Footer************************************************/
 .footerDiv {
@@ -777,6 +803,12 @@ textarea {
     .nav li:last-of-type {
         border-right: none;
     }
+    .search {
+        right: 25px;
+    }
+    .nav {
+        margin-left: 5px;
+    }
 }
 @media all and (max-width: 1050px) and  (min-width: 631px) {
     .eventDivWrapper {
@@ -814,16 +846,26 @@ textarea {
         display: none;
     }
     .nav {
+        width: 100%;
+        text-align: center;
         position: fixed;
         top: 40px;
         z-index: 100;
         background-color: #000;
+        margin: 0;
     }
     .nav li {
         display: block;
-        width: 100%;
         border: none;
         border-top: thin solid silver;
+        padding: 0 0 0 0;
+    }
+    .nav a {
+        display: block;
+        text-decoration: underline;
+    }
+    .nav a span {
+        border: none;
     }
     .nav .nav-login {
         display: block;

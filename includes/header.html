@@ -11,7 +11,6 @@
     <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />
     <!-- facebook image /-->
     <meta property="og:image" content="http://<?php echo BASE_URL; ?>images/logo_no_caption.jpg"/>
-
     <title>
     <?php
         if (isset($pageTitle)) {
@@ -24,7 +23,7 @@
     </title>
     <link href='https://fonts.googleapis.com/css?family=Raleway:400,800' rel='stylesheet' type='text/css' />
     <link rel="stylesheet" type="text/css" href="http://<?php echo BASE_URL; ?>css/normalize.css" media="all"/>
-    <link rel="stylesheet" type="text/css" href="http://<?php echo BASE_URL; ?>css/styles.css?<?php echo filemtime('./css/styles.css');?>" media="all" />
+    <link rel="stylesheet" type="text/css" href="http://<?php echo BASE_URL; ?>css/styles.css" media="all" />
     <script type="application/javascript" src="http://<?php echo BASE_URL; ?>js/menu.js"></script>
 
     <!-- Google analytics /-->
@@ -99,11 +98,11 @@
             <div class="navbar-container userAction padToView">
                 <div id="menuToggleWrapper"><span id="menuToggle">&#8801; Menu</span></div>
                 <ul class="nav menuVisibility">
-                    <li><a href="http://<?php echo BASE_URL; ?>#cal">Calendar / About</a></li>
-                    <li><a href="http://<?php echo BASE_URL; ?>profiles/">Musician Profiles</a></li>
-                    <li><a href="http://<?php echo BASE_URL; ?>venues/">Venues</a></li>
-                    <li><a href="http://<?php echo BASE_URL; ?>blog/">Blog</a></li>
-                    <li><a href="http://<?php echo BASE_URL; ?>booking/">Booking</a></li>
+                    <li><a href="http://<?php echo BASE_URL; ?>#cal"><span>Calendar</span></a></li>
+                    <li><a href="http://<?php echo BASE_URL; ?>profiles/"><span>Musicians</span></a></li>
+                    <li><a href="http://<?php echo BASE_URL; ?>venues/"><span>Venues</span></a></li>
+                    <li><a href="http://<?php echo BASE_URL; ?>blog/"><span>JIA Weekly</span></a></li>
+                    <li><a href="http://<?php echo BASE_URL; ?>booking/"><span>Booking</span></a></li>
                     <?php
                     //check if user is logged in
                     if (isset($_SESSION['id']) && filter_var($_SESSION['id'], FILTER_VALIDATE_INT, array('min_range'=>1))) {
@@ -113,13 +112,22 @@
                     <?php
                     }else{ ?>
                     <li class="nav-login"><a href="http://<?php echo BASE_URL; ?>login/">Login</a></li>
-                    <li><a href="http://<?php echo BASE_URL; ?>register/">Register</a></li>
+                    <li><a href="http://<?php echo BASE_URL; ?>register/"><span>Register</span></a></li>
                     <?php }
                     if (isset($_SESSION['id']) && filter_var($_SESSION['id'], FILTER_VALIDATE_INT, array('min_range'=>1))) {
                     ?>
-                    <li><a href="http://<?php echo BASE_URL; ?>addevent/">Add Event</a></li>
+                    <li><a href="http://<?php echo BASE_URL; ?>addevent/"><span>Add Event</span></a></li>
                     <?php } ?>
                 </ul>
+                <div class="search">
+                    <p>Search</p>
+                    <form action="http://<?php echo BASE_URL ?>search/" method="get">
+                        <input type="text" placeholder="&#8981;" name="q"/>
+                        <input type="hidden" name="e" value="on"/>
+                        <input type="hidden" name="p" value="on"/>
+                        <input type="hidden" name="v" value="on"/>
+                    </form>
+                </div>
             </div>
         <?php
         //the pages listed won't contain the 'bodyDiv' element
