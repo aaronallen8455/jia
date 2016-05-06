@@ -67,15 +67,21 @@ window.addEventListener('load', function() {
                         startHour.value = hour;
                         startMin.value = res.start.slice(-2);
 
-                        var hour = parseInt(res.end.slice(0,2));
-                        endPeriod.value = 'am';
-                        if (hour -12 >= 0) {
-                            endPeriod.value = 'pm';
-                            if (hour !== 12)
-                                hour -= 12;
-                        }else if (hour === 0) hour = 12; //midnight
-                        endHour.value = hour;
-                        endMin.value = res.end.slice(-2);
+                        //check for end time
+                        if (res.end) {
+                            var hour = parseInt(res.end.slice(0,2));
+                            endPeriod.value = 'am';
+                            if (hour -12 >= 0) {
+                                endPeriod.value = 'pm';
+                                if (hour !== 12)
+                                    hour -= 12;
+                            }else if (hour === 0) hour = 12; //midnight
+                            endHour.value = hour;
+                            endMin.value = res.end.slice(-2);
+                        }else{
+                            endHour.value = '';
+                            endMin.value = '00';
+                        }
 
                         desc.innerHTML = res.desc;
                         //create the list of band members
@@ -86,10 +92,11 @@ window.addEventListener('load', function() {
                         for (var i=0; i<list.length; i++) {
                             var entry = list[i].split(',');
                             if (!entry[1]) entry[1] = '';
-                            createMember(entry[0],entry[1],bandDiv,i);
+                            if (entry[0])
+                                createMember(entry[0],entry[1],bandDiv,i);
                         }
                     }
-                }
+                };
                 req.send(data);
             }
         }
@@ -154,7 +161,7 @@ window.addEventListener('load', function() {
     addMember.setAttribute('type', 'button'); //otherwise it submits the form
     addMember.onclick = function(e) {
         createMember('', '', bandDiv, bandDiv.children.length);
-    }
+    };
     
     //the remove button for initial row
     var del = document.getElementsByClassName('memberDel');
