@@ -27,6 +27,7 @@ Edit any of the fields below then click 'Save'.<br>Don't select a new picture to
         );
         if (!empty($_POST['secinstr'])) $secInstr = $_POST['secinstr'];
         //$posted = isset($_POST['secinstr']); //true if values are present in post.
+        $otherIndex = 0; //iterator for secInstrSelOther
         for ($i = 0; $i < count($secInstr); $i++) {
             //create the secondary instr selectors
             echo '<div class="memberDiv">';
@@ -35,9 +36,14 @@ Edit any of the fields below then click 'Save'.<br>Don't select a new picture to
                 createInput('secinstr[]', 'select', $profile_errors, '', null, ['value' => ucwords($secInstr[$i])]);
             else {
                 //create the selector plus 'other' option
+                if (isset($_POST['secInstrSelOther'][$otherIndex])) {
+                    $instrName = $_POST['secInstrSelOther'][$otherIndex++];
+                }else{
+                    $instrName = ucwords($secInstr[$i]);
+                }
                 createInput('secinstr[]', 'select', $profile_errors, '', null, ['value' => 'other']);
-                createInput('secInstrSelOther['.$i.']', 'text', $profile_errors, '', null, [
-                    'value'=>$_POST['secInstrSelOther'][$i], 'placeholder'=>'Please specify...', 'class'=>'instrSelOther'
+                createInput('secInstrSelOther[]', 'text', $profile_errors, '', null, [
+                    'value'=>$instrName, 'placeholder'=>'Please specify...', 'class'=>'instrSelOther'
                 ]);
                 echo '</span>';
             }

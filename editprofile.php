@@ -37,11 +37,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ((isset($_GET['id'],$_SESSION['id']
     //validate secondary instruments
     $secinstr = array();
     if (!empty($_POST['secinstr']) && count($_POST['secinstr']) <= 7) {
+        $otherIndex = 0; //for iterating the secInstrSelOther array
         for ($i=0; $i<count($_POST['secinstr']); $i++) {
             $instrName = $_POST['secinstr'][$i];
             //get 'other' value
             if ($instrName === 'other')
-                $instrName = $_POST['secInstrSelOther'][$i];
+                $instrName = $_POST['secInstrSelOther'][$otherIndex++];
             //validate
             if (preg_match('/^[ \w\-.]{2,}$/', $instrName) && $instrName !== 'none') {
                 //check if is same as primary instr

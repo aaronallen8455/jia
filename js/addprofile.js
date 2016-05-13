@@ -126,7 +126,7 @@ window.addEventListener('load', function() {
                     instrSelOther.className = 'instrSelOther';
                     //check if secondary instrument selection
                     if (this.name.indexOf('[') !== -1) {
-                        instrSelOther.setAttribute('name', 'secInstrSelOther['+i+']');
+                        instrSelOther.setAttribute('name', 'secInstrSelOther[]');
                     }else
                         instrSelOther.setAttribute('name', 'instrSelOther');
                     instrSelOther.setAttribute('type', 'text');
@@ -172,7 +172,7 @@ window.addEventListener('load', function() {
     //remove button handler
     function removeButtonHandler(button) {
         button.parentNode.parentNode.removeChild(button.parentNode);
-        //if secondary instr, reset the 'other' input name values to match new order.
+        /*//if secondary instr, reset the 'other' input name values to match new order.
         var secInstrSelectors = Array.prototype.filter.call(instrSel, function (x) {
             return (x.name.indexOf('[') !== -1);
         });
@@ -182,7 +182,7 @@ window.addEventListener('load', function() {
                 if (otherInput)
                     otherInput.name = 'secInstrSelOther['+i+']';
             }
-        }
+        }*/
     }
     //the remove button for initial row
     var del = document.getElementsByClassName('linkDel');

@@ -16,15 +16,15 @@ Fill out the form below to create your musician profile.<br><br>
     echo '<div id="secInstrDiv">';
     //check for posted data
     if (!empty($_POST['secinstr'])) {
-        //$posted = isset($_POST['secinstr']); //true if values are present in post.
+        $otherIndex = 0;
         for ($i = 0; $i < count($_POST['secinstr']); $i++) {
             //create the secondary instr selectors
             echo '<div class="memberDiv">';
             createInput('secinstr[]', 'select', $profile_errors, '', null, ['value' => $_POST['secinstr'][$i]]);
             //check if 'other'
             if ($_POST['secinstr'][$i] === 'other') {
-                createInput('secInstrSelOther['.$i.']', 'text', $profile_errors, '', null, [
-                    'value'=>$_POST['secInstrSelOther'][$i], 'placeholder'=>'Please specify...', 'class'=>'instrSelOther'
+                createInput('secInstrSelOther[]', 'text', $profile_errors, '', null, [
+                    'value'=>$_POST['secInstrSelOther'][$otherIndex++], 'placeholder'=>'Please specify...', 'class'=>'instrSelOther'
                 ]);
                 echo '</span>';
             }
