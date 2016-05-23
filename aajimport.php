@@ -12,8 +12,8 @@ if (isset($_SESSION['id']) && $_SESSION['isAdmin'] === true) {
             $userNames[$row[0]] = $row[1];
         }
         //get description, time, band members from link page
-        $stmt = $dbc->prepare('CALL mass_insert(?,?,?,?,?,?,?,?)');
         foreach ($_POST['shows'] as $c) {
+            $stmt = $dbc->prepare('CALL mass_insert(?,?,?,?,?,?,?,?,@eid)');
             $show = unserialize(base64_decode($c));
             //extract details from event link page
             $show->parseLink();
@@ -36,8 +36,16 @@ if (isset($_SESSION['id']) && $_SESSION['isAdmin'] === true) {
                 }
             }
             //add to DB
-            if ($stmt->execute(array($show->venue, $show->edate, $show->startTime, null, $show->title, $uid, $show->band, $show->desc)))
+            if ($stmt->execute(array($show->venue, $show->edate, $show->startTime, null, $show->title, $uid, $show->band, $show->desc))) {
                 echo "Successfully added $show->title.<br />";
+                $eid = $dbc->query('SELECT @eid')->fetchColumn();
+                //check the names against profiles and make event_profile entries
+                $q = "INSERT INTO events_profiles (event_id, profile_id) VALUES (?, (SELECT u.id AS id FROM users AS u INNER JOIN profiles AS p ON p.user_id=u.id WHERE CONCAT_WS(' ', LOWER(u.first_name), LOWER(u.last_name))=?))";
+                $stmt = $dbc->prepare($q);
+                foreach ($show->memNames as $name) {
+                    $stmt->execute(array($eid, $name));
+                }
+            }
         }
     }else{
         //get the html from x pages
@@ -90,6 +98,7 @@ class Row {
     public $startTime;
     public $band = '';
     public $desc;
+    public $memNames = array();
     
     public function __construct($html) {
         //get title and link
@@ -136,6 +145,7 @@ class Row {
         for ($i=0; $i<count($array); $i++) {
             if ($i>0) $this->band .= '|';
             $this->band .= trim(strip_tags($array[$i][1])) . ',' . trim(strip_tags($array[$i][2])); //name=>instrument
+            $this->memNames[] = trim(strip_tags($array[$i][1]));
         }
     }
 }

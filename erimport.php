@@ -71,7 +71,7 @@ if (isset($_SESSION['id']) && $_SESSION['isAdmin'] === true) {
     }
 
     //$sql = 'INSERT INTO `events` (venue, date, start_time, end_time, title, user_id) VALUES ("Elephant Room", ?, ?, ?, ?, ?)';
-    $sql = 'CALL mass_insert(?,?,?,?,?,?,?,?)';
+    $sql = 'CALL mass_insert(?,?,?,?,?,?,?,?,@eid)';
     $stmt = $dbc->prepare($sql);
     //loop through all rows (main rows, not happy hour)
     for ($i=0; $i<count(Row::$rows); $i+=2) {

@@ -21,7 +21,7 @@ if (isset($_SESSION['id']) && $_SESSION['isAdmin'] === true) {
             $userNames[$row[0]] = $row[1];
         }
         //prepare query
-        $sql = 'CALL mass_insert(?,?,?,?,?,?,?,?)';
+        $sql = 'CALL mass_insert(?,?,?,?,?,?,?,?,@eid)';
         $stmt = $dbc->prepare($sql);
         //loop through shows
         foreach ($_POST['shows'] as $show) {

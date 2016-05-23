@@ -50,12 +50,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     //generate the HTML
     $html = "<body style='min-width: 400px; max-width: 900px;'>
+    <a href='http://jazzinaustin.com/'>
     <table style='width: 100%; background-color: #14206c;'>
     <tr style='background: rgba(0, 0, 0, 0) linear-gradient(to bottom, #0b113b, #14206c 50%) repeat scroll 0 0;'>
         <td style='display:block; width: 100%; padding: 10px; text-align: center;'><img src='http://".BASE_URL."images/logo.png'/></td>
 
 </tr>
 </table>
+</a>
     $top
     <span><h2>JIA Calendar: Upcoming Shows</h2></span>
     $eventTable
