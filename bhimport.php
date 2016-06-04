@@ -71,7 +71,7 @@ if (isset($_SESSION['id']) && $_SESSION['isAdmin'] === true) {
         $bh = file_get_contents($url);
         $bh = preg_replace('/\v/', '', $bh);
         //get date of top left cell
-        preg_match('/<td class="date-marker date-(month|not-month) (date-today)?"( style="")?>(\d+)<\/td>/', $bh, $match);
+        preg_match('/<td class="date-marker date-(month|not-month)( date-today)?"( style="")?>(\d+)<\/td>/', $bh, $match);
         $startDate = $match[4];
         //if its from the previous month, how many days in that month?
         if ($startDate !== '1') {
@@ -125,7 +125,7 @@ if (isset($_SESSION['id']) && $_SESSION['isAdmin'] === true) {
                 if (!empty($time[1]) && !empty($summary[1])) {
                     //get date
                     $d = $c + ($r*7) - $daysLeft + 1;
-                    if ($d > $daysCurMonth) continue; //if we're into the next month
+                    if ($d > $daysCurMonth || $d < 1) continue; //if we're into the next month or in prev month
                     //convert time
                     $period = substr($time[1], -2);
                     $time = (int)substr($time[1], 0, -2);
@@ -159,7 +159,7 @@ if (isset($_SESSION['id']) && $_SESSION['isAdmin'] === true) {
             foreach ($shows as $date=>$showArray) {
                 foreach ($showArray as $show) {
                     $show['date'] = $date;
-                    echo '<option value="'.htmlspecialchars(json_encode($show)).'" selected>' . $show['summary'] . '</option>';
+                    echo '<option value="'.htmlspecialchars(json_encode($show)).'" selected>' . $show['summary'] . ' ' . $date . '</option>';
                 }
             }
             ?>

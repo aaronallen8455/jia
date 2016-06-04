@@ -50,7 +50,7 @@ if (isset($_SESSION['id']) && $_SESSION['isAdmin'] === true) {
     }else{
         //get the html from x pages
         for ($i=1; $i<4; $i++) {
-            $html = file_get_contents('http://austin.jazznearyou.com/calendar.php?pg='.$i);
+            $html = file_get_contents('https://austin.jazznearyou.com/calendar.php?pg='.$i);
             //find the table
             preg_match('/<table class="table e-calendar table-striped">.*?<\/table>/s', $html, $table);
             //process it
@@ -103,7 +103,7 @@ class Row {
     public function __construct($html) {
         //get title and link
         preg_match('/<td class="b-40">.*?href="(.*?)".*?>(.*?)<\/a/s', $html, $d);
-        $this->link = 'http://austin.jazznearyou.com' . $d[1];
+        $this->link = 'https://austin.jazznearyou.com' . $d[1];
         $this->title = trim($d[2]);
         //get venue
         preg_match('/<td class="b-30">(.*?)<br/s', $html, $d);
