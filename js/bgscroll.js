@@ -41,7 +41,7 @@ window.addEventListener('load', function() {
     function defineImgHeight(ele) {
         //get imgHeight
         var css = window.getComputedStyle(ele).backgroundImage;
-        var url = css.slice(5,-2);
+        var url = css.match(/url\("?(.+?)"?\)/)[1];
         var image = new Image();
         image.src = url;
         //ele.imgHeight = (image.height - ele.offsetHeight)/2;

@@ -224,10 +224,7 @@ button, input, optgroup, select, textarea {
     text-align: center;
 }
 .splashWide, .splashNarrow {
-    /*background: black url("../images/congress-ave-webres.jpg") no-repeat;*/
     background: black;
-    background-position: center center;
-    background-attachment: fixed;
     color: #fff8ed;
     overflow: hidden;
 }
@@ -239,16 +236,15 @@ button, input, optgroup, select, textarea {
     font-size: 4em;
     height: 600px;
     text-shadow: -1px -1px 10px rgba(0, 0, 0, 1), -1px -1px 10px rgba(0, 0, 0, 1);
-    /*text-shadow: 3px 0px 5px rgba(0, 0, 0, 0.5), -3px 0px 5px rgba(0, 0, 0, 0.5);*/
 }
 #bgSlideWide, #bgSlideNarrow {
-    background: black url("../images/congress-ave-webres.jpg") no-repeat;
+    background: black url("../images/congress-ave-webres.jpg") no-repeat 50% 50%;
 }
 #bgSlideCal {
-    background: black url("../images/paramount-webres.jpg") no-repeat;
+    background: black url("../images/paramount-webres.jpg") no-repeat 50% 50%;
+
 }
 #bgSlideWide, #bgSlideNarrow, #bgSlideCal {
-    background-position: 50% 50%;
     position: absolute;
     left: 0;
     top: 0;
