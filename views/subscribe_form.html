@@ -1,0 +1,12 @@
+    <h2>Mailing List</h2>
+    <p>Enter your email below to subscribe to our weekly email list.
+        <br/>You'll receive information about upcoming shows and other news related to the Austin jazz scene.
+        <br/>You can un-subscribe by clicking the link at the bottom of our newsletters. Your email will not be shared.</p>
+    <div id="eventForm">
+    <form action="" method="post">
+        <?php
+        createInput('email', 'text', $subscribe_errors, 'Your Email: ');
+        ?>
+        <button type="submit">Subscribe</button>
+        </form>
+    </div>

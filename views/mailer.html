@@ -1,0 +1,21 @@
+<style>
+    .email-preview {
+        min-width: 400px;
+        max-width: 900px;
+        padding: 20px;
+        border: solid 3px black;
+    }
+</style>
+Preview:
+<div class="email-preview">
+    <?php echo preg_replace('/<\/?body.*?>/', '', $html) ?>
+</div>
+
+<textarea id="msg" style="display: none" data-url="<?php echo BASE_URL ?>">
+    <?php echo $html ?>
+</textarea>
+<br/>
+<button id="mailer" type="button">Send Emails</button><span id="progress"></span>
+<div id="emails" style="display: none"><?php echo $emails ?></div>
+
+<script type="application/javascript" src="http://<?php echo BASE_URL; ?>js/mailer.js"></script>

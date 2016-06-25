@@ -120,6 +120,15 @@ CREATE TABLE `auth_tokens` (
     UNIQUE (`token`)
 ) ENGINE = InnoDB  DEFAULT CHARSET=utf8;
 
+CREATE TABLE `subscribers` (
+    `id` SMALLINT UNSIGNED NOT NULL AUTO_INCREMENT,
+    `email` VARCHAR(80) NOT NULL,
+    `ip` VARCHAR(45) NULL,
+    `code` CHAR(12) NOT NULL,
+    PRIMARY KEY (`id`),
+    UNIQUE INDEX `email_UNIQUE` (`email` ASC)
+) ENGINE = InnoDB  DEFAULT CHARSET=utf8;
+
 CREATE TABLE `events_profiles` (
     `profile_id` SMALLINT UNSIGNED NOT NULL,
     `event_id` INT UNSIGNED NOT NULL,

@@ -6,6 +6,8 @@ if (!isset($_SESSION['isAdmin'])) {
     exit();
 }
 
+require MYSQL;
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $top = !empty($_POST['emailTop'])?$_POST['emailTop']:'';
     $eventTable = '<table border="1" class="event-table" style="border-collapse: collapse; min-width: 400px;">';
@@ -62,15 +64,30 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <span><h2>JIA Calendar: Upcoming Shows</h2></span>
     $eventTable
     $bottom
+    <small>To un-subscribe from this email list, click <a href='*!@?+'>here</a>.</small>
     </body>";
 
-    //show the page
-    echo $html;
+    $_SESSION['email_message'] = $html;
+    
+    //get all email addresses
+    $emails = [];
+    $page = 0;
+    while ($stmt = $dbc->query('SELECT email, code FROM `subscribers` ORDER BY id LIMIT ' . $page++*50 . ', ' . '50')) {
+        if ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+            do {
+                $emails[] = ['email' => $row['email'], 'code' => $row['code']];
+            }while ($row = $stmt->fetch(PDO::FETCH_ASSOC));
+        }else break;
+    }
+    $emails = json_encode($emails);
+    
+    //mailer interface
+    include './views/mailer.html';
+
 }else{
 
     $pageTitle = 'Email Creator';
     include './includes/header.html';
-    require MYSQL;
     //on form submit
 
     //get all upcoming events

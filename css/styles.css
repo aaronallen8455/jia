@@ -773,6 +773,8 @@ textarea {
 .searchResultDetails {
     font-style: italic;
 }
+
+
 /************************************************Media Queries************************************************/
 @media all and (max-width: 1130px) {
     .padToView {
