@@ -34,7 +34,6 @@ function post(emails, baseUrl, progress) {
 window.addEventListener('load', function () {
     var emails = document.getElementById('emails').innerHTML;
     emails = JSON.parse(emails);
-    var msg = document.getElementById('msg');
     var mailer = document.getElementById('mailer');
     var progress = document.getElementById('progress');
     //is local? get base url
@@ -42,23 +41,11 @@ window.addEventListener('load', function () {
     if (window.location.pathname.slice(0,5) === '/jia/') {
         baseUrl = window.location.origin + '/jia';
     }else baseUrl = window.location.origin;
-    msg = msg.value;
-    
+
     mailer.onclick = function () {
         this.setAttribute('disabled', 'true');
         progress.innerHTML = '0% Complete';
-        //send initial request
-        var req = new XMLHttpRequest();
-        req.open('POST', baseUrl + '/ajax/mailer.ajax.php',true);
-        req.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-        req.onreadystatechange = function() {
-            if(req.readyState === 4 && req.response == 1) {
-                //post to the ajax script with the emails in groups of 5.
-                post(emails, baseUrl, progress);
-            }
-        };
-        //req.send('action=init&msg=' + encodeURIComponent(msg));
-        req.send('action=init');
+        post(emails, baseUrl, progress);
     }
 }, false);
 

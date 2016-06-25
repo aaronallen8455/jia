@@ -4,12 +4,7 @@ require '../includes/config.inc.php';
 //assert admin
 if (isset($_SESSION['isAdmin']) && $_SESSION['isAdmin'] === true && isset($_POST['action'])) {
     $response = 0;
-    //if initial request, get the email content and store it
-    //if ($_POST['action'] === 'init' && isset($_POST['msg'])) {
-    if ($_POST['action'] === 'init') {
-        //$_SESSION['email_message'] = $_POST['msg'];
-        $response = 1;
-    }else if ($_POST['action'] === 'stop') {
+    if ($_POST['action'] === 'stop') {
         //close the session when done
         unset($_SESSION['email_message']);
         $response = 1;
