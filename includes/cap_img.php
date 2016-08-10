@@ -19,7 +19,6 @@ function makeImage($code) {
     $tsize = imagettfbbox(30, 0, $fontPath, $code);
 
     $width = abs($tsize[2] - $tsize[0]) + 10;
-    $height = abs($tsize[5] - $tsize[3]) + 10;
     $height = 40;
 
     $img = imagecreate($width, $height);
@@ -27,7 +26,6 @@ function makeImage($code) {
     $black = imagecolorallocate($img, 0x00, 0x00, 0x00);
     $white = imagecolorallocate($img, 0xFF, 0xFF, 0xFF);
 
-    //imagestring($img, 5, 0, 0, $code, $black);
     imagettftext($img, 30, 0, 5, $height - 10, $white, $fontPath, $code);
 
     $path = './images/cap/' . uniqid('cap', false) . '.gif';
@@ -37,5 +35,5 @@ function makeImage($code) {
 
     $url = BASE_URL . substr($path, 2);
 
-    return [$url, $path];
+    return $url;
 }

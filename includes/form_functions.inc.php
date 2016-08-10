@@ -144,7 +144,7 @@ function createInput($name, $type, $errors = array(), $label, $values = 'POST', 
             $code .= $chars[rand(0, strlen($chars) - 1)];
         }
         // get the image url
-        list($imgUrl, $path) = makeImage($code);
+        $imgUrl = makeImage($code);
         $ele .= "<img src='http://$imgUrl'/>";
 
         if (array_key_exists($name, $errors)) { //handle any errors
@@ -153,8 +153,6 @@ function createInput($name, $type, $errors = array(), $label, $values = 'POST', 
 
         // make hidden field with hashed value
         $ele .= '<input type="hidden" name="cap" value="' . sha1($code) . '"/>';
-        // hidden field with img file path.
-        $ele .= '<input type="hidden" name="imgpath" value="' . $path . '"/>';
 
         echo $ele;
     }

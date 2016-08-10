@@ -3,6 +3,14 @@ require './includes/config.inc.php';
 include './includes/login.inc.php';
 $pageTitle = 'Booking';
 include './includes/header.html';
+
+// delete contents of the captcha image folder
+$imgs = glob('./images/cap/*');
+foreach ($imgs as $img) {
+    if (is_file($img))
+        unlink($img);
+}
+
 //on submit, validate form
 $booking_errors = array();
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -25,10 +33,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!isset($_POST['captcha']) || sha1($_POST['captcha']) !== $_POST['cap']) {
         $booking_errors['captcha'] = 'Please try again';
     }
-
-    // delete the captcha image
-    if (isset($_POST['imgpath']) && preg_match('/^\.\/images\/cap\/cap[a-z1-9]+\.gif$/', urldecode($_POST['imgpath'])) && file_exists($_POST['imgpath']))
-        unlink($_POST['imgpath']);
 
     //if no errors, send email
     if (empty($booking_errors)) {
