@@ -117,3 +117,110 @@ window.addEventListener('load', function() {
 
 
 });
+
+// decided to use css instead but this is cool
+function MenuLink(element) {
+    var self = this;
+
+    this.element = element;
+    this.status = 'idle'; // 'forward' to change to target color, 'back' to change back to base color
+    this.baseColor = [0,0,0]; // RGB of base color
+    this.targetColor = [255,0,255]; // RGB of target color
+    this.currentColor = this.baseColor.slice(0);
+    this.duration = 10; // time in ms of animation
+    this.rgbIncrements = (function () {
+        var redShift = Math.round((self.targetColor[0] - self.baseColor[0]) / self.duration),
+            greenShift = Math.round((self.targetColor[1] - self.baseColor[1]) / self.duration),
+            blueShift = Math.round((self.targetColor[2] - self.baseColor[2]) / self.duration);
+
+        return [redShift, greenShift, blueShift];
+    })();
+
+    function mouseOverHandler (e) {
+
+        self.status = 'forward';
+
+        // animate until we reach the target color or the animation is aborted
+        window.requestAnimationFrame(animate);
+
+        function animate() {
+            // increment each color channel
+            self.currentColor.forEach(function (x, i, a) {
+                a[i] += self.rgbIncrements[i];
+            });
+
+            // check for completion
+            if (
+                (
+                    (self.rgbIncrements[0] < 0 && self.currentColor[0] <= self.targetColor[0])
+                    || (self.rgbIncrements[0] > 0 && self.currentColor[0] >= self.targetColor[0])
+                ) || (
+                    (self.rgbIncrements[1] < 0 && self.currentColor[1] <= self.targetColor[1])
+                    || (self.rgbIncrements[1] > 0 && self.currentColor[1] >= self.targetColor[1])
+                ) || (
+                    (self.rgbIncrements[2] < 0 && self.currentColor[2] <= self.targetColor[2])
+                    || (self.rgbIncrements[2] > 0 && self.currentColor[2] >= self.targetColor[2])
+                )
+            ) {
+                if (self.status === 'forward')
+                    self.status = 'idle'; // stop animating
+
+                self.currentColor = self.targetColor.slice(0); // set to target color
+            }
+
+            // set color
+            self.element.style.color = 'rgb(' + self.currentColor[0] + ', ' + self.currentColor[1] + ', ' + self.currentColor[2] + ')';
+
+            // loop if incomplete
+            if (self.status === 'forward')
+                window.requestAnimationFrame(animate);
+        }
+    }
+
+    function mouseOutHandler (e) {
+
+        self.status = 'back';
+
+        // animate until we reach the target color or the animation is aborted
+        window.requestAnimationFrame(animate);
+
+        function animate() {
+            // increment each color channel
+            self.currentColor.forEach(function (x, i, a) {
+                a[i] -= self.rgbIncrements[i];
+            });
+
+            // check for completion
+            if (
+                (
+                    (self.rgbIncrements[0] < 0 && self.currentColor[0] >= self.baseColor[0])
+                    || (self.rgbIncrements[0] > 0 && self.currentColor[0] <= self.baseColor[0])
+                ) || (
+                    (self.rgbIncrements[1] < 0 && self.currentColor[1] >= self.baseColor[1])
+                    || (self.rgbIncrements[1] > 0 && self.currentColor[1] <= self.baseColor[1])
+                ) || (
+                    (self.rgbIncrements[2] < 0 && self.currentColor[2] >= self.baseColor[2])
+                    || (self.rgbIncrements[2] > 0 && self.currentColor[2] <= self.baseColor[2])
+                )
+            ) {
+                if (self.status === 'back')
+                    self.status = 'idle'; // stop animating
+
+                self.currentColor = self.targetColor.slice(0); // set to target color
+            }
+
+            // set color
+            self.element.style.color = 'rgb(' + self.currentColor[0] + ', ' + self.currentColor[1] + ', ' + self.currentColor[2] + ')';
+
+            // loop if incomplete
+            if (self.status === 'back')
+                window.requestAnimationFrame(animate);
+        }
+    }
+
+    this.element.addEventListener('mouseover', mouseOverHandler);
+
+    this.element.addEventListener('mouseout', mouseOutHandler);
+}
+
+

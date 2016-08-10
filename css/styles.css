@@ -160,6 +160,7 @@ button, input, optgroup, select, textarea {
     display: block;
     text-decoration: none;
     border-color: #004167;
+    transition: color .2s ease-in, border-color .2s ease-in;
 }
 .nav a span {
     border-radius: 10px 10px 0px 0px;

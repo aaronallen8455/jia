@@ -119,6 +119,44 @@ function createInput($name, $type, $errors = array(), $label, $values = 'POST', 
             $ele .= '<span class="error">'. $errors[$name] . '</span>';
         }
         echo $ele;
+    }else if ($type === 'captcha') {
+
+        require 'cap_img.php';
+
+        $ele = '<label for="'.$name.'">'.$label.'</label><input id="' . $name . '" name="'.$name.'" type="'.$type.'" ';
+        if ($value) {
+            $ele .= 'value="'.$value.'" ';
+        }
+        if (!empty($options)) { //append options
+            foreach ($options as $k=>$v) {
+                $ele .= $k . '="'.$v.'" ';
+            }
+        }
+        if (array_key_exists($name, $errors)) { //handle any errors
+            $ele .= 'class="error" />';
+        }else $ele .= '/>';
+
+        // chars to be used in code
+        $chars = '23456789abcdefghkmnopqrstuvwxyz';
+        $code = '';
+        // generate the code
+        for ($i=0; $i<4; $i++) {
+            $code .= $chars[rand(0, strlen($chars) - 1)];
+        }
+        // get the image url
+        list($imgUrl, $path) = makeImage($code);
+        $ele .= "<img src='http://$imgUrl'/>";
+
+        if (array_key_exists($name, $errors)) { //handle any errors
+            $ele .= '<span class="error">'.$errors[$name].'</span>';
+        }
+
+        // make hidden field with hashed value
+        $ele .= '<input type="hidden" name="cap" value="' . sha1($code) . '"/>';
+        // hidden field with img file path.
+        $ele .= '<input type="hidden" name="imgpath" value="' . $path . '"/>';
+
+        echo $ele;
     }
     echo '</div>';
 }

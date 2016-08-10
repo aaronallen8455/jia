@@ -21,6 +21,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $msg = substr($msg, 0, 65535);
         }
     }else $booking_errors['msg'] = 'Please enter a message!';
+    //check captcha
+    if (!isset($_POST['captcha']) || sha1($_POST['captcha']) !== $_POST['cap']) {
+        $booking_errors['captcha'] = 'Please try again';
+    }
+
+    // delete the captcha image
+    if (isset($_POST['imgpath']) && preg_match('/^\.\/images\/cap\/cap[a-z1-9]+\.gif$/', urldecode($_POST['imgpath'])) && file_exists($_POST['imgpath']))
+        unlink($_POST['imgpath']);
+
     //if no errors, send email
     if (empty($booking_errors)) {
         $from = "admin@jazzinaustin.com";

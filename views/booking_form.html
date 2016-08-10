@@ -6,7 +6,9 @@
         createInput('name', 'text', $booking_errors, 'Your Name: ');
         createInput('email', 'text', $booking_errors, 'Your Email: ');
         createInput('msg', 'textarea', $booking_errors, 'Message: ');
+        createInput('captcha', 'captcha', $booking_errors, 'Enter the four characters on the right: ', null, ['size' => 5]);
         ?>
+        <br/><br/>
         <button type="submit">Send</button>
         </form>
     </div>
