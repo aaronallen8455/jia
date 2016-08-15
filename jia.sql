@@ -90,7 +90,7 @@ CREATE TABLE `venues` (
     `desc` TEXT NOT NULL,
     `pic` VARCHAR(100) NULL,
     `links` TINYTEXT NULL,
-    PRIMARY KEY (`id`),
+    PRIMARY KEY (`id`)
     -- FULLTEXT (`name`, `desc`)
 ) ENGINE = InnoDB  DEFAULT CHARSET=utf8;
 -- make a MyIsam dupe for searching in mysql 5.5

@@ -14,11 +14,11 @@ require MYSQL;
 //check that user is creator of event, an admin, or has ownership of the event's venue.
 if (filter_var($_GET['id'], FILTER_VALIDATE_INT, array('min_range'=>1))) {
     if (empty($_SESSION['isAdmin'])) {
-        $q = 'SELECT venues.user_id AS uidc, venue_owner.user_id AS uido FROM venues
-LEFT OUTER JOIN venue_owner ON venue_owner.venue_id=venues.id WHERE venues.id='.$_GET['id'];
+        $q = 'SELECT events.user_id AS uide, venue_owner.user_id AS uido FROM events LEFT OUTER JOIN events_venues ON events_venues.event_id=events.id
+LEFT JOIN venue_owner ON venue_owner.venue_id=events_venues.venue_id WHERE events.id='.$_GET['id'].' AND (events.user_id='.$_SESSION['id'].' OR venue_owner.user_id='.$_SESSION['id'].')';
         $row = $dbc->query($q)->fetch(PDO::FETCH_NUM);
         //check for id match
-        if (!in_array($_SESSION['id'], $row)) {
+        if (empty($row)) {
             echo '<div class="centeredDiv"><h2>You\'re not authorized to edit this event.</h2></div>';
             include './includes/footer.html';
             exit();
@@ -133,14 +133,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         //make sure that user is creator of event or is admin
         $q = $dbc->query("SELECT user_id, band, venue, start_time, `date` FROM events WHERE id={$_GET['id']}");
         if ($row = $q->fetch(PDO::FETCH_ASSOC)) {
-            if (!$_SESSION['isAdmin']) {
-                if ($row['user_id'] !== $_SESSION['id']) {
-                    //wrong user
-                    echo '<h2>This page has been accessed in error!</h2>';
-                    include './includes/footer.html';
-                    exit();
-                }
-            }
+            //if (!$_SESSION['isAdmin']) {
+            //    if ($row['user_id'] !== $_SESSION['id']) {
+            //        //wrong user
+            //        echo '<h2>This page has been accessed in error!</h2>';
+            //        include './includes/footer.html';
+            //        exit();
+            //    }
+            //}
             $q->closeCursor();
         }else{
             echo '<h2>This page has been accessed in error!</h2>';
@@ -219,13 +219,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' || !empty($event_errors)) {
     $event = $dbc->query('SELECT user_id, title, venue, DATE_FORMAT(`date`, \'%c/%e/%y\') AS date, start_time, end_time, `desc`, band FROM events WHERE id=' . $_GET['id']);
     if ($event) {
         $event = $event->fetch(PDO::FETCH_ASSOC);
-        if (!$_SESSION['isAdmin']) {
-            if ($event['user_id'] !== $_SESSION['id']) {
-                echo '<h2>This page was accessed in error!</h2>';
-                include './includes/footer.html';
-                exit();
-            }
-        }
+        //if (!$_SESSION['isAdmin']) {
+        //    if ($event['user_id'] !== $_SESSION['id']) {
+        //        echo '<h2>This page was accessed in error!</h2>';
+        //        include './includes/footer.html';
+        //        exit();
+        //    }
+        //}
         //Query all the profile user names
         $names = $dbc->query('SELECT CONCAT_WS(" ", first_name, last_name) AS name FROM users JOIN profiles ON id=user_id ORDER BY first_name, last_name ASC');
         if ($names) {

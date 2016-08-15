@@ -9,21 +9,25 @@ if (!isset($_SESSION['id'])) {
     include './includes/footer.html';
     exit();
 }
-//validate event id and insure that user is the creator of event or is an admin
+//validate event id and insure that user is the creator of event or is an admin or owns the venue
 if ($_SERVER['REQUEST_METHOD'] === 'GET' && filter_var($_GET['id'], FILTER_VALIDATE_INT, array('min_range'=>1))) {
     //get user id
     require MYSQL;
-    $r = $dbc->query("SELECT user_id, title FROM events WHERE id={$_GET['id']}");
-    $r = $r->fetch(PDO::FETCH_NUM);
-    if (!$_SESSION['isAdmin']) {
-        if ($r[0] !== $_SESSION['id']) {
-            //wrong user id
-            echo '<h2>This page was accessed in error!</h2>';
+    if (empty($_SESSION['isAdmin'])) {
+        $q = 'SELECT events.user_id AS uide, venue_owner.user_id AS uido FROM events LEFT OUTER JOIN events_venues ON events_venues.event_id=events.id
+LEFT JOIN venue_owner ON venue_owner.venue_id=events_venues.venue_id WHERE events.id='.$_GET['id'].' AND (events.user_id='.$_SESSION['id'].' OR venue_owner.user_id='.$_SESSION['id'].')';
+        $row = $dbc->query($q)->fetch(PDO::FETCH_NUM);
+        //check for id match
+        if (empty($row)) {
+            echo '<div class="centeredDiv"><h2>This page was accessed in error!</h2></div>';
             include './includes/footer.html';
             exit();
         }
     }
-    echo "<div class=\"centeredDiv\"><h2>Are you sure you want to remove the event '$r[1]?'";
+    // get event title
+    $q = 'SELECT title FROM events WHERE id=' . $_GET['id'];
+    $r = $dbc->query($q)->fetch(PDO::FETCH_NUM);
+    echo "<div class=\"centeredDiv\"><h2>Are you sure you want to remove the event '$r[0]?'";
     ?>
 <form action="http://<?php echo BASE_URL; ?>removeevent/<?php echo $_GET['id']; ?>/" method="post">
     <input type="hidden" value="true" name="delete" />
@@ -38,12 +42,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && filter_var($_GET['id'], FILTER_VALID
     //check that user is still the author of the event, or is admin
     if (filter_var($_GET['id'], FILTER_VALIDATE_INT, array('min_range'=>1))) {
         require MYSQL;
-        if (!$_SESSION['isAdmin']) {
-            $r = $dbc->query("SELECT user_id FROM events WHERE id={$_GET['id']}");
-            $r = $r->fetchColumn();
-            if ($r !== $_SESSION['id']) {
-                //wrong user
-                echo '<h2>This page was accessed in error!</h2>';
+        if (empty($_SESSION['isAdmin'])) {
+            $q = 'SELECT events.user_id AS uide, venue_owner.user_id AS uido FROM events LEFT OUTER JOIN events_venues ON events_venues.event_id=events.id
+LEFT JOIN venue_owner ON venue_owner.venue_id=events_venues.venue_id WHERE events.id='.$_GET['id'].' AND (events.user_id='.$_SESSION['id'].' OR venue_owner.user_id='.$_SESSION['id'].')';
+            $row = $dbc->query($q)->fetch(PDO::FETCH_NUM);
+            //check for id match
+            if (empty($row)) {
+                echo '<div class="centeredDiv"><h2>This page was accessed in error!.</h2></div>';
                 include './includes/footer.html';
                 exit();
             }
