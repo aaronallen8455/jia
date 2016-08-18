@@ -1,8 +1,8 @@
 <?php
 require './includes/config.inc.php';
 $pageTitle = 'Change Password';
-$noLogin = true;
-include './includes/header.html';
+//$noLogin = true;
+
 //on form submit, validate
 $pw_errors = array();
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_SESSION['id'])) {
@@ -16,6 +16,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_SESSION['id'])) {
             if ($uid === $_SESSION['id']) {
                 $pwCheck = true;
             }else{
+                include_once './includes/header.html';
                 echo '<div class="centeredDiv"><h2>This page was accessed in error.</h2></div>';
                 include './includes/footer.html';
                 exit();
@@ -34,9 +35,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_SESSION['id'])) {
                         $pwCheck = false;
                     }
                 }else{
+                    include_once './includes/header.html';
                     echo '<div class="centeredDiv"><h2>This page was accessed in error.</h2></div>';
                 }
-            }else trigger_error('An internal error occured.');
+            }else trigger_error('An internal error occured. We apologize for the inconvenience.');
         }
     }
     //validate new password
@@ -50,22 +52,29 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_SESSION['id'])) {
     if (empty($pw_errors) && isset($pwCheck) && $pwCheck === true) {
         if ($dbc->exec("UPDATE users SET pass='$pass' WHERE id={$_SESSION['id']}")) {
             //success
+
+            //remove rm_token if exists
+            if ($dbc->exec('DELETE FROM rm_tokens WHERE user_id='.$_SESSION['id'])) {
+                setcookie('rm', '', time()-3600, '/'); //remove cookie
+            }
+
+            include_once './includes/header.html';
             include './views/password_success.html';
             include './includes/footer.html';
             //remove auth_token if exists
             if (isset($uid)) {
                 $dbc->exec('DELETE FROM auth_tokens WHERE user_id='.$uid);
             }
-            //remove rm_token if exists
-            if ($dbc->exec('DELETE FROM rm_tokens WHERE user_id='.$_SESSION['id'])) {
-                setcookie('rm', '', time()-3600, '/'); //remove cookie
-            }
+
             exit();
         }else{
             trigger_error('The password was not changed due to a system error. We apologize for the inconvenience.');
         }
     }
 }
+
+include_once './includes/header.html';
+
 //determine which version of the PW change form to display.
 if (isset($_SESSION['id']) && !isset($_GET['t'])) {//logged in
     //show the change password form.
