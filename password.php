@@ -73,23 +73,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_SESSION['id'])) {
     }
 }
 
-include_once './includes/header.html';
-
 //determine which version of the PW change form to display.
 if (isset($_SESSION['id']) && !isset($_GET['t'])) {//logged in
     //show the change password form.
+    include_once './includes/header.html';
     require './includes/form_functions.inc.php';
     include './views/changepw_form.html';
 }else if ((!isset($_SESSION['id']) || isset($uid)) && isset($_GET['t']) && strlen($_GET['t']) === 64) {//forgot password
     //get user info if token matches
     if (isset($uid)) { //if the entered password failed to validate, $uid will be set and we don't need to run a query.
+        include_once './includes/header.html';
         require './includes/form_functions.inc.php';
         include './views/resetpw_form.html';
     }else{
         require MYSQL;
-        /*$q = "SELECT user_id, type, CONCAT_WS(' ', first_name, last_name) AS name
-        FROM auth_tokens JOIN users ON user_id=id
-        WHERE token=? AND expires > NOW()";*/
+
         //get user id to feed into log_in_rm()
         $q = "SELECT user_id FROM auth_tokens JOIN users ON user_id=id
         WHERE token=? AND expires > NOW()";
@@ -127,15 +125,18 @@ if (isset($_SESSION['id']) && !isset($_GET['t'])) {//logged in
                     }
                 }
                 //show pw reset form
+                include_once './includes/header.html';
                 require './includes/form_functions.inc.php';
                 include './views/resetpw_form.html';
             }else{
+                include_once './includes/header.html';
                 echo '<div class="centeredDiv"><h2>The supplied token has expired.</h2>
                 You\'ll need to start the process over before you can reset your password.</div>';
             }
         }
     }
 }else{
+    include_once './includes/header.html';
     echo '<div class="centeredDiv"><h2>Access Denied</h2></div>';
 }
 include './includes/footer.html';

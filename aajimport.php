@@ -102,12 +102,25 @@ class Row {
     
     public function __construct($html) {
         //get title and link
-        preg_match('/<td class="b-40">.*?href="(.*?)".*?>(.*?)<\/a/s', $html, $d);
+
+        //get td elements
+        preg_match_all('/<td.*?\/td/s', $html, $d, PREG_PATTERN_ORDER);
+        // get link
+        preg_match('/href="(.*?)".*?>(.*?)<\/a/s', $d[0][1], $link);
+        $this->link = 'https://austin.jazznearyou.com' . $link[1];
+        $this->title = trim($link[2]);
+        //get venue
+        preg_match('/<a.*?>(.*?)</s', $d[0][2], $venue);
+        $this->venue = trim($venue[1]);
+
+        // remove class name
+        /*preg_match('/<td class="b-40">.*?href="(.*?)".*?>(.*?)<\/a/s', $html, $d);
         $this->link = 'https://austin.jazznearyou.com' . $d[1];
         $this->title = trim($d[2]);
         //get venue
+        //extract from <a> element
         preg_match('/<td class="b-30">(.*?)<br/s', $html, $d);
-        $this->venue = trim(strip_tags($d[1]));
+        $this->venue = trim(strip_tags($d[1]));*/
     }
     
     public function parseLink() {
