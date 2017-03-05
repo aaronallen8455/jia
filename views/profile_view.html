@@ -8,7 +8,7 @@
 }(document, 'script', 'facebook-jssdk'));</script>
 
 <?php
-if (isset($_SESSION['id']) && ($_SESSION['id'] === $row['user_id'] || $_SESSION['isAdmin'])) {
+if (isset($_SESSION['id']) && ($_SESSION['id'] === $row['user_id'] || isset($_SESSION['isAdmin']) && $_SESSION['isAdmin'])) {
     echo '<a href="http://'.BASE_URL.'editprofile/'.$row['user_id'].'/">Click here to edit profile</a><br/>';
     echo '<a href="http://'.BASE_URL.'removeprofile/'.$row['user_id'].'/">Click here to remove profile</a><br/><br/>';
 }

@@ -31,7 +31,7 @@ if (empty($row)) {
     exit();
 }
 $pageTitle = $row['title'];
-$pageDesc = $row['desc'];
+$pageDesc = str_replace('"', '&quot;', $row['desc']); // need to escape quotes
 include './includes/header.html';
 include './views/event_view.html';
 include './includes/footer.html';
