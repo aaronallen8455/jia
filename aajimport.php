@@ -54,10 +54,11 @@ if (isset($_SESSION['id']) && $_SESSION['isAdmin'] === true) {
             //find the table
             preg_match('/<table class="table e-calendar table-striped">.*?<\/table>/s', $html, $table);
             //process it
-            $t = new Table($table[0]);
+            if (!empty($table)) {
+                $t = new Table($table[0]);
+            }
         }
-        
-        
+
         //create the form
         ?>
 <form action="aajimport.php" method="post">

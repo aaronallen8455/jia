@@ -774,7 +774,10 @@ textarea {
 .searchResultDetails {
     font-style: italic;
 }
-
+.captcha-image{
+    vertical-align: middle;
+    margin-left: 5px;
+}
 
 /************************************************Media Queries************************************************/
 @media all and (max-width: 1130px) {

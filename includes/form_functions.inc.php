@@ -145,7 +145,7 @@ function createInput($name, $type, $errors = array(), $label, $values = 'POST', 
         }
         // get the image url
         $imgUrl = makeImage($code);
-        $ele .= "<img src='http://$imgUrl'/>";
+        $ele .= "<img class='captcha-image' src='http://$imgUrl'/>";
 
         if (array_key_exists($name, $errors)) { //handle any errors
             $ele .= '<span class="error">'.$errors[$name].'</span>';

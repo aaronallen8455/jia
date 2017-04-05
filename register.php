@@ -60,6 +60,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }else{
         $reg_errors['pass1'] = 'Please enter a valid password!';
     }
+    //check captcha
+    if (!isset($_POST['captcha']) || sha1($_POST['captcha']) !== $_POST['cap']) {
+        $reg_errors['captcha'] = 'Please try again';
+    }
+
     //if no errors, create the DB row.
     if (empty($reg_errors)) {
         //check if email already exists
